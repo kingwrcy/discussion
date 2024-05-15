@@ -2,15 +2,15 @@
 
 const links = [[{
   label: '首页',
-  icon: 'i-heroicons-home',
+  icon: 'i-carbon-home',
   to: '/'
 }], [{
   label: '登录',
-  icon: 'i-heroicons-home',
+  icon: 'i-carbon-login',
   to: '/user/login'
 }, {
   label: '登出',
-  icon: 'i-heroicons-command-line',
+  icon: 'i-carbon-logout',
   to: '/user/reg'
 }]]
 </script>
