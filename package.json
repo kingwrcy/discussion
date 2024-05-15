@@ -1,0 +1,24 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@iconify-json/carbon": "^1.1.32",
+    "@nuxt/ui": "^2.16.0",
+    "dayjs-nuxt": "^2.1.9",
+    "nuxt": "^3.11.2",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0",
+    "vue-sonner": "^1.1.2"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.3"
+  }
+}
