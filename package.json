@@ -11,8 +11,7 @@
   },
   "dependencies": {
     "@iconify-json/carbon": "^1.1.32",
-    "@nuxt/ui": "^2.16.0",
-    "dayjs-nuxt": "^2.1.9",
+    "@nuxt/ui": "^2.16.0",    
     "nuxt": "^3.11.2",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
