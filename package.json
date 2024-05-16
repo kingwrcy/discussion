@@ -8,7 +8,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "exportSql":"npx prisma migrate diff --from-empty --to-schema-datasource prisma/schema.prisma --script > prisma/migrations/20240516050303_init/migration.sql"
+    "exportSql": "npx prisma migrate diff --from-empty --to-schema-datasource prisma/schema.prisma --script > prisma/migrations/20240516050303_init/migration.sql"
   },
   "dependencies": {
     "@iconify-json/carbon": "^1.1.32",
@@ -16,6 +16,7 @@
     "@prisma/client": "5.14.0",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
+    "md-editor-v3": "^4.15.0",
     "nuxt": "^3.11.2",
     "prisma": "^5.14.0",
     "short-uuid": "^5.2.0",

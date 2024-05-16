@@ -18,7 +18,7 @@
           </USelectMenu>
         </UFormGroup>
         <UFormGroup label="正文" name="content">
-          <UTextarea v-model="state.content" :rows="20" />
+          <MdEditor v-model="state.content" />
         </UFormGroup>
         <div>
           <UButton type="submit" :loading="pending">
@@ -38,7 +38,8 @@ import { z } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
 import { createPostSchema } from '~/types';
 import { toast } from 'vue-sonner';
-
+import { MdEditor   } from 'md-editor-v3';
+import 'md-editor-v3/lib/style.css';
 type Schema = z.output<typeof createPostSchema>
 
 
@@ -79,7 +80,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     toast.success('发表成功')
     setTimeout(() => {
       navigateTo(`/post/${result.pid}`)
-    }, 2000)
+    }, 200)
   } else if ('message' in result) {
     toast.error('发表失败,' + (result.message))
   }

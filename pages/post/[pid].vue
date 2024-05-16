@@ -2,13 +2,18 @@
   <UCard class="w-full mt-2">
     <template #header>
       <XPost v-bind="post" />
-      <div class="my-4 text-sm leading-5" v-html="post.content"></div>
+      <div class="my-4 text-sm leading-5" >
+        <MdPreview  v-model="post.content" />
+
+      </div>
     </template>
   </UCard>
 </template>
 
 <script lang="ts" setup>
 import type { PostDTO } from '~/types';
+import { MdPreview  } from 'md-editor-v3';
+import 'md-editor-v3/lib/style.css';
 const route = useRoute()
 
 const { data } = await useFetch('/api/post/' + route.params.pid, {

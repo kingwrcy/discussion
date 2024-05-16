@@ -1,11 +1,11 @@
 <template>
   <div class="flex space-x-2  items-start py-2 border-b border-primary/10">
 
-    <UAvatar v-if="author&&author.avatarUrl" :src="author.avatarUrl ?? ''" size="md" alt="Avatar" />
-    <div class="flex-1">
-      <NuxtLink :to="`/post/${props.pid}`"
-        class="text-gray-600 font-semibold text-sm truncate cursor-pointer hover:text-primary/80">
-        <span>{{ title }}</span>
+    <UAvatar v-if="author && author.avatarUrl" :src="author.avatarUrl ?? ''" size="md" alt="Avatar" />
+    <div class="flex-1 ">
+      <NuxtLink :to="`/post/${props.pid}`" 
+        class="text-gray-600 font-semibold text-sm  cursor-pointer  hover:text-primary/80">
+        <div class="" >{{ title }}</div>
         <!-- <UIcon v-if="props.pinned" name="i-carbon-pin-filled" class="ml-1 text-primary"></UIcon> -->
       </NuxtLink>
       <div class="flex space-x-4 text-[11px] mt-1 text-gray-500">
@@ -27,9 +27,12 @@
         </div>
       </div>
     </div>
-    <UBadge color="gray" variant="solid" size="xs" class="cursor-pointer hover:bg-gray-100 self-center"
-      v-if="props.tags && props.tags.length > 0">
-      {{ props.tags[0].name }}</UBadge>
+
+    <div class="flex gap-1 min-w-[120px] justify-end">
+      <UBadge color="gray" variant="solid" size="xs" class="cursor-pointer hover:bg-gray-100 self-center"
+        v-for="tag in props.tags ">
+        {{ tag.name }}</UBadge>
+    </div>
   </div>
 </template>
 
