@@ -12,5 +12,12 @@ export default defineNuxtConfig({
 
   devtools: {
     enabled: false
+  },
+  runtimeConfig:{
+    public:{
+      tokenKey:''
+    },
+    jwtSecretKey:''
+
   }
 })

@@ -3,21 +3,18 @@ import { Prisma } from "@prisma/client";
 type ListPostRequest = {
   page: number;
   size: number;
-  authorId?: number;
+  uid?: string;
   tag?: string;
   query?: string;
 };
-
-type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
-export type QueryPostResponse = ThenArg<ReturnType<typeof query>>;
 
 export default defineEventHandler(async (event) => {
   const request = (await readBody(event)) as ListPostRequest;
 
   const where: Prisma.PostWhereInput = {};
 
-  if (request.authorId) {
-    where.authorId = request.authorId;
+  if (request.uid) {
+    where.uid = request.uid;
   }
   if (request.tag) {
     where.tags = {
@@ -27,7 +24,25 @@ export default defineEventHandler(async (event) => {
     };
   }
 
-  const posts = await query(where, request);
+  const posts = await prisma.post.findMany({
+    where,
+    include: {
+      author: {
+        select: {
+          uid: true,
+          avatarUrl: true,
+          username: true,
+        },
+      },
+      tags: true,
+      Comment: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    skip: (request.page - 1) * request.size,
+    take: request.size,
+  });
   const total = await prisma.post.count({
     where,
   });
@@ -38,29 +53,3 @@ export default defineEventHandler(async (event) => {
     total,
   };
 });
-
-async function query(where: Prisma.PostWhereInput, request: ListPostRequest) {
-  const posts = await prisma.post.findMany({
-    where,
-    include: {
-      // author: {
-      //   select: {
-      //     avatarUrl: true,
-      //     username: true,
-      //   },
-      // },
-      // tags: {
-      //   select: {
-      //     name: true,
-      //     id: true,
-      //   },
-      // },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    skip: (request.page - 1) * request.size,
-    take: request.size,
-  });
-  return posts;
-}

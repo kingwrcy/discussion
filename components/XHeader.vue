@@ -1,28 +1,34 @@
 <script setup lang="ts">
+const config = useRuntimeConfig()
+const token = useCookie(config.public.tokenKey)
 
-const links = [[{
-  label: '首页',
-  icon: 'i-carbon-home',
-  to: '/'
-}], [{
-  label: '登录',
-  icon: 'i-carbon-login',
-  to: '/user/login'
-}, {
-  label: '登出',
-  icon: 'i-carbon-logout',
-  to: '/user/reg'
-}]]
+
 </script>
 
 <template>
   <div class="w-full bg-white shadow">
-    <div class="max-w-[1080px] mx-auto ">
-      <UHorizontalNavigation :links="links" class="border-b border-gray-200 dark:border-gray-800">
-        <template #default="{ link }">
-          <span class="group-hover:text-primary relative">{{ link.label }}</span>
-        </template>
-      </UHorizontalNavigation>
+    <div class="max-w-[1080px] mx-auto flex text-sm">
+
+      <NuxtLink class="flex gap-1 items-center p-2 hover:text-primary/80" to="/">
+        <UIcon name="i-carbon-home" />
+        <span>首页</span>
+      </NuxtLink>
+
+
+      <div class="flex gap-1 ml-auto ">
+        <NuxtLink class="flex gap-1 items-center p-2 hover:text-primary/80" to="/post/new" v-if="token">
+          <UIcon name="i-carbon-chat" />
+          <span>发帖</span>
+        </NuxtLink>
+        <NuxtLink class="flex gap-1 items-center p-2 hover:text-primary/80" to="/user/login" v-if="!token">
+          <UIcon name="i-carbon-login" />
+          <span>登录</span>
+        </NuxtLink>
+        <div class="flex gap-1 items-center p-2 hover:text-primary/80" to="/login" v-if="token">
+          <UIcon name="i-carbon-logout" />
+          <span>登出</span>
+        </div>
+      </div>
     </div>
   </div>
 

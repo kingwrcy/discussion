@@ -1,11 +1,12 @@
 import { z } from "zod";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
+import { default as bcrypt } from "bcryptjs";
 import { loginRequestSchema } from "~/types";
 
 type regRequest = z.infer<typeof loginRequestSchema>;
 
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig()
   const request = (await readBody(event)) as regRequest;
   const validateResult = loginRequestSchema.safeParse(request);
   if (!validateResult.success) {
@@ -35,16 +36,15 @@ export default defineEventHandler(async (event) => {
   const token = jwt.sign(
     {
       username: request.username,
-      id: user.id,
-      roleId:user.roleId
+      uid: user.uid,
     },
-    process.env["JWT_KEY"] as string,
+    config.jwtSecretKey,
     {    
       expiresIn: 60 * 60 * 24 * 10,
     }
   );
 
-  setCookie(event, process.env["TOKEN_KEY"] as string, token, {
+  setCookie(event, config.public.tokenKey, token, {
     secure: true,
     expires: new Date(Date.now() + 60 * 60 * 24 * 1000 *10),
   });

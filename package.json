@@ -7,24 +7,27 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "exportSql":"npx prisma migrate diff --from-empty --to-schema-datasource prisma/schema.prisma --script > prisma/migrations/20240516050303_init/migration.sql"
   },
   "dependencies": {
     "@iconify-json/carbon": "^1.1.32",
     "@nuxt/ui": "^2.16.0",
     "@prisma/client": "5.14.0",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
     "nuxt": "^3.11.2",
     "prisma": "^5.14.0",
+    "short-uuid": "^5.2.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
     "vue-sonner": "^1.1.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.6",
+    "@types/shortid": "^0.0.32",
     "dayjs": "^1.11.11",
     "dayjs-nuxt": "^2.1.9",
     "tailwindcss": "^3.4.3",

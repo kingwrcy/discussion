@@ -1,44 +1,5 @@
 import { z } from "zod";
 
-export type Post = {
-  id: number;
-  title: string;
-  author: User;
-  created: Date;
-  views: number;
-  comments: number;
-  pinned?: boolean;
-  content: string;
-  like?: number;
-  disLike?: number;
-  tag: {
-    name: string;
-  };
-};
-
-export type User = {
-  id: number;
-  name: string;
-  avatar: string;
-};
-
-export type Comment = {
-  author: User;
-  postId: number;
-  post: Post;
-  content: string;
-  created: Date;
-  like?: number;
-  disLike?: number;
-};
-
-export type Posts = Post[];
-
-export type JwtPayload = {
-  username: string;
-  id: number;
-  roleId: number;
-};
 
 export const regRequestSchema = z
   .object({
@@ -62,3 +23,48 @@ export const createPostSchema = z.object({
   content: z.string().min(6, "内容最少6个字符"),
   tags: z.array(z.number()).nonempty("请最少选择一个标签"),
 });
+
+export type JwtPayload = {
+  uid: string;
+  username: string;
+}
+
+export type UserDTO = {
+  createdAt: string;
+  uid: string;
+  username: string;
+  lastLogin: string | null;
+  email: string;
+  avatarUrl: string | null;
+  point: number;
+  postCount: number;
+  commentCount: number;
+  roleId: number;
+};
+export type TagDTO = {
+  name: string;
+  desc: string;
+  count: number;
+};
+export type CommentDTO = {
+  content: string;
+  cid: string;
+  createdAt: string;
+  postId: number;
+  mentioned: string | null;
+  author: UserDTO;
+};
+export type PostDTO = {
+  title: string;
+  content: string;
+  pid: string;
+  createdAt: string;
+  viewCount: number;
+  replyCount: number;
+  likeCount: number;
+  disLikeCount: number;
+  minLevel: number;
+  author:UserDTO,
+  comments?: Array<CommentDTO>;
+  tags: Array<TagDTO>;
+};

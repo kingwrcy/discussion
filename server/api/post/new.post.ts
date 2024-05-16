@@ -4,7 +4,7 @@ import { createPostSchema } from "~/types";
 type createPostRequest = z.infer<typeof createPostSchema>;
 
 export default defineEventHandler(async (event) => {
-  if (!event.context.userId) {
+  if (!event.context.uid) {
     throw createError("请先去登录");
   }
 
@@ -21,12 +21,20 @@ export default defineEventHandler(async (event) => {
     return { id: x };
   });
 
+  const pid = `p${randomId()}`;
+
+
   try {
     await prisma.post.create({
       data: {
+        pid,
         title: request.title,
         content: request.content,
-        authorId: event.context.userId,
+        author: {
+          connect: {
+            uid: event.context.uid,
+          },
+        },
         tags: {
           connect: tags,
         },
@@ -46,7 +54,7 @@ export default defineEventHandler(async (event) => {
     });
     await prisma.user.update({
       where: {
-        id: event.context.userId,
+        uid: event.context.uid,
       },
       data: {
         postCount: {
@@ -55,9 +63,11 @@ export default defineEventHandler(async (event) => {
       },
     });
   } catch (e) {
+    console.log("error", e);
     throw createError("发表贴子失败");
   }
   return {
     success: true,
+    pid,
   };
 });

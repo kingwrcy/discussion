@@ -1,8 +1,7 @@
 import { z } from "zod";
 
-import bcrypt from "bcrypt";
+import { default as bcrypt } from "bcryptjs";
 import { regRequestSchema } from "~/types";
-
 
 type regRequest = z.infer<typeof regRequestSchema>;
 
@@ -22,18 +21,27 @@ export default defineEventHandler(async (event) => {
   if (count > 0) {
     return {
       success: false,
+      message: "111用户名/邮箱已经存在了",
+    };
+  }
+  const uid = `u${randomId()}`
+  try {
+    await prisma.user.create({
+      data: {
+        uid: uid,
+        username: request.username,
+        password: bcrypt.hashSync(request.password, 10),
+        email: request.email,
+        roleId: 1,
+      },
+    });
+  } catch (e) {
+    console.log('uid',uid,e)
+    return {
+      success: false,
       message: "用户名/邮箱已经存在了",
     };
   }
-
-  await prisma.user.create({
-    data: {
-      username: request.username,
-      password: bcrypt.hashSync(request.password,10),
-      email: request.email,
-      roleId: 1,
-    },
-  });
 
   return { success: true };
 });
