@@ -1,13 +1,60 @@
 <template>
-  <div>
-      登录
-  </div>
+  <UCard class="w-full mt-2">
+    <template #header class="py-1">
+      <div class="text-center text-sm">登录</div>
+    </template>
+    <div class="flex flex-col my-2 lg:w-[300px] mx-auto">
+      <UForm :schema="loginRequestSchema" :state="state" :validate-on="['submit']" class="space-y-4" @submit="onSubmit"
+        autocomplete="off">
+        <UFormGroup label="用户名" name="username">
+          <UInput v-model="state.username" autocomplete="off" />
+        </UFormGroup>
+        <UFormGroup label="密码" name="password">
+          <UInput v-model="state.password" type="password" autocomplete="on" />
+        </UFormGroup>
+        <div>
+          <UButton type="submit" :loading="pending">
+            登录
+          </UButton>
+          <NuxtLink to="/user/login" class="text-primary text-sm ml-2 underline underline-offset-4">没有账户?去注册</NuxtLink>
+        </div>
+      </UForm>
+    </div>
+
+
+  </UCard>
 </template>
 
 <script lang="ts" setup>
+import { z } from 'zod'
+import type { FormSubmitEvent } from '#ui/types'
+import { loginRequestSchema } from '~/types';
+import { toast } from 'vue-sonner';
 
+type Schema = z.output<typeof loginRequestSchema>
+
+const state = reactive<Schema>({
+  password: "",
+  username: "",
+})
+const pending = ref(false)
+
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  pending.value = true
+  const result = await $fetch('/api/user/login', {
+    method: 'POST',
+    body: JSON.stringify(event.data)
+  })
+  if (result.success) {
+    toast.success('登录成功,2秒后返回首页')
+    setTimeout(() => {
+      navigateTo('/')
+    }, 2000)
+  } else if ('message' in result) {
+    toast.error('登录失败,' + (result.message))
+  }
+  pending.value = false
+}
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

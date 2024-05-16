@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  level     Int      @default(1)
+  User      User[]
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  username     String    @unique
+  password     String
+  lastLogin    DateTime?
+  email        String    @unique
+  avatarUrl    String?
+  point        Int       @default(0)
+  postCount    Int       @default(0)
+  commentCount Int       @default(0)
+  role         Role      @relation(fields: [roleId], references: [id])
+  Post         Post[]
+  Comment      Comment[]
+  roleId       Int
+}
+
+model Post {
+  id           Int       @id @default(autoincrement())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  title        String
+  content      String
+  author       User      @relation(fields: [authorId], references: [id])
+  authorId     Int
+  viewCount    Int       @default(0)
+  replyCount   Int       @default(0)
+  likeCount    Int       @default(0)
+  disLikeCount Int       @default(0)
+  minLevel     Int       @default(1)
+  tags         Tag[]
+  Comment      Comment[]
+}
+
+model Tag {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @unique
+  desc      String
+  count     Int      @default(0)
+  Post      Post[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
+  mentioned String?
+  content   String
+}
