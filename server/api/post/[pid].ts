@@ -1,13 +1,18 @@
+type req = {
+  page: number;
+  size: number;
+};
+
 export default defineEventHandler(async (event) => {
   const pid = getRouterParam(event, "pid");
-  const query = getQuery(event);
-  let page = parseInt(query.page as string);
-  if (isNaN(page)) {
-    page = 1;
-  }
+  const body = (await readBody(event)) as req;
   if (!pid) {
     throw createError("不存在的帖子");
   }
+  
+  const page = (body.page as number) || 1;
+  const size = (body.size as number) || 20;
+
 
   const post = await prisma.post.findFirst({
     where: {
@@ -20,8 +25,8 @@ export default defineEventHandler(async (event) => {
         include: {
           author: true,
         },
-        take: 20,
-        skip: (page - 1) * 20,
+        take: size,
+        skip: (page - 1) * size,
         orderBy: {
           createdAt: "asc",
         },

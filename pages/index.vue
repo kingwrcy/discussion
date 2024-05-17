@@ -3,10 +3,13 @@
     <template #header class="py-1">
       <XTagList />
     </template>
-    <div class="flex flex-col my-2">
+    <div class="flex flex-col ">
       <XPost v-for="post in postList" :key="post.pid" v-bind="post" />
     </div>
-    <UPagination v-model="state.page" :page-count="state.size" :total="totalPosts" v-if="totalPosts > state.size" />
+    <UPagination :to="(page: number) => ({
+      query: { page },
+    })" class="my-2" v-model="state.page" :page-count="state.size" :total="totalPosts"
+      v-if="totalPosts > state.size" />
 
   </UCard>
 </template>
@@ -14,15 +17,39 @@
 <script lang="ts" setup>
 import type { PostDTO } from '~/types';
 
+const route = useRoute()
+
+
 const state = reactive({
   page: 1,
   size: 20
 })
 
-const { data } = await useFetch('/api/post/list', {
+state.page = parseInt(route.query.page as any as string)
+let { data } = await useFetch('/api/post/list', {
   method: 'POST',
   body: JSON.stringify(state),
 })
+
+watch(() => route.fullPath, async () => {
+  const page = parseInt(route.query.page as any as string)
+  const res = await $fetch('/api/post/list', {
+    method: 'POST',
+    body: JSON.stringify({
+      page, size: state.size
+    }),
+  })
+  data.value = res
+})
+
+watch(() => state.page, async () => {
+  if(state.page === 1){
+    navigateTo('/')
+    return
+  }
+  navigateTo('/?page=' + state.page)
+})
+
 
 const postList = computed(() => {
   return data.value?.posts as any as PostDTO[]

@@ -55,6 +55,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   })
   if (result.success) {
     toast.success('注册成功,去登录吧')
+    navigateTo('/user/login')
   } else if ('message' in result) {
     toast.error('注册失败,' + (result.message))
   }

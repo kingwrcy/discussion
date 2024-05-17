@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
   if (count > 0) {
     return {
       success: false,
-      message: "111用户名/邮箱已经存在了",
+      message: "用户名/邮箱已经存在了",
     };
   }
   const uid = `u${randomId()}`

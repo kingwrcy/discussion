@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-
 export const regRequestSchema = z
   .object({
     username: z.string().min(4, "用户名最少4个字符"),
@@ -19,7 +18,10 @@ export const loginRequestSchema = z.object({
 });
 
 export const createPostSchema = z.object({
-  title: z.string().min(4, "标题不少于6个字符"),
+  title: z
+    .string()
+    .min(4, "标题不少于6个字符")
+    .max(120, "标题不能超过120个字符"),
   content: z.string().min(6, "内容最少6个字符"),
   tags: z.array(z.number()).nonempty("请最少选择一个标签"),
 });
@@ -27,8 +29,11 @@ export const createPostSchema = z.object({
 export type JwtPayload = {
   uid: string;
   username: string;
-}
-
+};
+export type RoleDTO = {
+  name: string;
+  level: number;
+};
 export type UserDTO = {
   createdAt: string;
   uid: string;
@@ -40,6 +45,7 @@ export type UserDTO = {
   postCount: number;
   commentCount: number;
   roleId: number;
+  role: RoleDTO;
 };
 export type TagDTO = {
   name: string;
@@ -63,10 +69,10 @@ export type PostDTO = {
   likeCount: number;
   disLikeCount: number;
   minLevel: number;
-  author:UserDTO,
+  author: UserDTO;
   comments?: Array<CommentDTO>;
   tags: Array<TagDTO>;
-  _count:{
-    comments:number
-  }
+  _count: {
+    comments: number;
+  };
 };

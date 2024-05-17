@@ -26,10 +26,10 @@
 </template>
 
 <script lang="ts" setup>
-import { z } from 'zod'
-import type { FormSubmitEvent } from '#ui/types'
-import { loginRequestSchema } from '~/types';
+import type { FormSubmitEvent } from '#ui/types';
 import { toast } from 'vue-sonner';
+import { z } from 'zod';
+import { loginRequestSchema } from '~/types';
 
 type Schema = z.output<typeof loginRequestSchema>
 
@@ -47,8 +47,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   })
   if (result.success && 'tokenKey' in result) {
     refreshCookie(result.tokenKey)
-    navigateTo('/',{replace:true})
-    
+    navigateTo('/', { replace: true })
   } else if ('message' in result) {
     toast.error('登录失败,' + (result.message))
   }

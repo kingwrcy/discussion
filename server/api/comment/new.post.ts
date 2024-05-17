@@ -14,7 +14,7 @@ function extractMentions(text: string) {
 
 export default defineEventHandler(async (event) => {
   if (!event.context.uid) {
-    throw createError("请先去登录");
+    sendRedirect(event,'/user/login')
   }
   const request = (await readBody(event)) as commentRequest;
   if (!request.content) {
@@ -40,6 +40,17 @@ export default defineEventHandler(async (event) => {
     },
     data: {
       commentCount: {
+        increment: 1,
+      },
+    },
+  });
+
+  await prisma.post.update({
+    where: {
+      pid: request.pid,
+    },
+    data: {
+      replyCount: {
         increment: 1,
       },
     },

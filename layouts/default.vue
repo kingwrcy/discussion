@@ -2,30 +2,52 @@
   <div>
     <x-header></x-header>
     <div class="flex max-w-[1080px] mx-auto h-full gap-4 ">
-      
-        <slot />
+
+      <slot />
       <div class="space-y-4 w-1/3">
-        <UCard class="w-full mt-2">
-          <div class="h-20">1</div>
-        </UCard>
+        <XUserCard v-if="userinfo && userinfo.username" />
 
         <UCard class="w-full mt-2">
           <div class="h-20">2</div>
         </UCard>
 
-        <UCard class="w-full mt-2">
-          <div class="h-20">3</div>
-        </UCard>
+
       </div>
     </div>
-    <XFooter/>
+    <XFooter />
   </div>
-  <Toaster position="top-center" richColors 
-  />
+  <Toaster position="top-center" richColors />
 </template>
 <script lang="ts" setup>
 
-import { Toaster } from 'vue-sonner'
+import { Toaster } from 'vue-sonner';
+import type { UserDTO } from '~/types';
+let userinfo = useState<UserDTO>('userinfo')
+const config = useRuntimeConfig()
+const token = useCookie(config.public.tokenKey)
+
+const loadProfile = async () => {
+  const userinfoRes = await useFetch('/api/user/profile', {
+    method: 'POST'
+  })
+  if (userinfoRes.data.value) {
+    userinfo.value = userinfoRes.data.value as UserDTO
+  }
+}
+
+
+watch(token, async () => {
+  if (token.value) {
+    const userinfoRes = await $fetch('/api/user/profile', {
+      method: 'POST'
+    })
+    if (userinfoRes) {
+      userinfo.value = userinfoRes as UserDTO
+    }
+  }
+})
+
+await loadProfile()
 
 useHead({
   link: [
@@ -37,7 +59,7 @@ useHead({
   ],
   style: [
     {
-      
+
     }
   ],
   script: [

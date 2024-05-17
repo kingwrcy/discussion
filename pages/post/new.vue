@@ -19,7 +19,7 @@
         </UFormGroup>
         <UFormGroup label="正文" name="content">
           <ClientOnly>
-            <MdEditor v-model="state.content" :preview="false" :toolbars="toolbars" editor-id="newPost"/>
+            <MdEditor style="max-height: 400px;" v-model="state.content" :preview="false" :toolbars="toolbars" editor-id="newPost"/>
           </ClientOnly>
         </UFormGroup>
         <div>
