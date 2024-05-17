@@ -26,4 +26,25 @@
 <script lang="ts" setup>
 
 import { Toaster } from 'vue-sonner'
+
+useHead({
+  link: [
+    // {
+    //   rel: 'shortcut icon',
+    //   type: 'image/png',
+    //   href: userinfo.value?.favicon || '/favicon.png',
+    // },
+  ],
+  style: [
+    {
+      
+    }
+  ],
+  script: [
+    // {
+    //   type: 'text/javascript',
+    //   innerHTML: userinfo.value?.js || '',
+    // }
+  ]
+})
 </script>

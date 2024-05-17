@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import { default as bcrypt } from "bcryptjs";
 import { regRequestSchema } from "~/types";
+import {sha256} from 'js-sha256'
 
 type regRequest = z.infer<typeof regRequestSchema>;
 
@@ -33,6 +34,7 @@ export default defineEventHandler(async (event) => {
         password: bcrypt.hashSync(request.password, 10),
         email: request.email,
         roleId: 1,
+        avatarUrl:sha256(request.email)
       },
     });
   } catch (e) {

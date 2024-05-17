@@ -50,7 +50,6 @@ export type CommentDTO = {
   content: string;
   cid: string;
   createdAt: string;
-  postId: number;
   mentioned: string | null;
   author: UserDTO;
 };
@@ -67,4 +66,7 @@ export type PostDTO = {
   author:UserDTO,
   comments?: Array<CommentDTO>;
   tags: Array<TagDTO>;
+  _count:{
+    comments:number
+  }
 };

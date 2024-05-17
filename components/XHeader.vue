@@ -1,7 +1,9 @@
 <script setup lang="ts">
 const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)
-
+const logout =()=>{
+  token.value = ''
+}
 
 </script>
 
@@ -24,7 +26,7 @@ const token = useCookie(config.public.tokenKey)
           <UIcon name="i-carbon-login" />
           <span>登录</span>
         </NuxtLink>
-        <div class="flex gap-1 items-center p-2 hover:text-primary/80" to="/login" v-if="token">
+        <div class="flex gap-1 items-center p-2 hover:text-primary/80 cursor-pointer" to="/login" v-if="token" @click="logout">
           <UIcon name="i-carbon-logout" />
           <span>登出</span>
         </div>

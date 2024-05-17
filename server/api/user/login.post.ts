@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { date, z } from "zod";
 import jwt from "jsonwebtoken";
 import { default as bcrypt } from "bcryptjs";
 import { loginRequestSchema } from "~/types";
@@ -6,7 +6,7 @@ import { loginRequestSchema } from "~/types";
 type regRequest = z.infer<typeof loginRequestSchema>;
 
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig()
+  const config = useRuntimeConfig();
   const request = (await readBody(event)) as regRequest;
   const validateResult = loginRequestSchema.safeParse(request);
   if (!validateResult.success) {
@@ -39,15 +39,24 @@ export default defineEventHandler(async (event) => {
       uid: user.uid,
     },
     config.jwtSecretKey,
-    {    
+    {
       expiresIn: 60 * 60 * 24 * 10,
     }
   );
 
-  setCookie(event, config.public.tokenKey, token, {
-    secure: true,
-    expires: new Date(Date.now() + 60 * 60 * 24 * 1000 *10),
+  await prisma.user.update({
+    where: {
+      uid: user.uid,
+    },
+    data: {
+      lastLogin: new Date(),
+    },
   });
 
-  return { success: true, token };
+  setCookie(event, config.public.tokenKey, token, {
+    secure: true,
+    expires: new Date(Date.now() + 60 * 60 * 24 * 1000 * 10),
+  });
+
+  return { success: true, token, tokenKey: config.public.tokenKey };
 });

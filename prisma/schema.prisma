@@ -13,7 +13,7 @@ model Role {
   updatedAt DateTime @updatedAt
   name      String
   level     Int      @default(1)
-  User      User[]
+  users     User[]
 }
 
 model User {
@@ -30,8 +30,8 @@ model User {
   postCount    Int       @default(0)
   commentCount Int       @default(0)
   roleId       Int
-  Comment      Comment[]
-  Post         Post[]
+  comments     Comment[]
+  posts        Post[]
   role         Role      @relation(fields: [roleId], references: [id])
 }
 
@@ -48,7 +48,7 @@ model Post {
   likeCount    Int       @default(0)
   disLikeCount Int       @default(0)
   minLevel     Int       @default(1)
-  Comment      Comment[]
+  comments     Comment[]
   author       User      @relation(fields: [uid], references: [uid])
   tags         Tag[]     @relation("PostToTag")
 }
@@ -60,7 +60,7 @@ model Tag {
   name      String   @unique
   desc      String
   count     Int      @default(0)
-  Post      Post[]   @relation("PostToTag")
+  posts     Post[]   @relation("PostToTag")
 }
 
 model Comment {

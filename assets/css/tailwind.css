@@ -2,3 +2,4 @@
 @tailwind components;
 @tailwind utilities;
 .md-editor-preview-wrapper{padding:0 !important; }
+.md-editor-preview{font-size:14px !important;  }

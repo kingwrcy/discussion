@@ -10,7 +10,7 @@
           <UInput v-model="state.title" autocomplete="off" />
         </UFormGroup>
         <UFormGroup label="标签" name="tags">
-          <USelectMenu value-attribute="id" option-attribute="desc" v-model="state.tags" :options="options" multiple>
+          <USelectMenu value-attribute="id" option-attribute="desc" v-model="state.tags" :options="tags" multiple>
             <template #label>
               <span v-if="state.tags.length" class="truncate">{{ selectedTagDesc }}</span>
               <span v-else>请选择至少一个标签</span>
@@ -18,7 +18,9 @@
           </USelectMenu>
         </UFormGroup>
         <UFormGroup label="正文" name="content">
-          <MdEditor v-model="state.content" />
+          <ClientOnly>
+            <MdEditor v-model="state.content" :preview="false" :toolbars="toolbars" editor-id="newPost"/>
+          </ClientOnly>
         </UFormGroup>
         <div>
           <UButton type="submit" :loading="pending">
@@ -27,8 +29,6 @@
         </div>
       </UForm>
     </div>
-
-
   </UCard>
 </template>
 
@@ -38,29 +38,48 @@ import { z } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
 import { createPostSchema } from '~/types';
 import { toast } from 'vue-sonner';
-import { MdEditor   } from 'md-editor-v3';
+import { MdEditor, type ToolbarNames } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 type Schema = z.output<typeof createPostSchema>
 
-
-
-const options = ref([
-  { id: 1, name: 'bug', desc: '问题' },
-  { id: 2, name: 'documentation', desc: '文档' },
-])
-
-
+const toolbars: ToolbarNames[] = [
+  'bold',
+  'underline',
+  '-',
+  'title',
+  'strikeThrough',
+  'quote',
+  'unorderedList',
+  'orderedList',
+  'task',
+  '-',
+  'codeRow',
+  'code',
+  'link',
+  'image',
+  'table',
+  '-',
+  'revoke',
+  'next',
+  '=',
+  'preview',
+];
+const tagRes = useFetch('/api/tag/list', {
+  method: 'POST',
+  key:"tagLists"
+})
+const tags = tagRes.data.value?.tags.map(item=>{return {...item,desc:item.name+' / '+item.desc}})
 
 const state = reactive<Schema>({
   title: "",
   content: "",
-  tags: [options.value[0].id]
+  tags: [tags?.at(0)?.id ?? 0]
 })
 
 const selectedTagDesc = computed(() => {
   let label: string = ""
   state.tags.map(id => {
-    label += (options.value.find(x => x.id === id)?.desc + ",")
+    label += (tags?.find(x => x.id === id)?.name + ",")
   })
   if (label.length > 0) {
     return label.substring(0, label.length - 1)

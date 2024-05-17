@@ -1,7 +1,7 @@
 <template>
-  <div class="flex space-x-2  items-start py-2 border-b border-primary/10">
+  <div class="flex space-x-2  items-start py-2" :class="{'border-b border-primary/10':!route.fullPath.startsWith('/post')}">
 
-    <UAvatar v-if="author && author.avatarUrl" :src="author.avatarUrl ?? ''" size="md" alt="Avatar" />
+    <UAvatar v-if="author && author.avatarUrl" :src="getAvatarUrl(author.avatarUrl)" size="md" alt="Avatar" />
     <div class="flex-1 ">
       <NuxtLink :to="`/post/${props.pid}`" 
         class="text-gray-600 font-semibold text-sm  cursor-pointer  hover:text-primary/80">
@@ -34,11 +34,13 @@
         {{ tag.name }}</UBadge>
     </div>
   </div>
+
+  
 </template>
 
 <script lang="ts" setup>
 import type { PostDTO } from '~/types';
-
+const route = useRoute()
 const props = defineProps<PostDTO>()
 
 </script>

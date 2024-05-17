@@ -26,7 +26,12 @@ export default defineEventHandler(async (event) => {
 
   const posts = await prisma.post.findMany({
     where,
-    include: {
+    include: {      
+      _count:{
+        select:{
+          comments:true
+        }
+      },
       author: {
         select: {
           uid: true,
@@ -35,11 +40,12 @@ export default defineEventHandler(async (event) => {
         },
       },
       tags: true,
-      Comment: true,
+      comments: false,      
     },
     orderBy: {
       createdAt: "desc",
     },
+   
     skip: (request.page - 1) * request.size,
     take: request.size,
   });

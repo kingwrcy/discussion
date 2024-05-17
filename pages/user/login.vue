@@ -45,11 +45,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     method: 'POST',
     body: JSON.stringify(event.data)
   })
-  if (result.success) {
-    toast.success('登录成功,2秒后返回首页')
-    setTimeout(() => {
-      navigateTo('/')
-    }, 2000)
+  if (result.success && 'tokenKey' in result) {
+    refreshCookie(result.tokenKey)
+    navigateTo('/',{replace:true})
+    
   } else if ('message' in result) {
     toast.error('登录失败,' + (result.message))
   }

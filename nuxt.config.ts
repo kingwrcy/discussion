@@ -1,23 +1,23 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['dayjs-nuxt',"@nuxt/ui"],
+  modules: ["dayjs-nuxt", "@nuxt/ui"],
   dayjs: {
-    locales: ['zh-CN'],
-    plugins: ['relativeTime'],
-    defaultLocale: 'zh-CN'
+    locales: ["zh-CN"],
+    plugins: ["relativeTime"],
+    defaultLocale: "zh-CN",
   },
   ui: {
-    icons: ['carbon']    
+    icons: ["carbon"],
   },
 
   devtools: {
-    enabled: false
+    enabled: false,
   },
-  runtimeConfig:{
-    public:{
-      tokenKey:''
+  runtimeConfig: {
+    public: {
+      tokenKey: "",
+      avatarCdn: "",
     },
-    jwtSecretKey:''
-
-  }
-})
+    jwtSecretKey: "",
+  },
+});
