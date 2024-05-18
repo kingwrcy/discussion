@@ -38,7 +38,6 @@ export default defineEventHandler(async (event) => {
       },
     },
   });
-
   await prisma.post.update({
     where: {
       pid,
@@ -49,6 +48,7 @@ export default defineEventHandler(async (event) => {
       },
     },
   });
+
 
   return {
     success: true,

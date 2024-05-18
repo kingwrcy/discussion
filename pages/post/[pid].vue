@@ -7,8 +7,14 @@
       <MdPreview v-model="post.content" preview-theme="github" :editor-id="post.pid" />
     </div>
     <div class="px-4 flex justify-end pb-2 border-b items-center space-x-2">
+      <NuxtLink :to="`/post/new?pid=${post.pid}`">
+        <UBadge variant="soft" size="xs" class="flex gap-1 items-center cursor-pointer hover:text-primary/80">
+          <UIcon name="i-carbon-edit" />
+          <div>编辑</div>
+        </UBadge>
+      </NuxtLink>
       <UBadge color="primary" size="xs" class="cursor-pointer hover:bg-primary/80 ">
-        <UIcon name="i-carbon-chat" class="mr-1" />加入收藏
+        <UIcon name="i-carbon-favorite-filled" color="red" class="mr-1" />加入收藏
       </UBadge>
     </div>
 
@@ -34,6 +40,7 @@ const state = reactive({
   page: 1,
   size: 20
 })
+
 const url = '/api/post/' + route.params.pid
 let { data, refresh } = await useFetch(url, {
   method: 'POST',
@@ -54,7 +61,7 @@ watch(() => route.fullPath, async () => {
 
 watch(() => state.page, async () => {
   if (state.page === 1) {
-    navigateTo('/post/'+route.params.pid)
+    navigateTo('/post/' + route.params.pid)
     return
   }
   navigateTo('?page=' + state.page)

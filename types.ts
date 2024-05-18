@@ -24,6 +24,7 @@ export const createPostSchema = z.object({
     .max(120, "标题不能超过120个字符"),
   content: z.string().min(6, "内容最少6个字符"),
   tags: z.array(z.number()).nonempty("请最少选择一个标签"),
+  pid:z.string().optional()
 });
 
 export type JwtPayload = {
@@ -48,6 +49,7 @@ export type UserDTO = {
   role: RoleDTO;
 };
 export type TagDTO = {
+  id:number;
   name: string;
   desc: string;
   count: number;

@@ -17,16 +17,26 @@ export default defineEventHandler(async (event) => {
     };
   }
 
-  const tags = request.tags.map((x) => {
+  const tags = request.tags.filter(x=>x>0).map((x) => {
     return { id: x };
   });
 
+
   const pid = `p${randomId()}`;
 
-
   try {
-    await prisma.post.create({
-      data: {
+    await prisma.post.upsert({
+      where: {
+        pid: request.pid??pid,
+      },
+      update: {
+        title: request.title,
+        content: request.content,
+        tags: {
+          set: tags,
+        },
+      },
+      create: {
         pid,
         title: request.title,
         content: request.content,
@@ -40,34 +50,37 @@ export default defineEventHandler(async (event) => {
         },
       },
     });
-    await prisma.tag.updateMany({
-      where: {
-        id: {
-          in: request.tags,
+    if (!request.pid) {
+      await prisma.tag.updateMany({
+        where: {
+          id: {
+            in: request.tags,
+          },
         },
-      },
-      data: {
-        count: {
-          increment: 1,
+        data: {
+          count: {
+            increment: 1,
+          },
         },
-      },
-    });
-    await prisma.user.update({
-      where: {
-        uid: event.context.uid,
-      },
-      data: {
-        postCount: {
-          increment: 1,
+      });
+
+      await prisma.user.update({
+        where: {
+          uid: event.context.uid,
         },
-      },
-    });
+        data: {
+          postCount: {
+            increment: 1,
+          },
+        },
+      });
+    }
   } catch (e) {
     console.log("error", e);
     throw createError("发表贴子失败");
   }
   return {
     success: true,
-    pid,
+    pid:request.pid || pid,
   };
 });

@@ -18,9 +18,8 @@
           </USelectMenu>
         </UFormGroup>
         <UFormGroup label="正文" name="content">
-          <ClientOnly>
-            <MdEditor style="max-height: 400px;" v-model="state.content" :preview="false" :toolbars="toolbars" editor-id="newPost"/>
-          </ClientOnly>
+          <MdEditor style="max-height: 400px;" v-model="state.content" :preview="false" :toolbars="toolbars"
+            editor-id="newPost" />
         </UFormGroup>
         <div>
           <UButton type="submit" :loading="pending">
@@ -34,13 +33,15 @@
 
 
 <script lang="ts" setup>
-import { z } from 'zod'
+import { object, z } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
-import { createPostSchema } from '~/types';
+import { createPostSchema, type PostDTO, type TagDTO } from '~/types';
 import { toast } from 'vue-sonner';
 import { MdEditor, type ToolbarNames } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 type Schema = z.output<typeof createPostSchema>
+
+const route = useRoute()
 
 const toolbars: ToolbarNames[] = [
   'bold',
@@ -66,37 +67,65 @@ const toolbars: ToolbarNames[] = [
 ];
 const tagRes = useFetch('/api/tag/list', {
   method: 'POST',
-  key:"tagLists"
+  key: "tagLists"
 })
-const tags = tagRes.data.value?.tags.map(item=>{return {...item,desc:item.name+' / '+item.desc}})
+const tags = computed(() => {
+  const items = tagRes.data.value?.tags.map(item => { return { name: item.name, id: item.id, desc: item.name + ' / ' + item.desc } })
+  return items
+})
+
 
 const state = reactive<Schema>({
+  pid: "",
   title: "",
   content: "",
-  tags: [tags?.at(0)?.id ?? 0]
+  tags: [0]
 })
+
+const loadPost = async ()=>{
+  const query = route.query
+  const pid = (query.pid) as string || ''
+  if (!pid) return
+  const res = (await $fetch('/api/post/' + pid,{
+    method:'POST',
+    body:JSON.stringify({})
+  })) as any as {post:PostDTO}
+  // Object.assign(state,res.post)
+  //@ts-ignore
+  state.tags = res.post.tags?.map(x=>x.id)
+  state.content = res.post.content
+  state.title = res.post.title
+  state.pid = res.post.pid
+}
+
+await loadPost()
+watch(() => route.fullPath, loadPost)
 
 const selectedTagDesc = computed(() => {
   let label: string = ""
-  state.tags.map(id => {
-    label += (tags?.find(x => x.id === id)?.name + ",")
+  state.tags.filter(x => x > 0).map(id => {
+    label += (tags.value?.find(x => x.id === id)?.name + ",")
   })
   if (label.length > 0) {
     return label.substring(0, label.length - 1)
   }
-  return label
+  return label || '请选择标签,最少一个,最多三个'
 })
 
 const pending = ref(false)
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  // pending.value = true
+  console.log(state.tags)
+  if(state.tags.filter(x=>x>0).length <= 0 ){
+    toast.error('请选择标签,最少一个,最多三个')
+    return
+  }
+  pending.value = true
   const result = await $fetch('/api/post/new', {
     method: 'POST',
     body: JSON.stringify(event.data)
   })
   if (result.success && 'pid' in result) {
-    toast.success('发表成功')
     setTimeout(() => {
       navigateTo(`/post/${result.pid}`)
     }, 200)
