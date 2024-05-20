@@ -30,6 +30,8 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/shortid": "^0.0.32",
+    "@vueuse/core": "^10.9.0",
+    "@vueuse/nuxt": "^10.9.0",
     "dayjs": "^1.11.11",
     "dayjs-nuxt": "^2.1.9",
     "tailwindcss": "^3.4.3",

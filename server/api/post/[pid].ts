@@ -9,21 +9,49 @@ export default defineEventHandler(async (event) => {
   if (!pid) {
     throw createError("不存在的帖子");
   }
-  
+
   const page = (body.page as number) || 1;
   const size = (body.size as number) || 20;
-
+  const userId = event.context.userId;
 
   const post = await prisma.post.findFirst({
     where: {
       pid: pid,
     },
     include: {
-      author: true,
+      author: {
+        select: {
+          username: true,
+          avatarUrl: true,
+        },
+      },
       tags: true,
       comments: {
         include: {
-          author: true,
+          author: {
+            select: {
+              username: true,
+              avatarUrl: true,
+            },
+          },
+          likes: {
+            where: {
+              userId: userId,
+            },
+            select: {
+              userId: true,
+              commentId: true,
+            },
+          },
+          dislikes: {
+            where: {
+              userId: userId,
+            },
+            select: {
+              userId: true,
+              commentId: true,
+            },
+          },
         },
         take: size,
         skip: (page - 1) * size,
@@ -31,9 +59,19 @@ export default defineEventHandler(async (event) => {
           createdAt: "asc",
         },
       },
+      fav: {
+        where: {
+          userId: userId,
+        },
+        select: {
+          userId: true,
+        },
+      },
       _count: {
         select: {
           comments: true,
+          commentLike: true,
+          commentDisLike: true,
         },
       },
     },
@@ -49,9 +87,18 @@ export default defineEventHandler(async (event) => {
     },
   });
 
-
-  return {
+  const res = {
     success: true,
-    post,
+    post: {
+      ...post,
+      fav: userId ? post?.fav.length && post?.fav.length > 0 : false,
+      comments: post?.comments.map((comment) => ({
+        ...comment,
+        like: userId ? comment.likes.length > 0 : false,
+        dislike: userId ? comment.dislikes.length > 0 : false,
+      })),
+    },
   };
+
+  return res;
 });

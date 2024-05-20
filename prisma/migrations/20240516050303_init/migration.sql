@@ -8,8 +8,45 @@ CREATE TABLE "Comment" (
     "pid" TEXT NOT NULL,
     "mentioned" TEXT,
     "content" TEXT NOT NULL,
-    FOREIGN KEY ("uid") REFERENCES "User" ("uid") ON DELETE RESTRICT ON UPDATE CASCADE,
-    FOREIGN KEY ("pid") REFERENCES "Post" ("pid") ON DELETE RESTRICT ON UPDATE CASCADE
+    FOREIGN KEY ("pid") REFERENCES "Post" ("pid") ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY ("uid") REFERENCES "User" ("uid") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "DisLike" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "commentId" INTEGER NOT NULL,
+    "postId" INTEGER NOT NULL,
+    FOREIGN KEY ("postId") REFERENCES "Post" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY ("commentId") REFERENCES "Comment" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "Fav" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "userId" INTEGER NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    "postId" INTEGER NOT NULL,
+    FOREIGN KEY ("postId") REFERENCES "Post" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "Like" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "commentId" INTEGER NOT NULL,
+    "postId" INTEGER NOT NULL,
+    FOREIGN KEY ("postId") REFERENCES "Post" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY ("commentId") REFERENCES "Comment" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -70,12 +107,18 @@ CREATE TABLE "User" (
 CREATE TABLE "_PostToTag" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL,
-    FOREIGN KEY ("A") REFERENCES "Post" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY ("B") REFERENCES "Tag" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY ("B") REFERENCES "Tag" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY ("A") REFERENCES "Post" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Comment_cid_key" ON "Comment"("cid" ASC);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "DisLike_userId_commentId_key" ON "DisLike"("userId" ASC, "commentId" ASC);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Like_userId_commentId_key" ON "Like"("userId" ASC, "commentId" ASC);
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Post_pid_key" ON "Post"("pid" ASC);
@@ -84,17 +127,17 @@ CREATE UNIQUE INDEX "Post_pid_key" ON "Post"("pid" ASC);
 CREATE UNIQUE INDEX "Tag_name_key" ON "Tag"("name" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_uid_key" ON "User"("uid" ASC);
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email" ASC);
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username" ASC);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email" ASC);
-
--- CreateIndex
-CREATE UNIQUE INDEX "_PostToTag_AB_unique" ON "_PostToTag"("A" ASC, "B" ASC);
+CREATE UNIQUE INDEX "User_uid_key" ON "User"("uid" ASC);
 
 -- CreateIndex
 CREATE INDEX "_PostToTag_B_index" ON "_PostToTag"("B" ASC);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_PostToTag_AB_unique" ON "_PostToTag"("A" ASC, "B" ASC);
 

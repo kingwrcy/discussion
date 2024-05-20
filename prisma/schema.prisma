@@ -17,40 +17,46 @@ model Role {
 }
 
 model User {
-  id           Int       @id @default(autoincrement())
-  uid          String    @unique
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  username     String    @unique
-  password     String
-  lastLogin    DateTime?
-  email        String    @unique
-  avatarUrl    String?
-  point        Int       @default(0)
-  postCount    Int       @default(0)
-  commentCount Int       @default(0)
-  roleId       Int
-  comments     Comment[]
-  posts        Post[]
-  role         Role      @relation(fields: [roleId], references: [id])
+  id             Int       @id @default(autoincrement())
+  uid            String    @unique
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  username       String    @unique
+  password       String
+  lastLogin      DateTime?
+  email          String    @unique
+  avatarUrl      String?
+  point          Int       @default(0)
+  postCount      Int       @default(0)
+  commentCount   Int       @default(0)
+  roleId         Int
+  comments       Comment[]
+  posts          Post[]
+  role           Role      @relation(fields: [roleId], references: [id])
+  fav            Fav[]
+  commentLike    Like[]
+  commentDisLike DisLike[]
 }
 
 model Post {
-  id           Int       @id @default(autoincrement())
-  pid          String    @unique
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  title        String
-  content      String
-  uid          String
-  viewCount    Int       @default(0)
-  replyCount   Int       @default(0)
-  likeCount    Int       @default(0)
-  disLikeCount Int       @default(0)
-  minLevel     Int       @default(1)
-  comments     Comment[]
-  author       User      @relation(fields: [uid], references: [uid])
-  tags         Tag[]     @relation("PostToTag")
+  id             Int       @id @default(autoincrement())
+  pid            String    @unique
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  title          String
+  content        String
+  uid            String
+  viewCount      Int       @default(0)
+  replyCount     Int       @default(0)
+  likeCount      Int       @default(0)
+  disLikeCount   Int       @default(0)
+  minLevel       Int       @default(1)
+  comments       Comment[]
+  author         User      @relation(fields: [uid], references: [uid])
+  tags           Tag[]     @relation("PostToTag")
+  commentDisLike DisLike[]
+  commentLike    Like[]
+  fav            Fav[]
 }
 
 model Tag {
@@ -64,14 +70,54 @@ model Tag {
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
-  cid       String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        Int       @id @default(autoincrement())
+  cid       String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   uid       String
   pid       String
   mentioned String?
   content   String
-  post      Post     @relation(fields: [pid], references: [pid])
-  author    User     @relation(fields: [uid], references: [uid])
+  post      Post      @relation(fields: [pid], references: [pid])
+  author    User      @relation(fields: [uid], references: [uid])
+  likes     Like[]
+  dislikes  DisLike[]
+}
+
+model Fav {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  post      Post     @relation(fields: [postId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  postId    Int
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    Int
+  comment   Comment  @relation(fields: [commentId], references: [id])
+  commentId Int
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
+
+  @@unique([userId, commentId])
+}
+
+model DisLike {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  comment   Comment  @relation(fields: [commentId], references: [id])
+  userId    Int
+  commentId Int
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
+
+  @@unique([userId, commentId])
 }

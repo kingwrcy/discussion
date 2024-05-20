@@ -23,12 +23,16 @@ export const createPostSchema = z.object({
     .min(4, "标题不少于6个字符")
     .max(120, "标题不能超过120个字符"),
   content: z.string().min(6, "内容最少6个字符"),
-  tags: z.array(z.number()).nonempty("请最少选择一个标签"),
-  pid:z.string().optional()
+  tags: z
+    .array(z.number())
+    .nonempty("请最少选择一个标签")
+    .max(3, "最多只能选择三个标签"),
+  pid: z.string().optional(),
 });
 
 export type JwtPayload = {
   uid: string;
+  userId: number;
   username: string;
 };
 export type RoleDTO = {
@@ -49,7 +53,7 @@ export type UserDTO = {
   role: RoleDTO;
 };
 export type TagDTO = {
-  id:number;
+  id: number;
   name: string;
   desc: string;
   count: number;
@@ -60,6 +64,10 @@ export type CommentDTO = {
   createdAt: string;
   mentioned: string | null;
   author: UserDTO;
+  likeCount?: number;
+  dislikeCount?: number;
+  like?: boolean;
+  dislike?: boolean;
 };
 export type PostDTO = {
   title: string;
@@ -76,5 +84,22 @@ export type PostDTO = {
   tags: Array<TagDTO>;
   _count: {
     comments: number;
+    commentLike: number;
+    commentDisLike: number;
   };
+  fav: boolean;
+};
+
+export const SafeUser = {
+  createdAt: true,
+  uid: true,
+  id: true,
+  username: true,
+  lastLogin: true,
+  email: true,
+  avatarUrl: true,
+  point: true,
+  postCount: true,
+  commentCount: true,
+  roleId: true
 };

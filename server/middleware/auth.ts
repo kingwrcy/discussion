@@ -16,6 +16,7 @@ export default defineEventHandler(async (event) => {
       const result = jwt.verify(token, config.jwtSecretKey);
       const payload = result as JwtPayload;
       event.context.uid = payload.uid;
+      event.context.userId = payload.userId;
     } catch (e) {
       console.log(e)
       throw createError("登录信息已失效,请重新登录");

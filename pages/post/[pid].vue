@@ -13,13 +13,18 @@
           <div>编辑</div>
         </UBadge>
       </NuxtLink>
-      <UBadge color="primary" size="xs" class="cursor-pointer hover:bg-primary/80 ">
-        <UIcon name="i-carbon-favorite-filled" color="red" class="mr-1" />加入收藏
+      <UBadge variant="soft" size="xs" class="cursor-pointer hover:text-primary/80" @click="toggleFav">
+        <UIcon name="i-carbon-favorite-filled" class="mr-1" :class="[post.fav?'text-red-500':'']" />{{post.fav?'取消':'加入'}}收藏
       </UBadge>
     </div>
 
     <div class=" gap-2 divide-y divide-gray-200 dark:divide-gray-800">
-      <XComment v-for="(comment, index) in post.comments" :key="comment.cid" v-bind="comment" :index="index" />
+      <XComment v-for="(comment, index) in post.comments" 
+      :likeCount="post._count.commentLike"
+      :dislikeCount="post._count.commentDisLike" 
+      :key="comment.cid" 
+      v-bind="comment" 
+      :index="index" />
       <UPagination class="p-4" :to="(page: number) => ({
         query: { page },
       })" v-model="state.page" :page-count="state.size" :total="totalComments" v-if="totalComments > state.size" />
@@ -66,6 +71,13 @@ watch(() => state.page, async () => {
   }
   navigateTo('?page=' + state.page)
 })
+
+const toggleFav = async () => {
+  await $fetch('/api/post/fav?pid=' + post.value.pid, {
+    method: 'POST'
+  })
+  await refresh()
+}
 
 const post = computed(() => {
   return (data.value as { post: PostDTO }).post

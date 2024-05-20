@@ -12,12 +12,13 @@ export default defineEventHandler(async (event) => {
   const request = (await readBody(event)) as ListPostRequest;
 
   const where: Prisma.PostWhereInput = {};
+  const userId = event.context.userId
 
-  if(request.page <= 0 && !request.page){
-    request.page = 1
+  if (request.page <= 0 && !request.page) {
+    request.page = 1;
   }
-  if(request.size <= 0 && !request.size){
-    request.size = 20
+  if (request.size <= 0 && !request.size) {
+    request.size = 20;
   }
   if (request.uid) {
     where.uid = request.uid;
@@ -30,13 +31,13 @@ export default defineEventHandler(async (event) => {
     };
   }
 
-  const posts = await prisma.post.findMany({
+  let posts = await prisma.post.findMany({
     where,
-    include: {      
-      _count:{
-        select:{
-          comments:true
-        }
+    include: {
+      _count: {
+        select: {
+          comments: true,
+        },
       },
       author: {
         select: {
@@ -46,12 +47,21 @@ export default defineEventHandler(async (event) => {
         },
       },
       tags: true,
-      comments: false,      
+      comments: false,
+      fav: {
+        where: {
+          userId: userId,
+        },
+        select: {
+          userId: true,
+          postId: true,
+        },
+      },
     },
     orderBy: {
       createdAt: "desc",
     },
-   
+
     skip: (request.page - 1) * request.size,
     take: request.size,
   });
@@ -59,9 +69,16 @@ export default defineEventHandler(async (event) => {
     where,
   });
 
+  const postsWithExtraInfo = posts.map((post) => {
+    return {
+      ...post,
+      fav: userId && post.fav && post.fav.length >0 ? true : false,
+    };
+  });
+
   return {
     success: true,
-    posts,
+    posts: postsWithExtraInfo,
     total,
   };
 });
