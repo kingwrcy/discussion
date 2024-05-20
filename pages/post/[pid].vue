@@ -77,6 +77,7 @@ const toggleFav = async () => {
     method: 'POST'
   })
   await refresh()
+  userCardChanged.emit()
 }
 
 const post = computed(() => {

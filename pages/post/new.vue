@@ -126,6 +126,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     body: JSON.stringify(event.data)
   })
   if (result.success && 'pid' in result) {
+    userCardChanged.emit()
     setTimeout(() => {
       navigateTo(`/post/${result.pid}`)
     }, 200)

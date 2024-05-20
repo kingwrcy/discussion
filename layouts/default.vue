@@ -35,6 +35,9 @@ const loadProfile = async () => {
   }
 }
 
+userCardChanged.on(async () => {
+  await loadProfile()
+})
 
 watch(token, async () => {
   if (token.value) {

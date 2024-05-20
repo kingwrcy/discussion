@@ -1,0 +1,1 @@
+export const userCardChanged = useEventBus<void>('user-card-changed')

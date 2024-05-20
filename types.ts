@@ -51,6 +51,9 @@ export type UserDTO = {
   commentCount: number;
   roleId: number;
   role: RoleDTO;
+  _count: {
+    fav: number;
+  };
 };
 export type TagDTO = {
   id: number;
@@ -101,5 +104,5 @@ export const SafeUser = {
   point: true,
   postCount: true,
   commentCount: true,
-  roleId: true
+  roleId: true,
 };

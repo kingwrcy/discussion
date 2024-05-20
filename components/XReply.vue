@@ -55,6 +55,7 @@ const reply = async () => {
   if (res.success) {
     state.content = ''
     emits('commented')
+    userCardChanged.emit()
   }
 }
 </script>
