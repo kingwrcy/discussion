@@ -18,8 +18,8 @@
           </USelectMenu>
         </UFormGroup>
         <UFormGroup label="正文" name="content">
-          <MdEditor style="max-height: 400px;" v-model="state.content" :preview="false" :toolbars="toolbars"
-            editor-id="newPost" />
+          <MdEditor :no-upload-img="true" style="max-height: 400px;" v-model="state.content" :preview="false"
+            :toolbars="toolbars" editor-id="newPost" />
         </UFormGroup>
         <div>
           <UButton type="submit" :loading="pending">
@@ -33,14 +33,28 @@
 
 
 <script lang="ts" setup>
-import { object, z } from 'zod'
-import type { FormSubmitEvent } from '#ui/types'
-import { createPostSchema, type PostDTO, type TagDTO } from '~/types';
-import { toast } from 'vue-sonner';
+import type { FormSubmitEvent } from '#ui/types';
 import { MdEditor, type ToolbarNames } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
+import { toast } from 'vue-sonner';
+import { z } from 'zod';
+import { createPostSchema, type PostDTO } from '~/types';
 type Schema = z.output<typeof createPostSchema>
+import { config as mdConfig } from 'md-editor-v3';
+import LinkAttr from 'markdown-it-link-attributes';
 
+mdConfig({
+  markdownItConfig(md) {
+    md.use(LinkAttr, {
+      attrs: {
+        target: '_blank'
+      }
+    });
+    md.set({
+      linkify: true
+    });
+  }
+});
 const route = useRoute()
 
 const toolbars: ToolbarNames[] = [
@@ -82,17 +96,17 @@ const state = reactive<Schema>({
   tags: [0]
 })
 
-const loadPost = async ()=>{
+const loadPost = async () => {
   const query = route.query
   const pid = (query.pid) as string || ''
   if (!pid) return
-  const res = (await $fetch('/api/post/' + pid,{
-    method:'POST',
-    body:JSON.stringify({})
-  })) as any as {post:PostDTO}
+  const res = (await $fetch('/api/post/' + pid, {
+    method: 'POST',
+    body: JSON.stringify({})
+  })) as any as { post: PostDTO }
   // Object.assign(state,res.post)
   //@ts-ignore
-  state.tags = res.post.tags?.map(x=>x.id)
+  state.tags = res.post.tags?.map(x => x.id)
   state.content = res.post.content
   state.title = res.post.title
   state.pid = res.post.pid
@@ -116,7 +130,7 @@ const pending = ref(false)
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   console.log(state.tags)
-  if(state.tags.filter(x=>x>0).length <= 0 ){
+  if (state.tags.filter(x => x > 0).length <= 0) {
     toast.error('请选择标签,最少一个,最多三个')
     return
   }

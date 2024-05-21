@@ -14,7 +14,9 @@ export default defineEventHandler(async (event) => {
       role: true,      
       _count: {
         select:{
-          fav:true
+          fav:true,
+          comments:true,
+          posts:true
         }
       }
     },

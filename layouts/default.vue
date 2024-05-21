@@ -5,7 +5,7 @@
 
       <slot />
       <div class="space-y-4 w-1/3">
-        <XUserCard v-if="userinfo && userinfo.username" />
+        <XUserCard v-if="userinfo && userinfo.username && !route.fullPath.startsWith('/member')" />
 
         <UCard class="w-full mt-2">
           <div class="h-20">2</div>
@@ -25,6 +25,7 @@ import type { UserDTO } from '~/types';
 let userinfo = useState<UserDTO>('userinfo')
 const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)
+const route = useRoute()
 
 const loadProfile = async () => {
   const userinfoRes = await useFetch('/api/user/profile', {
@@ -36,7 +37,12 @@ const loadProfile = async () => {
 }
 
 userCardChanged.on(async () => {
-  await loadProfile()
+  const userinfoRes = await $fetch('/api/user/profile', {
+    method: 'POST'
+  })
+  if (userinfoRes) {
+    userinfo.value = userinfoRes as UserDTO
+  }
 })
 
 watch(token, async () => {

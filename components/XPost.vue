@@ -1,7 +1,7 @@
 <template>
-  <div class="flex space-x-2  items-start py-2" :class="{ 'border-b border-primary/10': !detailPage }">
+  <div class="flex space-x-2  items-start py-2">
 
-    <NuxtLink :to="`/member/${author.username}`">
+    <NuxtLink :to="`/member/${author.username}`" v-if="showAvatar">
       <UAvatar v-if="author && author.avatarUrl" :src="getAvatarUrl(author.avatarUrl)" size="md" alt="Avatar" />
     </NuxtLink>
     <div class="flex-1 ">
@@ -38,7 +38,7 @@
 
     <div class="flex gap-1 min-w-[120px] justify-end">
       <UBadge color="gray" variant="solid" size="xs" class="cursor-pointer hover:bg-gray-100 self-center"
-        v-for="tag in props.tags ">
+        v-for="tag in tags ">
         {{ tag.name }}</UBadge>
     </div>
   </div>
@@ -49,8 +49,14 @@
 <script lang="ts" setup>
 import type { PostDTO } from '~/types';
 const route = useRoute()
-const props = defineProps<PostDTO>()
 const detailPage = route.fullPath.startsWith('/post')
+
+const props = withDefaults(defineProps<PostDTO & {
+  showAvatar: boolean
+}>(), {
+  showAvatar: true,
+  fav:false
+})
 
 </script>
 

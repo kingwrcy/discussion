@@ -12,6 +12,12 @@ export const regRequestSchema = z
     path: ["repeatPassword"],
   });
 
+  export const saveSettingsRequestSchema = z.object({
+    password:z.string().optional(),
+    email:z.string().email('请填写正确邮箱地址'),
+    css: z.string().optional()
+  });
+
 export const loginRequestSchema = z.object({
   username: z.string().min(4, "用户名最少4个字符"),
   password: z.string().min(6, "密码最少6个字符"),
@@ -53,6 +59,8 @@ export type UserDTO = {
   role: RoleDTO;
   _count: {
     fav: number;
+    comments: number;
+    posts: number;
   };
 };
 export type TagDTO = {
@@ -71,11 +79,13 @@ export type CommentDTO = {
   dislikeCount?: number;
   like?: boolean;
   dislike?: boolean;
+  post?: PostDTO;
 };
 export type PostDTO = {
   title: string;
   content: string;
   pid: string;
+  uid: string;
   createdAt: string;
   viewCount: number;
   replyCount: number;
@@ -90,7 +100,7 @@ export type PostDTO = {
     commentLike: number;
     commentDisLike: number;
   };
-  fav: boolean;
+  fav?: boolean;
 };
 
 export const SafeUser = {

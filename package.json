@@ -17,6 +17,7 @@
     "bcryptjs": "^2.4.3",
     "js-sha256": "^0.11.0",
     "jsonwebtoken": "^9.0.2",
+    "markdown-it-link-attributes": "^4.0.1",
     "md-editor-v3": "^4.15.0",
     "nuxt": "^3.11.2",
     "prisma": "^5.14.0",
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.6",
+    "@types/markdown-it-link-attributes": "^3.0.5",
     "@types/shortid": "^0.0.32",
     "@vueuse/core": "^10.9.0",
     "@vueuse/nuxt": "^10.9.0",

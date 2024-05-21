@@ -13,11 +13,12 @@
           <span>{{ $dayjs(createdAt).fromNow() }}</span>
         </div>
         <div title="支持" class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer" @click="doLike">
-          <UIcon name="i-carbon-favorite" :class="[state.like ? 'text-red-500':'']"/>
+          <UIcon name="i-carbon-favorite" :class="[state.like ? 'text-red-500' : '']" />
           <span>{{ state.likeCount ?? 0 }}</span>
         </div>
-        <div title="反对" class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer" @click="doDisLike">
-          <UIcon name="i-carbon-thumbs-down" :class="[state.dislike ? 'text-yellow-500':'']"/>
+        <div title="反对" class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer"
+          @click="doDisLike">
+          <UIcon name="i-carbon-thumbs-down" :class="[state.dislike ? 'text-yellow-500' : '']" />
           <span>{{ state.dislikeCount ?? 0 }}</span>
         </div>
       </div>
@@ -26,7 +27,7 @@
       </div>
     </div>
 
-    <div class="text-xs text-gray-600 select-none cursor-pointer">{{ `#${index + 1}` }}</div>
+    <div class="text-xs text-gray-600 select-none cursor-pointer" v-if="index >= 0">{{ `#${index + 1}` }}</div>
   </div>
 </template>
 

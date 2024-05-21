@@ -8,6 +8,8 @@ export default defineEventHandler(async (event) => {
     throw createError("请先去登录");
   }
 
+  
+
   const request = (await readBody(event)) as createPostRequest;
   const validateResult = createPostSchema.safeParse(request);
   if (!validateResult.success) {
@@ -15,6 +17,17 @@ export default defineEventHandler(async (event) => {
       success: false,
       message: validateResult.error.issues.map((e) => e.message).join(","),
     };
+  }
+  if(request.pid){
+    const post = await prisma.post.findUnique({
+      where:{pid:request.pid}
+    })
+    if(!post){
+      throw createError("帖子不存在")
+    }
+    if(post.uid !== event.context.uid){
+      throw createError("无权修改该帖子")
+    }
   }
 
   const tags = request.tags.filter(x=>x>0).map((x) => {

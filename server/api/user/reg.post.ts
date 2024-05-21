@@ -32,9 +32,9 @@ export default defineEventHandler(async (event) => {
         uid: uid,
         username: request.username,
         password: bcrypt.hashSync(request.password, 10),
-        email: request.email,
+        email: request.email.trim(),
         roleId: 1,
-        avatarUrl:sha256(request.email)
+        avatarUrl:sha256(request.email.trim())
       },
     });
   } catch (e) {

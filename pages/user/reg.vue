@@ -9,8 +9,8 @@
         <UFormGroup label="用户名" name="username">
           <UInput v-model="state.username" autocomplete="off" />
         </UFormGroup>
-        <UFormGroup label="邮箱" name="email">
-          <UInput v-model="state.email" autocomplete="off" />
+        <UFormGroup label="邮箱" name="email" hint="请使用常用邮箱,会用来生成头像">
+          <UInput v-model="state.email" autocomplete="off"  />
         </UFormGroup>
         <UFormGroup label="密码" name="password">
           <UInput v-model="state.password" type="password" autocomplete="on" />

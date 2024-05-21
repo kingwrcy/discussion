@@ -3,8 +3,8 @@
     <template #header class="py-1">
       <XTagList />
     </template>
-    <div class="flex flex-col ">
-      <XPost v-for="post in postList" :key="post.pid" v-bind="post" />
+    <div class="flex flex-col divide-y divide-gray-100">
+      <XPost :showAvatar="true" v-for="post in postList" :key="post.pid" v-bind="post" />
     </div>
     <UPagination :to="(page: number) => ({
       query: { page },

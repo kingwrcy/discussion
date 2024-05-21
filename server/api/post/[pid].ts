@@ -23,6 +23,7 @@ export default defineEventHandler(async (event) => {
         select: {
           username: true,
           avatarUrl: true,
+          uid:true
         },
       },
       tags: true,
@@ -60,9 +61,7 @@ export default defineEventHandler(async (event) => {
         },
       },
       fav: {
-        where: {
-          userId: userId,
-        },
+       
         select: {
           userId: true,
         },
@@ -91,7 +90,7 @@ export default defineEventHandler(async (event) => {
     success: true,
     post: {
       ...post,
-      fav: userId ? post?.fav.length && post?.fav.length > 0 : false,
+      fav: userId ? post?.fav.length!>0  : false,
       comments: post?.comments.map((comment) => ({
         ...comment,
         like: userId ? comment.likes.length > 0 : false,
