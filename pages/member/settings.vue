@@ -2,10 +2,10 @@
   <UCard class="w-full mt-2 text-sm">
     <template #header>
       <div class="flex gap-1 items-center">
-        <UIcon name="i-carbon-settings" title="设置" class="size-4" /><span>个人设置</span>
+        <UIcon name="i-carbon-settings" title="设置" class="size-4" /><span class="font-semibold">个人设置</span>
       </div>
     </template>
-    <UForm :schema="saveSettingsRequestSchema" :state="state" class="space-y-4 max-w-[400px]" @submit="onSubmit">
+    <UForm :schema="saveSettingsRequestSchema" :state="state" class="space-y-4" @submit="onSubmit">
       <UFormGroup label="用户名">
         {{ userinfo.username }}
       </UFormGroup>

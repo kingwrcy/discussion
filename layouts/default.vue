@@ -2,13 +2,16 @@
   <div>
     <x-header></x-header>
     <div class="flex max-w-[1080px] mx-auto h-full gap-4 ">
-
+      
       <slot />
       <div class="space-y-4 w-1/3">
         <XUserCard v-if="userinfo && userinfo.username && !route.fullPath.startsWith('/member')" />
 
         <UCard class="w-full mt-2">
-          <div class="h-20">2</div>
+          <template #header><div class="text-sm">关于本站</div></template>
+          <div class="text-xs ">
+            本站是一个基于Vue3 + Vite2 + VitePress + VitePressTheme的前端项目，后端是基于NestJS + TypeORM + MySQL的后端项目，项目地址：
+          </div>
         </UCard>
 
 

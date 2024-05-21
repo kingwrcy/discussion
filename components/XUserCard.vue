@@ -7,9 +7,7 @@
         </NuxtLink>
         <div class="flex flex-col text-sm gap-1">
           <div class="flex justify-between">
-            <UChip color="green" text="3" size="xl" class="mr-2 text-gray-500 hover:text-primary/80">
               <NuxtLink :to="`/member/${userinfo.username}`">{{ userinfo.username }}</NuxtLink>
-            </UChip>
             <UBadge color="green" variant="soft" size="xs">{{ userinfo.role.name }}(lv{{ userinfo.role.level }})
             </UBadge>
           </div>

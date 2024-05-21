@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
     {
       username: request.username,
       uid: user.uid,
-      userId: user.id,
+      userId: user.id      
     },
     config.jwtSecretKey,
     {

@@ -17,6 +17,11 @@
       </NuxtLink>
 
       <div class="flex space-x-4 text-[11px] mt-1 text-gray-500">
+        <div class="flex gap-1 ">
+          <UBadge color="gray" variant="solid" size="xs" class="cursor-pointer hover:bg-gray-100 self-center"
+            v-for="tag in tags ">
+            <NuxtLink :to="`/tag/${tag.name}`">{{ tag.name }}</NuxtLink></UBadge>
+        </div>
         <div class="flex items-center space-x-1 cursor-pointer hover:text-primary/50">
           <UIcon name="i-carbon-user" />
           <NuxtLink :to="`/member/${author.username}`"><span>{{ author.username }}</span></NuxtLink>
@@ -33,14 +38,11 @@
           <UIcon name="i-carbon-time" />
           <span>{{ $dayjs(createdAt).fromNow() }}</span>
         </div>
+
       </div>
     </div>
 
-    <div class="flex gap-1 min-w-[120px] justify-end">
-      <UBadge color="gray" variant="solid" size="xs" class="cursor-pointer hover:bg-gray-100 self-center"
-        v-for="tag in tags ">
-        {{ tag.name }}</UBadge>
-    </div>
+
   </div>
 
 
@@ -55,7 +57,7 @@ const props = withDefaults(defineProps<PostDTO & {
   showAvatar: boolean
 }>(), {
   showAvatar: true,
-  fav:false
+  fav: false
 })
 
 </script>

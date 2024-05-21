@@ -49,7 +49,6 @@ export type UserDTO = {
   createdAt: string;
   uid: string;
   username: string;
-  lastLogin: string | null;
   email: string;
   avatarUrl: string | null;
   point: number;
@@ -57,6 +56,7 @@ export type UserDTO = {
   commentCount: number;
   roleId: number;
   role: RoleDTO;
+  lastLogin:Date,  
   _count: {
     fav: number;
     comments: number;

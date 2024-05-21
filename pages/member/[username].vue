@@ -20,7 +20,8 @@
 
     <div class="flex gap-2 mb-4">
       <NuxtLink class="flex flex-row gap-1 items-center" :to="`/member/${userinfo.username}`">
-        <UBadge size="lg" :color="selectedTab==='post'? 'gray' : 'white'" variant="solid" class="hover:text-primary/80">
+        <UBadge size="lg" :color="selectedTab === 'post' ? 'primary' : 'white'" variant="solid"
+          class="space-x-1">
           <UIcon name="i-carbon-add-comment" />
           <span>帖子({{ userinfo._count.posts }})</span>
         </UBadge>
@@ -28,14 +29,16 @@
       </NuxtLink>
 
       <NuxtLink class="flex flex-row gap-1 items-center " :to="`/member/${userinfo.username}/comment`">
-        <UBadge size="lg" :color="selectedTab==='comment'? 'gray' : 'white'" variant="solid" class="hover:text-primary/80">
+        <UBadge size="lg" :color="selectedTab === 'comment' ? 'primary' : 'white'" variant="solid"
+          class="space-x-1">
           <UIcon name="i-carbon-book" />
           <span>回复({{ userinfo._count.comments }})</span>
         </UBadge>
       </NuxtLink>
 
       <NuxtLink class="flex flex-row gap-1 items-center" :to="`/member/${userinfo.username}/fav`" v-if="token">
-        <UBadge size="lg" :color="selectedTab==='fav'? 'gray' : 'white'" variant="solid" class="hover:text-primary/80">
+        <UBadge size="lg" :color="selectedTab === 'fav' ? 'primary' : 'white'" variant="solid"
+          class="space-x-1">
           <UIcon name="i-carbon-favorite" />
           <span>收藏(({{ userinfo._count.fav }}))</span>
         </UBadge>
@@ -56,11 +59,17 @@ const route = useRoute()
 const username = route.params.username as string
 const { data } = await useFetch(`/api/user/${username}`, { method: 'POST' })
 const userinfo = data.value as UserDTO
-const selectedTab = useState('profileSelectedTab',()=>'post')
+const selectedTab = ref('post')
 
-
-
-
+watch(() => route.fullPath, () => {
+  if (route.fullPath === `/member/${username}/fav`) {
+    selectedTab.value = 'fav'
+  } else if (route.fullPath === `/member/${username}/comment`) {
+    selectedTab.value = 'comment'
+  } else {
+    selectedTab.value = 'post'
+  }
+},{immediate: true})
 </script>
 
 <style scoped></style>
