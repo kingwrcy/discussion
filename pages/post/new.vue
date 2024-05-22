@@ -45,10 +45,7 @@ mdConfig({
       attrs: {
         target: '_blank'
       }
-    });
-    md.set({
-      linkify: true
-    });
+    });    
   }
 });
 const route = useRoute()

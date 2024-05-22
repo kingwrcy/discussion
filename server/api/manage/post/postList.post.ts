@@ -4,6 +4,7 @@ type ListPostRequest = {
   page: number;
   size: number;
   username?: string;
+  pid?: string;
   begin?: Date;
   end?: Date;
 };
@@ -17,6 +18,9 @@ export default defineEventHandler(async (event) => {
   }
   if (request.size <= 0 && !request.size) {
     request.size = 20;
+  }
+  if (request.pid) {
+    where.pid = request.pid;
   }
   if (request.username) {
     where.author = {

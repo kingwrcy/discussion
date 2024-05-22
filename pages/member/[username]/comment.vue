@@ -3,7 +3,7 @@
     <XCommentWithPost  v-for="comment in state.comments" :key="comment.cid" v-bind="comment" />
   </div>
   <div class="flex items-center text-sm text-gray-500" v-else>
-    暂无评论
+    暂无回复
   </div>
   <UPagination :to="(page: number) => ({
     query: { page },

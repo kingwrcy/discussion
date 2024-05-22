@@ -26,9 +26,7 @@ mdConfig({
         target: '_blank'
       }
     });
-    md.set({
-      linkify: true
-    });
+    
   }
 });
 

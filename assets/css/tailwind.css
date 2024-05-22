@@ -4,7 +4,7 @@
 .md-editor-preview-wrapper{padding:0 !important; }
 .md-editor-preview{
   font-size:14px !important;  
-  line-height: 1.5rem !important;
+  line-height: 1.8rem !important;
 }
 
 .md-editor-previewOnly li{
@@ -12,4 +12,12 @@
 }
 .md-editor-previewOnly ol{
   list-style:disc;
+}
+
+.github-theme p, .github-theme blockquote, .github-theme ul, .github-theme ol, .github-theme dl, .github-theme table, .github-theme pre, .github-theme details {
+  margin-bottom:0 !important;
+}
+
+.md-editor-preview img{
+  border-radius: 5px;
 }

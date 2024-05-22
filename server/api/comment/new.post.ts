@@ -1,3 +1,5 @@
+import { UserStatus } from "@prisma/client";
+
 type commentRequest = {
   content: string;
   pid: string;
@@ -14,7 +16,7 @@ function extractMentions(text: string) {
 
 export default defineEventHandler(async (event) => {
   if (!event.context.uid) {
-    await sendRedirect(event,'/member/login')
+    await sendRedirect(event, "/member/login");
   }
   const request = (await readBody(event)) as commentRequest;
   if (!request.content) {
@@ -23,6 +25,13 @@ export default defineEventHandler(async (event) => {
 
   const mentioned = extractMentions(request.content);
   const cid = `c${randomId()}`;
+
+  const user = await prisma.user.findUnique({
+    where: { uid: event.context.uid },
+  });
+  if (!user || user.status === UserStatus.BANNED) {
+    throw createError("用户不存在或已被封禁");
+  }
 
   await prisma.comment.create({
     data: {

@@ -3,7 +3,7 @@
     <template #header>
       <div class="max-w-[300px]">
         <div class="space-y-4">
-          <div class="flex flex-row-gap-4">
+          <div class="flex flex-row gap-4">
             <UFormGroup label="用户名" name="username">
               <UInput v-model="state.username" />
             </UFormGroup>
@@ -27,7 +27,7 @@
         <UButton :to="`/member/${row.author.username}`" color="white">{{ row.author.username }}</UButton>
       </template>
       <template #post.title-data="{ row }">
-        <div class="max-w-[300px] line-clamp-3 text-wrap">{{ row.post.title }}</div>
+        <ULink target="_blank" class="text-blue-500 max-w-[300px] line-clamp-3 text-wrap" :to="`/post/${row.pid}`">{{ row.post.title }}</ULink>
       </template>
       <template #content-data="{ row }">
         <div class="max-w-[300px] line-clamp-3 text-wrap" :title="row.content">

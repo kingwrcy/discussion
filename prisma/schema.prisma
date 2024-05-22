@@ -67,11 +67,12 @@ model Post {
 }
 
 model Tag {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
   desc  String
-  count Int    @default(0)
+  count Int     @default(0)
   posts Post[]
+  hot   Boolean @default(false)
 }
 
 model Comment {
@@ -125,4 +126,9 @@ model DisLike {
   pid       String
 
   @@unique([uid, cid])
+}
+
+model SysConfig {
+  id      Int  @id @default(autoincrement())
+  content Json
 }

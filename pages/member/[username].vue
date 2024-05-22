@@ -5,11 +5,10 @@
         <UAvatar :src="getAvatarUrl(userinfo.avatarUrl!)" size="lg" alt="Avatar" />
         <div class="flex flex-col text-sm gap-1">
           <div class="flex">
-            <UChip color="green" text="3" size="xl" class="mr-2 text-gray-500">
-              <div>{{ userinfo.username }}</div>
-            </UChip>
-            <UBadge color="green" variant="soft" size="xs">{{ userinfo.role.name }}(lv{{ userinfo.role.level
-              }})</UBadge>
+            <NuxtLink :to="`/member/${userinfo.username}`">{{ userinfo.username }}</NuxtLink>
+            <UBadge color="green" variant="soft" size="xs">{{ userinfo.role === UserRole.ADMIN ? '管理员' : '普通用户' }}
+              (lv{{ userinfo.level }})
+            </UBadge>
           </div>
           <div class="flex gap-1">
             <div class="text-xs text-gray-400">{{ $dayjs(userinfo.createdAt).format('YYYY/MM/DD') }}加入</div>
@@ -51,6 +50,7 @@
 </template>
 
 <script lang="ts" setup>
+import { UserRole } from '@prisma/client';
 import type { UserDTO } from '~/types';
 
 const config = useRuntimeConfig()

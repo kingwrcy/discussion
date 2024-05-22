@@ -27,27 +27,68 @@
       <template #lastLogin-data="{ row }">
         {{ $dayjs(row.lastLogin).format('YYYY/MM/DD HH:mm:ss') }}
       </template>
+      <template #bannedEnd-data="{ row }">
+        {{ row.bannedEnd && $dayjs(row.bannedEnd).format('YYYY/MM/DD HH:mm:ss') }}
+      </template>
       <template #actions-data="{ row }">
         <div class="space-x-2">
-          <UButton color="white" @click="doRemove(row)">禁言</UButton>
+          <UDropdown v-if="row.status === UserStatus.NORMAL" :items="items" :popper="{ placement: 'bottom-start' }"
+            :ui="{ width: 'w-20' }">
+            <UButton color="white" label="禁言" trailing-icon="i-heroicons-chevron-down-20-solid"
+              @click="selectedUid = row.uid" />
+          </UDropdown>
+          <UButton v-else color="white" label="撤销禁言" @click="revokeBanned(row)" />
         </div>
       </template>
     </UTable>
     <template #footer>
       <UPagination :to="(page: number) => ({
         query: { page },
-      })" class="my-2" v-model="state.page" :page-count="state.size" :total="total"
-        v-if="total > state.size" />
+      })" class="my-2" v-model="state.page" :page-count="state.size" :total="total" v-if="total > state.size" />
     </template>
   </UCard>
 </template>
 
 <script lang="ts" setup>
+import { UserStatus } from '@prisma/client';
 import type { UserDTO } from '~/types';
 const route = useRoute()
 definePageMeta({
   layout: 'backend'
 })
+const selectedUid = ref('')
+
+
+const banUser = async (day: number) => {
+  await $fetch('/api/manage/member/banUser', {
+    method: 'POST',
+    body: JSON.stringify({
+      day,
+      uid: selectedUid.value
+    })
+  })
+  await reload()
+}
+
+const items = [
+  [{
+    label: '一天',
+    click: () => { banUser(1) }
+  }], [{
+    label: '三天',
+    click: () => { banUser(3) }
+  }], [{
+    label: '一周',
+    click: () => { banUser(7) }
+  }], [{
+    label: '一月',
+    click: () => { banUser(31) }
+  }], [{
+    label: '永久',
+    click: () => { banUser(99999) }
+  }]
+]
+
 
 const state = reactive({
   page: parseInt(route.query.page as any as string) || 1,
@@ -76,6 +117,9 @@ const columns = [{
   key: 'lastLogin',
   label: '最后登录时间',
 }, {
+  key: 'bannedEnd',
+  label: '禁言结束时间'
+}, {
   key: 'point',
   label: '积分'
 }, {
@@ -84,13 +128,21 @@ const columns = [{
 }, {
   key: '_count.comments',
   label: '评论数量',
-},{
-  key:'actions'
+}, {
+  key: 'actions'
 }]
 
-const doRemove = async (row:UserDTO)=>{}
+const revokeBanned = async (row: UserDTO) => {
+  await $fetch('/api/manage/member/revokeBanUser', {
+    method: 'POST',
+    body: JSON.stringify({
+      uid: row.uid
+    })
+  })
+  await reload()
+}
 
-let { data:userListRes } = await useFetch('/api/manage/userList', {
+let { data: userListRes } = await useFetch('/api/manage/userList', {
   method: 'POST',
   body: JSON.stringify(state)
 })
@@ -105,7 +157,7 @@ const reload = async () => {
   userListRes.value = res
 }
 
-watch(() => route.fullPath,reload)
+watch(() => route.fullPath, reload)
 </script>
 
 <style scoped></style>

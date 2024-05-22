@@ -18,12 +18,15 @@
           <UAvatar :src="getAvatarUrl(row.author.avatarUrl!)" size="lg" alt="Avatar" />
         </NuxtLink>
       </template>
+      <template #title-data="{ row }">
+        <ULink target="_blank" class="text-blue-500 max-w-[300px] line-clamp-3 text-wrap" :to="`/post/${row.pid}`">{{ row.title }}</ULink>
+      </template>
       <template #author.username-data="{ row }">
         <UButton :to="`/member/${ row.author.username}`" color="white">{{ row.author.username }}</UButton>
       </template>
       <template #tags-data="{ row }">
        <div class="space-x-1">
-        <UBadge color="gray" variant="solid" class="cursor-pointer hover:bg-gray-100" v-for="tag in row.tags" :key="tag.id"  >{{ tag.name }}</UBadge>
+        <UBadge color="gray" variant="solid" class="cursor-pointer hover:bg-gray-100">{{ row.tag.name }}</UBadge>
        </div>
       </template>
       <template #createdAt-data="{ row }">
@@ -68,7 +71,7 @@ const columns = [{
   label: '用户名称'
 }, {
   key: 'title',
-  label: '标题',
+  label: '帖子标题',
 }, {
   key: 'tags',
   label: '标签'

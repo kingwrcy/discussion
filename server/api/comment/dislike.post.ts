@@ -73,6 +73,8 @@ export default defineEventHandler(async (event) => {
       cid,
     },
     include: {
+      likes:true,
+      dislikes:true,
       _count: {
         select: {
           likes: true,
@@ -84,8 +86,8 @@ export default defineEventHandler(async (event) => {
 
   return {
     success: true,
-    like: count > 0,
-    dislike: count <= 0,
+    like: newComment?.likes.length! > 0,
+    dislike: newComment?.dislikes.length! > 0,
     likeCount: newComment!._count.likes,
     dislikeCount: newComment!._count.dislikes,
   };

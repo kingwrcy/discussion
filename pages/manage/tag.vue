@@ -12,10 +12,12 @@
       <template #actions-data="{ row }">
         <div class="space-x-2">
           <UButton color="white" @click="doEdit(row)">编辑</UButton>
-          <UButton color="gray" @click="doEdit(row)">禁用</UButton>
+          <UButton color="gray" @click="toggleHot(row)">{{ row.hot ? '取消' : '设为' }}热门</UButton>
         </div>
       </template>
-
+      <template #hot-data="{ row }">
+        {{ row.hot ? '是' : '否' }}
+      </template>
     </UTable>
     <template #footer>
       <UPagination :to="(page: number) => ({
@@ -77,6 +79,9 @@ const columns = [{
   key: 'desc',
   label: '描述'
 }, {
+  key: 'hot',
+  label: '是否热门',
+}, {
   key: 'count',
   label: '帖子数量',
 }, {
@@ -102,6 +107,17 @@ const saveTag = async () => {
   await reload(page.value)
   toast.success('保存成功')
 }
+
+const toggleHot = async (tag: TagDTO) => {
+  await $fetch('/api/manage/toggleHot', {
+    method: 'POST',
+    body: JSON.stringify({
+      id: tag.id
+    }),
+  })
+  await reload(page.value)
+}
+
 watch(() => route.fullPath, async () => {
   const page = parseInt(route.query.page as any as string)
   await reload(page)

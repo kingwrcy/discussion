@@ -1,11 +1,13 @@
 <template>
   <div class="px-4 flex space-x-2  items-start py-2 ">
-    <UAvatar v-if="author && author.avatarUrl" :src="getAvatarUrl(author.avatarUrl)" size="md" alt="Avatar" />
+    <NuxtLink :to="`/member/${author.username}`">
+      <UAvatar v-if="author && author.avatarUrl" :src="getAvatarUrl(author.avatarUrl)" size="md" alt="Avatar" />
+    </NuxtLink>
     <div class="flex-1 ">
       <div class="flex space-x-4 text-xs mt-1 text-gray-500">
         <div class="flex  items-center space-x-1 cursor-pointer hover:text-primary/80">
           <UIcon name="i-carbon-user" />
-          <span>{{ author.username }}</span>
+          <NuxtLink :to="`/member/${author.username}`">{{ author.username }} </NuxtLink>
         </div>
 
         <div class="flex items-center space-x-1 ">
@@ -43,17 +45,6 @@ const state = reactive({
   like: props.like,
   dislike: props.dislike,
 });
-
-
-const refresh = async () => {
-  const res = await $fetch(`/api/comment/detail/${props.cid}`, {
-    method: "POST",
-  });
-  state.likeCount = res.comment?._count?.likes
-  state.dislikeCount = res.comment?._count?.dislikes
-  state.like = res.comment?.like ?? false
-  state.dislike = res.comment?.dislike ?? false
-};
 
 const doLike = async () => {
   const res = await $fetch(`/api/comment/like?cid=${props.cid}`, {

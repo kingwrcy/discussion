@@ -1,4 +1,4 @@
-import type { UserRole } from "@prisma/client";
+import type { UserRole, UserStatus } from "@prisma/client";
 import { z } from "zod";
 
 export const regRequestSchema = z
@@ -49,7 +49,10 @@ export type UserDTO = {
   postCount: number;
   commentCount: number;
   role: UserRole;
+  status: UserStatus;
   lastLogin: Date;
+  level: number;
+  bannedEnd: Date;
   _count: {
     fav: number;
     comments: number;
@@ -109,4 +112,12 @@ export const SafeUser = {
   point: true,
   postCount: true,
   commentCount: true,
+};
+
+export type SysConfigDTO = {
+  pointPerPost: number;
+  pointPerComment: number;
+  websiteName: string;
+  websiteAnnouncement: string;
+  userInitPoint: number;
 };

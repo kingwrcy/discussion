@@ -1,6 +1,6 @@
 <template>
   <div class="flex space-x-2">
-    <UBadge :color="selectedTag === tag.name ? 'primary' :'gray'" variant="solid" size="xs" class="cursor-pointer "
+    <UBadge :color="selectedTag === tag.name ? 'primary' : 'gray'" variant="solid" size="xs" class="cursor-pointer "
       v-for="tag in tagList">
       <NuxtLink :to="`/tag/${tag.name}`">{{ tag.name }}({{ tag.count }})</NuxtLink>
     </UBadge>
@@ -11,7 +11,7 @@
 import type { TagDTO } from '~/types';
 const route = useRoute()
 
-const tagRes = await useFetch('/api/tag/list', {
+const tagRes = await useFetch('/api/tag/list?hot=true', {
   method: 'POST',
   key: "tagLists"
 })
@@ -22,9 +22,9 @@ const tagList = computed(() => {
 
 const selectedTag = ref('')
 
-watch(()=>route.fullPath,()=>{
+watch(() => route.fullPath, () => {
   selectedTag.value = route.params.tag as string
-},{immediate:true})
+}, { immediate: true })
 </script>
 
 <style scoped></style>

@@ -1,3 +1,4 @@
+import { UserStatus } from "@prisma/client";
 import { z } from "zod";
 import { createPostSchema } from "~/types";
 
@@ -28,6 +29,12 @@ export default defineEventHandler(async (event) => {
     }
   }
 
+  const user = await prisma.user.findUnique({
+    where: { uid: event.context.uid },
+  });
+  if (!user || user.status === UserStatus.BANNED) {
+    throw createError("用户不存在或已被封禁");
+  }
   const pid = `p${randomId()}`;
 
   try {
@@ -44,7 +51,7 @@ export default defineEventHandler(async (event) => {
         pid,
         title: request.title,
         content: request.content,
-        uid: event.context.uid,        
+        uid: event.context.uid,
         tagId: request.tagId,
       },
     });

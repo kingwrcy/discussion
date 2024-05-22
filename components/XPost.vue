@@ -18,7 +18,7 @@
 
       <div class="flex space-x-4 text-[11px] mt-1 text-gray-500">
         <div class="flex gap-1 ">
-          <UBadge color="gray" variant="solid" size="xs" class="cursor-pointer hover:bg-gray-100 self-center">
+          <UBadge color="gray" variant="solid" size="xs" class="text-[11px] cursor-pointer hover:bg-gray-100 self-center">
             <NuxtLink :to="`/tag/${props.tag.name}`">{{ props.tag.name }}</NuxtLink>
           </UBadge>
         </div>

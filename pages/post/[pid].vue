@@ -4,7 +4,7 @@
       <XPost :show-avatar="true" v-bind="post" />
     </div>
     <div class="px-4 pt-2 leading-5 border-t">
-      <MdPreview v-model="post.content" preview-theme="github" :editor-id="post.pid" />
+      <MdPreview v-model="post.content" :editor-id="post.pid" />
     </div>
     <div class="px-4 flex justify-end pb-2 border-b items-center space-x-2">
       <NuxtLink :to="`/post/new?pid=${post.pid}`" v-if="token && post.uid === userinfo.uid">
@@ -26,7 +26,7 @@
         query: { page },
       })" v-model="state.page" :page-count="state.size" :total="totalComments" v-if="totalComments > state.size" />
     </div>
-    <div class="px-4 border-t">
+    <div class="px-4 border-t" v-if="userinfo.status === 'NORMAL'">
       <XReply :pid="post.pid" @commented="refresh" />
     </div>
   </div>
