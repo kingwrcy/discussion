@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
     include:{
       post:{
         select:{
-          id:true
+          pid:true
         }
       }
     }
@@ -37,37 +37,56 @@ export default defineEventHandler(async (event) => {
 
   const count = await prisma.disLike.count({
     where: {
-      userId: user.id,
-      commentId: comment.id,
+      uid: user.uid,
+      cid: comment.cid,
     },
   });
 
   await prisma.like.deleteMany({
     where:{
-      userId: user.id,
-      postId: comment.post.id,
-      commentId: comment.id,
+      uid: user.uid,
+      pid: comment.post.pid,
+      cid: comment.cid,
     }
   })
 
   if (count > 0) {
     await prisma.disLike.deleteMany({
       where:{
-        userId: user.id,
-        postId: comment.post.id,
-        commentId: comment.id,
+        uid: user.uid,
+        pid: comment.post.pid,
+        cid: comment.cid,
       }
     })
   } else {
     await prisma.disLike.create({
       data: {
-        userId: user.id,
-        postId: comment.post.id,
-        commentId: comment.id,
+        uid: user.uid,
+        pid: comment.post.pid,
+        cid: comment.cid,
       },
     });
   }
+
+  const newComment = await prisma.comment.findUnique({
+    where: {
+      cid,
+    },
+    include: {
+      _count: {
+        select: {
+          likes: true,
+          dislikes: true,
+        },
+      },
+    },
+  });
+
   return {
     success: true,
+    like: count > 0,
+    dislike: count <= 0,
+    likeCount: newComment!._count.likes,
+    dislikeCount: newComment!._count.dislikes,
   };
 });

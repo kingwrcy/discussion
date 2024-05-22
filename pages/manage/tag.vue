@@ -3,72 +3,72 @@
     <template #header>
       <UButton @click="doAdd">新增标签</UButton>
     </template>
-    <UTable :rows="state.tagList" :columns="columns">
+    <UTable :rows="tagList" :columns="columns">
       <template #avatarUrl-data="{ row }">
         <NuxtLink :to="`/member/${row.username}`">
           <UAvatar :src="getAvatarUrl(row.avatarUrl!)" size="lg" alt="Avatar" />
         </NuxtLink>
       </template>
-      <template #actions-data="{row}">
-        <UButton color="white" @click="doEdit(row)">编辑</UButton>
+      <template #actions-data="{ row }">
+        <div class="space-x-2">
+          <UButton color="white" @click="doEdit(row)">编辑</UButton>
+          <UButton color="gray" @click="doEdit(row)">禁用</UButton>
+        </div>
       </template>
 
     </UTable>
     <template #footer>
       <UPagination :to="(page: number) => ({
         query: { page },
-      })" class="my-2" v-model="state.page" :page-count="state.size" :total="state.total"
-        v-if="state.total > state.size" />
+      })" class="my-2" v-model="page" :page-count="size" :total="total || 0" v-if="total > size" />
     </template>
   </UCard>
 
   <UModal v-model="isOpen">
-      <div class="p-4 space-y-4">
-        <UFormGroup label="名称" name="name">
-          <UInput v-model="saveState.name" />
-        </UFormGroup>
-        <UFormGroup label="描述" name="desc">
-          <UTextarea v-model="saveState.desc" />
-        </UFormGroup>
-        <UButton>提交</UButton>
-      </div>
-    </UModal>
+    <div class="p-4 space-y-4">
+      <UFormGroup label="名称" name="name">
+        <UInput v-model="saveState.name" />
+      </UFormGroup>
+      <UFormGroup label="描述" name="desc">
+        <UTextarea v-model="saveState.desc" />
+      </UFormGroup>
+      <UButton @click="saveTag">提交</UButton>
+    </div>
+  </UModal>
 </template>
 
 <script lang="ts" setup>
+import { toast } from 'vue-sonner';
 import type { TagDTO } from '~/types';
 const route = useRoute()
 definePageMeta({
   layout: 'backend'
 })
 
-const state = reactive({
-  tagList: Array<TagDTO>(),
-  page: 1,
-  size: 20,
-  begin: undefined,
-  end: undefined,
-  total: 0
-})
+const page = ref(parseInt(route.query.page as any as string) || 1)
+const size = ref(20)
 
 const saveState = reactive({
   name: '',
-  desc: ''
+  desc: '',
+  id: 0,
 })
 
 const isOpen = ref(false)
 
-const doEdit = (row:TagDTO)=>{
+const doEdit = (row: TagDTO) => {
   saveState.name = row.name
   saveState.desc = row.desc
+  saveState.id = row.id
   isOpen.value = true
 }
 
-const doAdd = ()=>{
+const doAdd = () => {
   saveState.name = ''
   saveState.desc = ''
   isOpen.value = true
 }
+
 
 const columns = [{
   key: 'name',
@@ -83,33 +83,40 @@ const columns = [{
   key: 'actions'
 }]
 
-
-const { data } = useFetch('/api/manage/tagList', {
+page.value = parseInt(route.query.page as any as string) || 1
+let { data: tagListRes } = await useFetch('/api/manage/tagList', {
   method: 'POST',
-  body: JSON.stringify(state)
+  body: JSON.stringify({
+    page: page.value, size: size.value
+  })
 })
-state.tagList = data.value?.tags as any as TagDTO[]
-state.total = data.value?.total || 0
+const tagList = computed(() => tagListRes?.value?.tags as any as TagDTO[])
+const total = computed(() => tagListRes?.value?.total as number)
 
+const saveTag = async () => {
+  await $fetch('/api/manage/saveTag', {
+    method: 'POST',
+    body: JSON.stringify(saveState),
+  })
+  isOpen.value = false
+  await reload(page.value)
+  toast.success('保存成功')
+}
 watch(() => route.fullPath, async () => {
   const page = parseInt(route.query.page as any as string)
+  await reload(page)
+})
+
+const reload = async (page: number) => {
   const res = await $fetch('/api/manage/tagList', {
     method: 'POST',
     body: JSON.stringify({
-      page, size: state.size
-    }),
+      page: page, size: size.value
+    })
   })
-  state.tagList = res.tags as any as TagDTO[]
-  state.total = res.total
-})
+  tagListRes.value = res
+}
 
-watch(() => state.page, async () => {
-  if (state.page === 1) {
-    navigateTo('/manage')
-    return
-  }
-  navigateTo('/manage?page=' + state.page)
-})
 
 </script>
 

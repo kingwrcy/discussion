@@ -29,9 +29,6 @@ import type { CommentDTO } from "~/types";
 const props = defineProps<CommentDTO>();
 
 
-
-
-
 </script>
 
 <style scoped></style>

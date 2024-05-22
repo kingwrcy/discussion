@@ -1,3 +1,4 @@
+import type { UserRole } from "@prisma/client";
 import { z } from "zod";
 
 export const regRequestSchema = z
@@ -12,11 +13,11 @@ export const regRequestSchema = z
     path: ["repeatPassword"],
   });
 
-  export const saveSettingsRequestSchema = z.object({
-    password:z.string().optional(),
-    email:z.string().email('请填写正确邮箱地址'),
-    css: z.string().optional()
-  });
+export const saveSettingsRequestSchema = z.object({
+  password: z.string().optional(),
+  email: z.string().email("请填写正确邮箱地址"),
+  css: z.string().optional(),
+});
 
 export const loginRequestSchema = z.object({
   username: z.string().min(4, "用户名最少4个字符"),
@@ -29,10 +30,7 @@ export const createPostSchema = z.object({
     .min(4, "标题不少于6个字符")
     .max(120, "标题不能超过120个字符"),
   content: z.string().min(6, "内容最少6个字符"),
-  tags: z
-    .array(z.number())
-    .nonempty("请最少选择一个标签")
-    .max(3, "最多只能选择三个标签"),
+  tagId: z.number({ message: "标签是必选的" }),
   pid: z.string().optional(),
 });
 
@@ -40,10 +38,6 @@ export type JwtPayload = {
   uid: string;
   userId: number;
   username: string;
-};
-export type RoleDTO = {
-  name: string;
-  level: number;
 };
 export type UserDTO = {
   createdAt: string;
@@ -54,9 +48,8 @@ export type UserDTO = {
   point: number;
   postCount: number;
   commentCount: number;
-  roleId: number;
-  role: RoleDTO;
-  lastLogin:Date,  
+  role: UserRole;
+  lastLogin: Date;
   _count: {
     fav: number;
     comments: number;
@@ -73,7 +66,7 @@ export type CommentDTO = {
   content: string;
   cid: string;
   createdAt: string;
-  mentioned: string | null;
+  mentioned: Array<string>;
   author: UserDTO;
   likeCount?: number;
   dislikeCount?: number;
@@ -94,13 +87,15 @@ export type PostDTO = {
   minLevel: number;
   author: UserDTO;
   comments?: Array<CommentDTO>;
-  tags: Array<TagDTO>;
+  tagId: number;
+  tag: TagDTO;
   _count: {
     comments: number;
     commentLike: number;
     commentDisLike: number;
   };
   fav?: boolean;
+  pinned: boolean;
 };
 
 export const SafeUser = {
@@ -114,5 +109,4 @@ export const SafeUser = {
   point: true,
   postCount: true,
   commentCount: true,
-  roleId: true,
 };

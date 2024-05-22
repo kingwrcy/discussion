@@ -1,5 +1,3 @@
-import { Prisma } from "@prisma/client";
-
 type ListUserRequest = {
   page: number;
   size: number;
@@ -23,13 +21,10 @@ export default defineEventHandler(async (event) => {
         },
       },
     },
-    orderBy: {
-      createdAt: "desc",
-    },
     skip: (request.page - 1) * request.size,
     take: request.size,
   });
-  const total = await prisma.user.count();
+  const total = await prisma.tag.count();
 
   return {
     success: true,

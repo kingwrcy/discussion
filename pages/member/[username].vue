@@ -57,7 +57,7 @@ const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)
 const route = useRoute()
 const username = route.params.username as string
-const { data } = await useFetch(`/api/user/${username}`, { method: 'POST' })
+const { data } = await useFetch(`/api/member/${username}`, { method: 'POST' })
 const userinfo = data.value as UserDTO
 const selectedTab = ref('post')
 

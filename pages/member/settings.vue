@@ -36,7 +36,7 @@ import type { UserDTO } from '~/types';
 import { saveSettingsRequestSchema } from '~/types';
 
 
-const { data } = await useFetch(`/api/user/profile`, { method: 'POST' })
+const { data } = await useFetch(`/api/member/profile`, { method: 'POST' })
 const userinfo = data.value as UserDTO
 const config = useRuntimeConfig()
 
@@ -49,14 +49,14 @@ const state = reactive({
 })
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  await $fetch('/api/user/saveSettings', {
+  await $fetch('/api/member/saveSettings', {
     method: "POST",
     body: JSON.stringify(event.data)
   })
   if (event.data.password) {
     toast.success('密码修改成功,请重新登录')    
     await refreshCookie(config.public.tokenKey)
-    await navigateTo('/user/login')
+    await navigateTo('/member/login')
   }else{
     toast.success('修改成功')
   }

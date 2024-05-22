@@ -56,17 +56,17 @@ const refresh = async () => {
 };
 
 const doLike = async () => {
-  await $fetch(`/api/comment/like?cid=${props.cid}`, {
+  const res = await $fetch(`/api/comment/like?cid=${props.cid}`, {
     method: "POST",
   });
-  await refresh()
+  Object.assign(state, res)
 }
 
 const doDisLike = async () => {
-  await $fetch(`/api/comment/dislike?cid=${props.cid}`, {
+  const res = await $fetch(`/api/comment/dislike?cid=${props.cid}`, {
     method: "POST",
   });
-  await refresh()
+  Object.assign(state, res)
 }
 
 

@@ -24,7 +24,7 @@ const state = reactive({
   page: 1,
   size: 10
 })
-const { data: postRes } = await useFetch<{ total: number, posts: Array<PostDTO> }>('/api/user/post',
+const { data: postRes } = await useFetch<{ total: number, posts: Array<PostDTO> }>('/api/member/post',
   {
     method: 'POST',
     body: { page: state.page, size: state.size, username: props.username }
@@ -36,7 +36,7 @@ state.total = postRes.value?.total || 0
 
 watch(() => route.fullPath, async () => {
   const page = parseInt(route.query.page as any as string)
-  const res = await $fetch('/api/user/post', {
+  const res = await $fetch('/api/member/post', {
     method: 'POST',
     body: JSON.stringify({
       page, size: state.size, username: props.username

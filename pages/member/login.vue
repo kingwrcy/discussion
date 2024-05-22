@@ -16,7 +16,7 @@
           <UButton type="submit" :loading="pending">
             登录
           </UButton>
-          <NuxtLink to="/user/reg" class="text-primary text-sm ml-2 underline underline-offset-4">没有账户?去注册</NuxtLink>
+          <NuxtLink to="/member/reg" class="text-primary text-sm ml-2 underline underline-offset-4">没有账户?去注册</NuxtLink>
         </div>
       </UForm>
     </div>
@@ -41,7 +41,7 @@ const pending = ref(false)
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   pending.value = true
-  const result = await $fetch('/api/user/login', {
+  const result = await $fetch('/api/member/login', {
     method: 'POST',
     body: JSON.stringify(event.data)
   })

@@ -31,19 +31,19 @@ export default defineEventHandler(async (event) => {
   const count = await prisma.fav.count({
     where: {
       userId: user.id,
-      postId: post.id,
+      pid: post.pid,
     },
   });
 
   if (count > 0) {
     await prisma.fav.deleteMany({
-      where: { userId: user.id, postId: post.id },
+      where: { userId: user.id, pid: post.pid },
     });
   } else {
     await prisma.fav.create({
       data: {
         userId: user.id,
-        postId: post.id,
+        pid: post.pid,
       },
     });
   }

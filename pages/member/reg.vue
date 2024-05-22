@@ -22,7 +22,7 @@
           <UButton type="submit" :loading="pending">
             注册账户
           </UButton>
-          <NuxtLink to="/user/login" class="text-primary text-sm ml-2 underline underline-offset-4">已有账户?去登录</NuxtLink>
+          <NuxtLink to="/member/login" class="text-primary text-sm ml-2 underline underline-offset-4">已有账户?去登录</NuxtLink>
         </div>
       </UForm>
     </div>
@@ -49,13 +49,13 @@ const pending = ref(false)
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {  
   pending.value = true
-  const result = await $fetch('/api/user/reg', {
+  const result = await $fetch('/api/member/reg', {
     method: 'POST',
     body: JSON.stringify(event.data)
   })
   if (result.success) {
     toast.success('注册成功,去登录吧')
-    navigateTo('/user/login')
+    navigateTo('/member/login')
   } else if ('message' in result) {
     toast.error('注册失败,' + (result.message))
   }

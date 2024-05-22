@@ -18,17 +18,17 @@ export default defineEventHandler(async (event) => {
     throw createError("评论不存在");
   }
 
-  const comment = await prisma.comment.findUnique({
+  let comment = await prisma.comment.findUnique({
     where: {
       cid,
     },
-    include:{
-      post:{
-        select:{
-          id:true
-        }
-      }
-    }
+    include: {
+      post: {
+        select: {
+          pid: true,
+        },
+      },
+    },
   });
 
   if (!comment) {
@@ -37,38 +37,55 @@ export default defineEventHandler(async (event) => {
 
   const count = await prisma.like.count({
     where: {
-      userId: user.id,
-      commentId: comment.id,
+      uid: user.uid,
+      cid: comment.cid,
     },
   });
 
-
   await prisma.disLike.deleteMany({
-    where:{
-      userId: user.id,
-      postId: comment.post.id,
-      commentId: comment.id,
-    }
-  })
+    where: {
+      uid: user.uid,
+      pid: comment.post.pid,
+      cid: comment.cid,
+    },
+  });
 
   if (count > 0) {
     await prisma.like.deleteMany({
-      where:{
-        userId: user.id,
-        postId: comment.post.id,
-        commentId: comment.id,
-      }
-    })
+      where: {
+        uid: user.uid,
+        pid: comment.post.pid,
+        cid: comment.cid,
+      },
+    });
   } else {
     await prisma.like.create({
       data: {
-        userId: user.id,
-        postId: comment.post.id,
-        commentId: comment.id,
+        uid: user.uid,
+        pid: comment.post.pid,
+        cid: comment.cid,
       },
     });
   }
+
+  const newComment = await prisma.comment.findUnique({
+    where: {
+      cid,
+    },
+    include: {
+      _count: {
+        select: {
+          likes: true,
+          dislikes: true,
+        },
+      },
+    },
+  });
   return {
     success: true,
+    like: count <= 0,
+    dislike: count > 0,
+    likeCount: newComment!._count.likes,
+    dislikeCount: newComment!._count.dislikes,
   };
 });

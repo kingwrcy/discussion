@@ -14,7 +14,7 @@ function extractMentions(text: string) {
 
 export default defineEventHandler(async (event) => {
   if (!event.context.uid) {
-    await sendRedirect(event,'/user/login')
+    await sendRedirect(event,'/member/login')
   }
   const request = (await readBody(event)) as commentRequest;
   if (!request.content) {
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
       cid,
       pid: request.pid,
       uid: event.context.uid,
-      mentioned: mentioned.join(","),
+      mentioned: mentioned,
     },
   });
 

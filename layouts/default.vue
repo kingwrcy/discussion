@@ -31,7 +31,7 @@ const token = useCookie(config.public.tokenKey)
 const route = useRoute()
 
 const loadProfile = async () => {
-  const userinfoRes = await useFetch('/api/user/profile', {
+  const userinfoRes = await useFetch('/api/member/profile', {
     method: 'POST'
   })
   if (userinfoRes.data.value) {
@@ -40,7 +40,7 @@ const loadProfile = async () => {
 }
 
 userCardChanged.on(async () => {
-  const userinfoRes = await $fetch('/api/user/profile', {
+  const userinfoRes = await $fetch('/api/member/profile', {
     method: 'POST'
   })
   if (userinfoRes) {
@@ -50,7 +50,7 @@ userCardChanged.on(async () => {
 
 watch(token, async () => {
   if (token.value) {
-    const userinfoRes = await $fetch('/api/user/profile', {
+    const userinfoRes = await $fetch('/api/member/profile', {
       method: 'POST'
     })
     if (userinfoRes) {

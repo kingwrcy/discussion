@@ -45,14 +45,8 @@ export default defineEventHandler(async (event) => {
           username: true,
         },
       },
-      tags: true,
-      comments: false,
-      fav: {
-        select: {
-          userId: true,
-          postId: true,
-        },
-      },
+      tag: true,
+      comments: false,      
     },
     orderBy: {
       createdAt: "desc",

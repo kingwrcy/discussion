@@ -8,8 +8,6 @@ export default defineEventHandler(async (event) => {
     throw createError("请先去登录");
   }
 
-  
-
   const request = (await readBody(event)) as createPostRequest;
   const validateResult = createPostSchema.safeParse(request);
   if (!validateResult.success) {
@@ -18,57 +16,42 @@ export default defineEventHandler(async (event) => {
       message: validateResult.error.issues.map((e) => e.message).join(","),
     };
   }
-  if(request.pid){
+  if (request.pid) {
     const post = await prisma.post.findUnique({
-      where:{pid:request.pid}
-    })
-    if(!post){
-      throw createError("帖子不存在")
+      where: { pid: request.pid },
+    });
+    if (!post) {
+      throw createError("帖子不存在");
     }
-    if(post.uid !== event.context.uid){
-      throw createError("无权修改该帖子")
+    if (post.uid !== event.context.uid) {
+      throw createError("无权修改该帖子");
     }
   }
-
-  const tags = request.tags.filter(x=>x>0).map((x) => {
-    return { id: x };
-  });
-
 
   const pid = `p${randomId()}`;
 
   try {
     await prisma.post.upsert({
       where: {
-        pid: request.pid??pid,
+        pid: request.pid ?? pid,
       },
       update: {
         title: request.title,
         content: request.content,
-        tags: {
-          set: tags,
-        },
+        tagId: request.tagId,
       },
       create: {
         pid,
         title: request.title,
         content: request.content,
-        author: {
-          connect: {
-            uid: event.context.uid,
-          },
-        },
-        tags: {
-          connect: tags,
-        },
+        uid: event.context.uid,        
+        tagId: request.tagId,
       },
     });
     if (!request.pid) {
-      await prisma.tag.updateMany({
+      await prisma.tag.update({
         where: {
-          id: {
-            in: request.tags,
-          },
+          id: request.tagId,
         },
         data: {
           count: {
@@ -94,6 +77,6 @@ export default defineEventHandler(async (event) => {
   }
   return {
     success: true,
-    pid:request.pid || pid,
+    pid: request.pid || pid,
   };
 });

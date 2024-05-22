@@ -7,20 +7,20 @@
     <div class="flex-1 ">
       <div v-if="detailPage" :to="`/post/${props.pid}`" :class="[detailPage ? 'text-lg' : 'text-sm']"
         class="text-gray-600 font-semibold  ">
-        <div :class="{ 'line-clamp-1': !detailPage }">{{ title }}</div>
-        <!-- <UIcon v-if="props.pinned" name="i-carbon-pin-filled" class="ml-1 text-primary"></UIcon> -->
+        <div :class="{ 'line-clamp-1': !detailPage }">{{ title }}
+        </div>
       </div>
       <NuxtLink v-else :to="`/post/${props.pid}`" :class="[detailPage ? 'text-lg' : 'text-sm']"
-        class="text-gray-600 font-semibold   cursor-pointer  hover:text-primary/80">
+        class="text-gray-600 font-semibold flex items-center  cursor-pointer  hover:text-primary/80">
         <div>{{ title }}</div>
-        <!-- <UIcon v-if="props.pinned" name="i-carbon-pin-filled" class="ml-1 text-primary"></UIcon> -->
+        <UIcon v-if="props.pinned" name="i-carbon-pin-filled" class="ml-1 text-primary"></UIcon>
       </NuxtLink>
 
       <div class="flex space-x-4 text-[11px] mt-1 text-gray-500">
         <div class="flex gap-1 ">
-          <UBadge color="gray" variant="solid" size="xs" class="cursor-pointer hover:bg-gray-100 self-center"
-            v-for="tag in tags ">
-            <NuxtLink :to="`/tag/${tag.name}`">{{ tag.name }}</NuxtLink></UBadge>
+          <UBadge color="gray" variant="solid" size="xs" class="cursor-pointer hover:bg-gray-100 self-center">
+            <NuxtLink :to="`/tag/${props.tag.name}`">{{ props.tag.name }}</NuxtLink>
+          </UBadge>
         </div>
         <div class="flex items-center space-x-1 cursor-pointer hover:text-primary/50">
           <UIcon name="i-carbon-user" />
@@ -38,14 +38,9 @@
           <UIcon name="i-carbon-time" />
           <span>{{ $dayjs(createdAt).fromNow() }}</span>
         </div>
-
       </div>
     </div>
-
-
   </div>
-
-
 </template>
 
 <script lang="ts" setup>

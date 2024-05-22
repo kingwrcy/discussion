@@ -1,48 +1,52 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Role {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String
-  level     Int      @default(1)
-  users     User[]
+enum UserStatus {
+  NORMAL
+  BANNED
+}
+
+enum UserRole {
+  ADMIN
+  USER
 }
 
 model User {
-  id             Int       @id @default(autoincrement())
-  uid            String    @unique
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  username       String    @unique
+  id             Int        @id @default(autoincrement())
+  uid            String     @unique
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @default(now()) @updatedAt
+  username       String     @unique
   password       String
   lastLogin      DateTime?
-  email          String    @unique
-  avatarUrl      String?
-  point          Int       @default(0)
-  postCount      Int       @default(0)
-  commentCount   Int       @default(0)
-  roleId         Int
+  email          String     @unique
+  avatarUrl      String
+  point          Int        @default(0)
+  postCount      Int        @default(0)
+  commentCount   Int        @default(0)
   comments       Comment[]
   posts          Post[]
-  role           Role      @relation(fields: [roleId], references: [id])
+  role           UserRole   @default(USER)
+  level          Int        @default(1)
   fav            Fav[]
   commentLike    Like[]
   commentDisLike DisLike[]
+  status         UserStatus @default(NORMAL)
+  bannedEnd      DateTime?
 }
 
 model Post {
   id             Int       @id @default(autoincrement())
   pid            String    @unique
   createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  updatedAt      DateTime  @default(now()) @updatedAt
   title          String
   content        String
   uid            String
@@ -53,30 +57,31 @@ model Post {
   minLevel       Int       @default(1)
   comments       Comment[]
   author         User      @relation(fields: [uid], references: [uid])
-  tags           Tag[]     @relation("PostToTag")
+  tagId          Int
   commentDisLike DisLike[]
   commentLike    Like[]
   fav            Fav[]
+  pinned         Boolean   @default(false)
+  point          Int       @default(0)
+  tag            Tag       @relation(fields: [tagId], references: [id])
 }
 
 model Tag {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String   @unique
-  desc      String
-  count     Int      @default(0)
-  posts     Post[]   @relation("PostToTag")
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  desc  String
+  count Int    @default(0)
+  posts Post[]
 }
 
 model Comment {
   id        Int       @id @default(autoincrement())
   cid       String    @unique
   createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  updatedAt DateTime  @default(now()) @updatedAt
   uid       String
   pid       String
-  mentioned String?
+  mentioned String[]
   content   String
   post      Post      @relation(fields: [pid], references: [pid])
   author    User      @relation(fields: [uid], references: [uid])
@@ -88,36 +93,36 @@ model Fav {
   id        Int      @id @default(autoincrement())
   user      User     @relation(fields: [userId], references: [id])
   userId    Int
-  post      Post     @relation(fields: [postId], references: [id])
+  post      Post     @relation(fields: [pid], references: [pid])
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  postId    Int
+  updatedAt DateTime @default(now()) @updatedAt
+  pid       String
 }
 
 model Like {
   id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [uid], references: [uid])
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    Int
-  comment   Comment  @relation(fields: [commentId], references: [id])
-  commentId Int
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    Int
+  updatedAt DateTime @default(now()) @updatedAt
+  uid       String
+  comment   Comment  @relation(fields: [cid], references: [cid])
+  cid       String
+  post      Post     @relation(fields: [pid], references: [pid])
+  pid       String
 
-  @@unique([userId, commentId])
+  @@unique([uid, cid])
 }
 
 model DisLike {
   id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [uid], references: [uid])
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  comment   Comment  @relation(fields: [commentId], references: [id])
-  userId    Int
-  commentId Int
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    Int
+  updatedAt DateTime @default(now()) @updatedAt
+  comment   Comment  @relation(fields: [cid], references: [cid])
+  uid       String
+  cid       String
+  post      Post     @relation(fields: [pid], references: [pid])
+  pid       String
 
-  @@unique([userId, commentId])
+  @@unique([uid, cid])
 }

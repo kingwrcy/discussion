@@ -10,11 +10,7 @@
           <UInput v-model="state.title" autocomplete="off" />
         </UFormGroup>
         <UFormGroup label="标签" name="tags">
-          <USelectMenu value-attribute="id" option-attribute="desc" v-model="state.tags" :options="tags" multiple>
-            <template #label>
-              <span v-if="state.tags.length" class="truncate">{{ selectedTagDesc }}</span>
-              <span v-else>请选择至少一个标签</span>
-            </template>
+          <USelectMenu value-attribute="id" option-attribute="desc" v-model="state.tagId" :options="tags" >
           </USelectMenu>
         </UFormGroup>
         <UFormGroup label="正文" name="content">
@@ -38,7 +34,7 @@ import { MdEditor, type ToolbarNames } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import { toast } from 'vue-sonner';
 import { z } from 'zod';
-import { createPostSchema, type PostDTO } from '~/types';
+import { createPostSchema, type PostDTO, type TagDTO } from '~/types';
 type Schema = z.output<typeof createPostSchema>
 import { config as mdConfig } from 'md-editor-v3';
 import LinkAttr from 'markdown-it-link-attributes';
@@ -79,7 +75,7 @@ const toolbars: ToolbarNames[] = [
   '=',
   'preview',
 ];
-const tagRes = useFetch('/api/tag/list', {
+const tagRes = await useFetch('/api/tag/list', {
   method: 'POST',
   key: "tagLists"
 })
@@ -93,7 +89,7 @@ const state = reactive<Schema>({
   pid: "",
   title: "",
   content: "",
-  tags: [0]
+  tagId: 0
 })
 
 const loadPost = async () => {
@@ -104,36 +100,16 @@ const loadPost = async () => {
     method: 'POST',
     body: JSON.stringify({})
   })) as any as { post: PostDTO }
-  // Object.assign(state,res.post)
-  //@ts-ignore
-  state.tags = res.post.tags?.map(x => x.id)
-  state.content = res.post.content
-  state.title = res.post.title
-  state.pid = res.post.pid
+  Object.assign(state, res.post)
 }
 
 await loadPost()
 watch(() => route.fullPath, loadPost)
 
-const selectedTagDesc = computed(() => {
-  let label: string = ""
-  state.tags.filter(x => x > 0).map(id => {
-    label += (tags.value?.find(x => x.id === id)?.name + ",")
-  })
-  if (label.length > 0) {
-    return label.substring(0, label.length - 1)
-  }
-  return label || '请选择标签,最少一个,最多三个'
-})
 
 const pending = ref(false)
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  console.log(state.tags)
-  if (state.tags.filter(x => x > 0).length <= 0) {
-    toast.error('请选择标签,最少一个,最多三个')
-    return
-  }
   pending.value = true
   const result = await $fetch('/api/post/new', {
     method: 'POST',

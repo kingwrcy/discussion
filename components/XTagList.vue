@@ -11,7 +11,7 @@
 import type { TagDTO } from '~/types';
 const route = useRoute()
 
-const tagRes = useFetch('/api/tag/list', {
+const tagRes = await useFetch('/api/tag/list', {
   method: 'POST',
   key: "tagLists"
 })

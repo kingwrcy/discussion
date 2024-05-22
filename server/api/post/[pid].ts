@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
 
   const page = (body.page as number) || 1;
   const size = (body.size as number) || 20;
-  const userId = event.context.userId;
+  const uid = event.context.uid;
 
   const post = await prisma.post.findFirst({
     where: {
@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
           uid:true
         },
       },
-      tags: true,
+      tag: true,
       comments: {
         include: {
           author: {
@@ -37,20 +37,20 @@ export default defineEventHandler(async (event) => {
           },
           likes: {
             where: {
-              userId: userId,
+              uid: uid,
             },
             select: {
-              userId: true,
-              commentId: true,
+              uid: true,
+              cid: true,
             },
           },
           dislikes: {
             where: {
-              userId: userId,
+              uid: uid,
             },
             select: {
-              userId: true,
-              commentId: true,
+              uid: true,
+              cid: true,
             },
           },
         },
@@ -60,12 +60,7 @@ export default defineEventHandler(async (event) => {
           createdAt: "asc",
         },
       },
-      fav: {
-       
-        select: {
-          userId: true,
-        },
-      },
+      fav: true,
       _count: {
         select: {
           comments: true,
@@ -90,11 +85,11 @@ export default defineEventHandler(async (event) => {
     success: true,
     post: {
       ...post,
-      fav: userId ? post?.fav.length!>0  : false,
+      fav: uid ? post?.fav.length!>0  : false,
       comments: post?.comments.map((comment) => ({
         ...comment,
-        like: userId ? comment.likes.length > 0 : false,
-        dislike: userId ? comment.dislikes.length > 0 : false,
+        like: uid ? comment.likes.length > 0 : false,
+        dislike: uid ? comment.dislikes.length > 0 : false,
       })),
     },
   };

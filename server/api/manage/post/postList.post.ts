@@ -3,19 +3,14 @@ import { Prisma } from "@prisma/client";
 type ListPostRequest = {
   page: number;
   size: number;
-  username: string;
+  username?: string;
+  begin?: Date;
+  end?: Date;
 };
 
 export default defineEventHandler(async (event) => {
   const request = (await readBody(event)) as ListPostRequest;
-
   const where: Prisma.PostWhereInput = {};
-  const user = await prisma.user.findUnique({
-    where: { username: request.username },
-  });
-  if (!user) {
-    throw createError("用户不存在");
-  }
 
   if (request.page <= 0 && !request.page) {
     request.page = 1;
@@ -23,25 +18,38 @@ export default defineEventHandler(async (event) => {
   if (request.size <= 0 && !request.size) {
     request.size = 20;
   }
-  where.uid = user.uid;
+  if (request.username) {
+    where.author = {
+      username: request.username.trim(),
+    };
+  }
+  if (request.begin) {
+    where.createdAt = {
+      gte: request.begin,
+    };
+  }
+  if (request.end) {
+    where.createdAt = {
+      lte: request.end,
+    };
+  }
 
   let posts = await prisma.post.findMany({
     where,
     include: {
+      author: {
+        select: {
+          uid: true,
+          username: true,
+          avatarUrl: true,
+        },
+      },
       _count: {
         select: {
           comments: true,
         },
       },
-      author: {
-        select: {
-          uid: true,
-          avatarUrl: true,
-          username: true,
-        },
-      },
-      tags: true,
-      comments: false,      
+      tag: true,
     },
     orderBy: {
       createdAt: "desc",

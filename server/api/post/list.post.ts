@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
   const request = (await readBody(event)) as ListPostRequest;
 
   const where: Prisma.PostWhereInput = {};
-  const userId = event.context.userId
+  const uid = event.context.uid;
 
   if (request.page <= 0 && !request.page) {
     request.page = 1;
@@ -24,47 +24,52 @@ export default defineEventHandler(async (event) => {
     where.uid = request.uid;
   }
   if (request.tag) {
-    where.tags = {
-      some: {
-        name: request.tag,
-      },
+    where.tag = {
+      name: request.tag,
     };
   }
 
-  let posts = await prisma.post.findMany({
-    where,
-    include: {
-      _count: {
-        select: {
-          comments: true,
-        },
-      },
-      author: {
-        select: {
-          uid: true,
-          avatarUrl: true,
-          username: true,
-        },
-      },
-      tags: true,
-      comments: false,
-      fav: {
-        where: {
-          userId: userId,
-        },
-        select: {
-          userId: true,
-          postId: true,
-        },
+  const include = {
+    _count: {
+      select: {
+        comments: true,
       },
     },
+    author: {
+      select: {
+        uid: true,
+        avatarUrl: true,
+        username: true,
+      },
+    },
+    tag: true,
+    comments: false,
+    fav: true,
+  }
+
+  let pinnedPost = await prisma.post.findMany({
+    where: { ...where, pinned: true },
+    include,
+    orderBy: [
+      {
+        pinned: "desc",
+      },
+      {
+        updatedAt: "desc",
+      },
+    ],
+  });
+  let posts = await prisma.post.findMany({
+    where: { ...where, pinned: false },
+    include,
     orderBy: {
       createdAt: "desc",
     },
-
     skip: (request.page - 1) * request.size,
     take: request.size,
   });
+
+  posts = [...pinnedPost, ...posts];
   const total = await prisma.post.count({
     where,
   });
@@ -72,7 +77,7 @@ export default defineEventHandler(async (event) => {
   const postsWithExtraInfo = posts.map((post) => {
     return {
       ...post,
-      fav: userId && post.fav && post.fav.length >0 ? true : false,
+      fav: uid && post.fav && post.fav.length > 0 ? true : false,
     };
   });
 

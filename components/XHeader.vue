@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { UserRole } from '@prisma/client';
 import type { UserDTO } from '~/types';
 
 
@@ -23,12 +24,16 @@ const logout = () => {
       </NuxtLink>
 
 
-      <div class="flex gap-1 ml-auto ">     
+      <div class="flex gap-1 ml-auto ">   
+        <NuxtLink class="flex gap-1 items-center p-2 hover:text-primary/80" to="/manage" v-if="token && userinfo?.role === UserRole.ADMIN">
+          <UIcon name="i-carbon-add-comment" />
+          <span>管理</span>
+        </NuxtLink>  
         <NuxtLink class="flex gap-1 items-center p-2 hover:text-primary/80" to="/post/new" v-if="token">
           <UIcon name="i-carbon-add-comment" />
           <span>发帖</span>
         </NuxtLink>
-        <NuxtLink class="flex gap-1 items-center p-2 hover:text-primary/80" to="/user/login" v-if="!token">
+        <NuxtLink class="flex gap-1 items-center p-2 hover:text-primary/80" to="/member/login" v-if="!token">
           <UIcon name="i-carbon-login" />
           <span>登录</span>
         </NuxtLink>

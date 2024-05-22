@@ -1,3 +1,4 @@
+import { UserRole } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import { JwtPayload } from "~/types";
 
@@ -26,14 +27,11 @@ export default defineEventHandler(async (event) => {
   if (url.pathname.startsWith("/manage")) {
     const user = await prisma.user.findUnique({
       where: { uid: event.context.uid },
-      include: {
-        role: true,
-      },
     });
     if (!user) {
       throw createError("登录信息已失效,请重新登录");
     }
-    if (user.role.level !== 999) {
+    if (user.role !== UserRole.ADMIN) {
       throw createError("只有管理员才能访问");
     }
   }

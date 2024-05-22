@@ -25,7 +25,7 @@ const state = reactive({
   size: 20
 })
 
-state.page = parseInt(route.query.page as any as string)
+state.page = parseInt(route.query.page as any as string) || 1
 let { data } = await useFetch('/api/post/list', {
   method: 'POST',
   body: JSON.stringify(state),

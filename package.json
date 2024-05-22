@@ -13,6 +13,7 @@
   "dependencies": {
     "@iconify-json/carbon": "^1.1.32",
     "@nuxt/ui": "^2.16.0",
+    "@prisma/adapter-pg": "^5.14.0",
     "@prisma/client": "5.14.0",
     "bcryptjs": "^2.4.3",
     "js-sha256": "^0.11.0",
@@ -20,6 +21,7 @@
     "markdown-it-link-attributes": "^4.0.1",
     "md-editor-v3": "^4.15.0",
     "nuxt": "^3.11.2",
+    "pg": "^8.11.5",
     "prisma": "^5.14.0",
     "short-uuid": "^5.2.0",
     "vue": "^3.4.21",
@@ -31,6 +33,7 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/markdown-it-link-attributes": "^3.0.5",
+    "@types/pg": "^8.11.6",
     "@types/shortid": "^0.0.32",
     "@vueuse/core": "^10.9.0",
     "@vueuse/nuxt": "^10.9.0",

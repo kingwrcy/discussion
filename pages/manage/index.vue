@@ -6,13 +6,13 @@
           <UFormGroup label="用户名" name="username">
             <UInput v-model="state.username" />
           </UFormGroup>
-          <UButton type="button" @click="onsubmit">
+          <UButton type="button" @click="reload">
             查询
           </UButton>
         </div>
       </div>
     </template>
-    <UTable :rows="state.userList" :columns="columns">
+    <UTable :rows="userList" :columns="columns">
       <template #avatarUrl-data="{ row }">
         <NuxtLink :to="`/member/${row.username}`">
           <UAvatar :src="getAvatarUrl(row.avatarUrl!)" size="lg" alt="Avatar" />
@@ -27,12 +27,17 @@
       <template #lastLogin-data="{ row }">
         {{ $dayjs(row.lastLogin).format('YYYY/MM/DD HH:mm:ss') }}
       </template>
+      <template #actions-data="{ row }">
+        <div class="space-x-2">
+          <UButton color="white" @click="doRemove(row)">禁言</UButton>
+        </div>
+      </template>
     </UTable>
     <template #footer>
       <UPagination :to="(page: number) => ({
         query: { page },
-      })" class="my-2" v-model="state.page" :page-count="state.size" :total="state.total"
-        v-if="state.total > state.size" />
+      })" class="my-2" v-model="state.page" :page-count="state.size" :total="total"
+        v-if="total > state.size" />
     </template>
   </UCard>
 </template>
@@ -45,13 +50,11 @@ definePageMeta({
 })
 
 const state = reactive({
-  userList: Array<UserDTO>(),
-  page: 1,
+  page: parseInt(route.query.page as any as string) || 1,
   size: 20,
   begin: undefined,
   end: undefined,
   username: "",
-  total: 0
 })
 
 const columns = [{
@@ -61,7 +64,7 @@ const columns = [{
   key: 'username',
   label: '用户名称'
 }, {
-  key: 'role.name',
+  key: 'role',
   label: '角色',
 }, {
   key: 'email',
@@ -81,46 +84,28 @@ const columns = [{
 }, {
   key: '_count.comments',
   label: '评论数量',
+},{
+  key:'actions'
 }]
 
+const doRemove = async (row:UserDTO)=>{}
 
-const { data } = useFetch('/api/manage/userList', {
+let { data:userListRes } = await useFetch('/api/manage/userList', {
   method: 'POST',
   body: JSON.stringify(state)
 })
-state.userList = data.value?.users as any as UserDTO[]
-state.total = data.value?.total || 0
+const userList = computed(() => userListRes?.value?.users as any as UserDTO[])
+const total = computed(() => userListRes?.value?.total as number)
 
-const onsubmit = async () => {
+const reload = async () => {
   const res = await $fetch('/api/manage/userList', {
     method: 'POST',
     body: JSON.stringify(state)
   })
-  state.userList = res.users as any as UserDTO[]
-  state.total = res.total
+  userListRes.value = res
 }
 
-
-watch(() => route.fullPath, async () => {
-  const page = parseInt(route.query.page as any as string)
-  const res = await $fetch('/api/manage/userList', {
-    method: 'POST',
-    body: JSON.stringify({
-      page, size: state.size, username: state.username
-    }),
-  })
-  state.userList = res.users as any as UserDTO[]
-  state.total = res.total
-})
-
-watch(() => state.page, async () => {
-  if (state.page === 1) {
-    navigateTo('/manage')
-    return
-  }
-  navigateTo('/manage?page=' + state.page)
-})
-
+watch(() => route.fullPath,reload)
 </script>
 
 <style scoped></style>
