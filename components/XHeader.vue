@@ -33,7 +33,7 @@ const logout = () => {
           <UIcon name="i-carbon-add-comment" />
           <span>发帖</span>
         </NuxtLink>
-        <div class="text-red-500" v-if="token && userinfo?.status === 'BANNED'">被禁言,到{{ $dayjs(userinfo?.bannedEnd).format('YYYY-MM-DD HH:mm:ss') }}</div>
+        <UBadge v-if="token && userinfo?.status === 'BANNED'">被禁言,到{{ $dayjs(userinfo?.bannedEnd).format('YYYY-MM-DD HH:mm:ss') }}</UBadge>
         <NuxtLink class="flex gap-1 items-center p-2 hover:text-primary/80" to="/member/login" v-if="!token">
           <UIcon name="i-carbon-login" />
           <span>登录</span>
