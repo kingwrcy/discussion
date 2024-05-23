@@ -14,12 +14,13 @@
           <UIcon name="i-carbon-time" />
           <span>{{ $dayjs(createdAt).fromNow() }}</span>
         </div>
-        <div title="支持" class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer" @click="doLike">
+        <div v-if="token && userinfo && userinfo.uid !== props.author.uid" title="支持"
+          class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer" @click="doLike">
           <UIcon name="i-carbon-favorite" :class="[state.like ? 'text-red-500' : '']" />
           <span>{{ state.likeCount ?? 0 }}</span>
         </div>
-        <div title="反对" class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer"
-          @click="doDisLike">
+        <div v-if="token && userinfo && userinfo.uid !== props.author.uid" title="反对"
+          class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer" @click="doDisLike">
           <UIcon name="i-carbon-thumbs-down" :class="[state.dislike ? 'text-yellow-500' : '']" />
           <span>{{ state.dislikeCount ?? 0 }}</span>
         </div>
@@ -36,7 +37,10 @@
 
 <script lang="ts" setup>
 import { MdPreview } from "md-editor-v3";
-import type { CommentDTO } from "~/types";
+import type { CommentDTO, UserDTO } from "~/types";
+const userinfo = useState<UserDTO | undefined>('userinfo')
+const config = useRuntimeConfig()
+const token = useCookie(config.public.tokenKey)
 
 const props = defineProps<CommentDTO>();
 const route = useRoute()

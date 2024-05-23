@@ -42,7 +42,7 @@
       </template>
     </UTable>
     <template #footer>
-      <UPagination :to="(page: number) => ({
+      <UPagination size="sm" :to="(page: number) => ({
         query: { page },
       })" class="my-2" v-model="state.page" :page-count="state.size" :total="total" v-if="total > state.size" />
     </template>
@@ -52,13 +52,6 @@
 <script lang="ts" setup>
 import { UserStatus } from '@prisma/client';
 import type { UserDTO } from '~/types';
-useHead({
-  title:"用户管理",
-  meta:[
-    {name:"keywords",content:"极简论坛"},
-    {name:"description",content:"极简论坛"},
-  ],
-})
 const route = useRoute()
 definePageMeta({
   layout: 'backend'

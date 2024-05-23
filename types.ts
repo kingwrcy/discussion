@@ -140,6 +140,7 @@ export type SysConfigDTO = {
 };
 
 export type MessageDTO = {
+  id: number;
   from: UserDTO;
   to: UserDTO;
   content: string;

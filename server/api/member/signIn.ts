@@ -41,6 +41,14 @@ export default defineEventHandler(async (event) => {
       reason: PointReason.SIGNIN,
     },
   });
+  await prisma.user.update({
+    where: { uid: event.context.uid },
+    data: {
+      point: {
+        increment: point,
+      },
+    },
+  });
   return {
     success: true,
     message: `签到成功,获得${point}积分`,

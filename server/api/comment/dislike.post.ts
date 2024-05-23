@@ -41,31 +41,6 @@ export default defineEventHandler(async (event) => {
   if (!comment) {
     throw createError("帖子不存在");
   }
-
-  if (user.uid === comment.uid) {
-    const newComment = await prisma.comment.findUnique({
-      where: {
-        cid,
-      },
-      include: {
-        likes: true,
-        dislikes: true,
-        _count: {
-          select: {
-            likes: true,
-            dislikes: true,
-          },
-        },
-      },
-    });
-    return {
-      success: true,
-      like: newComment?.likes.length! > 0,
-      dislike: newComment?.dislikes.length! > 0,
-      likeCount: newComment!._count.likes,
-      dislikeCount: newComment!._count.dislikes,
-    };
-  }
   const count = await prisma.disLike.count({
     where: {
       uid: user.uid,
@@ -142,9 +117,7 @@ export default defineEventHandler(async (event) => {
 
   await prisma.message.create({
     data: {
-      content: `你的评论<a href='/post/${comment.post.pid}#${
-        comment.cid
-      }'被<a href='/member/${user.username}'>${user.username}</a>${
+      content: `你的<a class='text-blue-500 mx-1' href='/post/${comment.post.pid}#${comment.cid}'>评论</a>被<a class='text-blue-500 mx-1' href='/member/${user.username}'>${user.username}</a>${
         count > 0 ? "取消" : ""
       }点踩了`,
       read: false,

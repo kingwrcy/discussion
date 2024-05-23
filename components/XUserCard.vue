@@ -7,10 +7,10 @@
         </NuxtLink>
         <div class="flex flex-col text-sm gap-1">
           <div class="flex justify-between">
-            <UChip :text="userinfo.unRead" size="2xl" v-if="userinfo.unRead">
-              <NuxtLink :to="`/member/${userinfo.username}`">{{ userinfo.username }}</NuxtLink>
-            </UChip>
-            <NuxtLink :to="`/member/${userinfo.username}`" v-else>{{ userinfo.username }}</NuxtLink>
+
+            <NuxtLink :to="`/member/${userinfo.username}`">
+              {{ userinfo.username }}</NuxtLink>
+
             <UBadge color="primary" variant="solid" size="xs">{{ userinfo.role === UserRole.ADMIN ? '管理员' : '普通用户' }}
               (lv{{ userinfo.level }})
             </UBadge>
@@ -26,41 +26,63 @@
         </div>
       </div>
     </template>
-    <div class="flex flex-col justify-evenly text-primary/80 text-sm">
-      <div class="flex flex-row space-x-4 justify-evenly">
+    <div class="flex flex-row justify-evenly text-primary/80 text-sm">
+      <div class="flex flex-col space-y-1">
+        <NuxtLink :to="`/member/${userinfo.username}/message`" :class="{'text-red-500':userinfo.unRead > 0}"
+          class="space-x-1 flex flex-row items-center cursor-pointer">
+          <div class="flex items-center gap-1  text-gray-400" :class="{'text-red-500':userinfo.unRead > 0}">
+            <UIcon name="i-carbon-notification-filled" />
+            <div>消息</div>
+          </div>
+          <div class="">{{ userinfo.unRead }}</div>
+        </NuxtLink>
+
+        <NuxtLink :to="`/member/${userinfo.username}/fav`"
+          class="space-x-1 flex flex-row items-center cursor-pointer hover:text-primary/60">
+          <div class="flex items-center gap-1 text-gray-400">
+            <UIcon name="i-carbon-task-approved" />
+            <div>等级</div>
+          </div>
+          <div class="">{{ userinfo.level }}</div>
+        </NuxtLink>
+
+      </div>
+
+      
+      <div class="flex flex-col space-y-1">
         <NuxtLink :to="`/member/${userinfo.username}`"
-          class="space-x-2 flex flex-row items-center cursor-pointer hover:text-primary/60">
+          class="space-x-1 flex flex-row items-center cursor-pointer hover:text-primary/60">
           <div class="flex items-center gap-1  text-gray-400">
             <UIcon name="i-carbon-add-comment" />
             <div>发帖</div>
           </div>
           <div class="">{{ userinfo.postCount }}</div>
-
         </NuxtLink>
+
+        <NuxtLink :to="`/member/${userinfo.username}/fav`"
+          class="space-x-1 flex flex-row items-center cursor-pointer hover:text-primary/60">
+          <div class="flex items-center gap-1 text-gray-400">
+            <UIcon name="i-carbon-favorite" />
+            <div>收藏</div>
+          </div>
+          <div class="">{{ userinfo._count.fav }}</div>
+        </NuxtLink>
+
+      </div>
+
+      <div class="flex flex-col space-y-1">
         <NuxtLink :to="`/member/${userinfo.username}/comment`"
-          class="space-x-2 flex flex-row items-center cursor-pointer hover:text-primary/60">
+          class="space-x-1 flex flex-row items-center cursor-pointer hover:text-primary/60">
           <div class="flex items-center gap-1 text-gray-400">
             <UIcon name="i-carbon-book" />
             <div>回复</div>
           </div>
           <div class="">{{ userinfo.commentCount }}</div>
         </NuxtLink>
-      </div>
-
-      <div class="flex flex-row space-x-4 justify-evenly">
-        <NuxtLink :to="`/member/${userinfo.username}/fav`"
-          class="space-x-2 flex flex-row items-center cursor-pointer hover:text-primary/60">
-          <div class="flex items-center gap-1 text-gray-400">
-            <UIcon name="i-carbon-favorite-filled" class="text-red-500" />
-            <div>收藏</div>
-          </div>
-          <div class="">{{ userinfo._count.fav }}</div>
-
-        </NuxtLink>
         <NuxtLink :to="`/member/${userinfo.username}/point`"
-          class="space-x-2 flex flex-row items-center cursor-pointer hover:text-primary/60">
+          class="space-x-1 flex flex-row items-center cursor-pointer hover:text-primary/60">
           <div class="flex items-center gap-1 text-gray-400">
-            <UIcon name="i-carbon-favorite" class="text-red-500" />
+            <UIcon name="i-carbon-model" />
             <div>积分</div>
           </div>
           <div class="">{{ userinfo.point }}</div>

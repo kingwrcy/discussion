@@ -1,9 +1,13 @@
 <template>
-  <div class="flex space-x-2">
-    <UBadge :color="selectedTag === tag.name ? 'primary' : 'gray'" variant="solid" size="xs" class="cursor-pointer "
+  <div class="flex">
+    <div class="flex space-x-2 flex-1">
+      <UBadge :color="selectedTag === tag.name ? 'primary' : 'gray'" variant="solid" size="xs" class="cursor-pointer "
       v-for="tag in tagList">
       <NuxtLink :to="`/tag/${tag.name}`">{{ tag.name }}({{ tag.count }})</NuxtLink>
     </UBadge>
+    </div>
+    <UBadge :color="selectedTag === 'all' ? 'primary' : 'gray'" variant="solid" size="xs" class="cursor-pointer ">
+      <NuxtLink to="/tags">全部节点</NuxtLink></UBadge>
   </div>
 </template>
 

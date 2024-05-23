@@ -1,6 +1,9 @@
 <template>
   <div>
-    <UTable :rows="messageList" :columns="columns">
+    <div class="flex ">
+      <UButton icon="i-carbon-checkmark-outline" color="green" size="xs" @click="setMessageRead()">全部已读</UButton>
+    </div>
+    <UTable :rows="messageList" :columns="columns" :ui="{td:{padding:'py-2'},th:{padding:'py-2'}}">
       <template #createdAt-data="{ row }">
         {{ $dayjs(row.createdAt).format('YYYY/MM/DD HH:mm:ss') }}
       </template>
@@ -13,16 +16,20 @@
         <div v-else>系统</div>
       </template>
       <template #actions-data="{ row }">
-        <UButton v-if="!row.read">已读</UButton>
+        <UButton @click="setMessageRead(row.id)" icon="i-carbon-checkmark-outline" size="xs" v-if="!row.read">已读</UButton>
+      </template>
+      <template #empty-state>
+        <div class="text-center text-gray-400 my-4 text-sm">暂无消息</div>
       </template>
     </UTable>
-    <UPagination :to="(page: number) => ({
+    <UPagination size="sm" :to="(page: number) => ({
       query: { page },
     })" class="my-2" v-model="state.page" :page-count="state.size" :total="total" v-if="total > state.size" />
   </div>
 </template>
 
 <script lang="ts" setup>
+import { toast } from 'vue-sonner';
 import type { MessageDTO } from '~/types';
 const route = useRoute()
 
@@ -44,7 +51,7 @@ const columns = [{
 
 const state = reactive({
   page: parseInt(route.query.page as any as string) || 1,
-  size: 3,
+  size: 10,
 })
 
 let { data: messageListRes } = await useFetch('/api/member/message', {
@@ -61,6 +68,14 @@ const reload = async () => {
     body: JSON.stringify(state)
   })
   messageListRes.value = res
+}
+
+const setMessageRead = async(id?:number) =>{
+  await $fetch('/api/member/readMessage?messageId='+id, {
+    method: 'POST'
+  })
+  toast.success('操作成功')
+  await reload()
 }
 
 watch(() => route.fullPath, reload)

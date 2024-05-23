@@ -5,7 +5,7 @@
   <div class="flex items-center text-sm text-gray-500" v-else>
     暂无帖子
   </div>
-  <UPagination :to="(page: number) => ({
+  <UPagination size="sm" :to="(page: number) => ({
     query: { page },
   })" class="my-2" v-model="state.page" :page-count="state.size" :total="state.total"
     v-if="state.total > state.size" />

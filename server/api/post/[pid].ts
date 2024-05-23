@@ -31,6 +31,7 @@ export default defineEventHandler(async (event) => {
         include: {
           author: {
             select: {
+              uid:true,
               username: true,
               avatarUrl: true,
             },

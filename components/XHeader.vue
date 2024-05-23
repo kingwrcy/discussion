@@ -24,7 +24,7 @@ const logout = () => {
       </NuxtLink>
 
 
-      <div class="flex items-center gap-1 ml-auto ">
+      <div class="flex items-center gap-1 ml-auto ">      
         <NuxtLink class="flex gap-1 items-center p-2 hover:text-primary/80" to="/manage"
           v-if="token && userinfo?.role === UserRole.ADMIN">
           <UIcon name="i-carbon-add-comment" />

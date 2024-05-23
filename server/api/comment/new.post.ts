@@ -36,6 +36,20 @@ export default defineEventHandler(async (event) => {
   if (user.point <= 0) {
     throw createError("用户积分小于或等于0分,不能回帖");
   }
+
+  const post = await prisma.post.findUnique({
+    where: { pid: request.pid },
+    include: {
+      author: {
+        select: {
+          uid: true,
+        },
+      },
+    },
+  });
+  if (!post) {
+    throw createError("帖子不存在");
+  }
   const {
     _max: { floor: maxFloor },
   } = await prisma.comment.aggregate({
@@ -129,6 +143,16 @@ export default defineEventHandler(async (event) => {
         cid,
         point: sysConfigDTO.pointPerComment,
         reason: PointReason.COMMENT,
+      },
+    });
+  }
+
+  if (event.context.uid !== post.author.uid) {
+    await prisma.message.create({
+      data: {
+        content: `你的<a class="mx-1 text-blue-500" href='/post/${request.pid}#${cid}'>帖子</a>有了新回复`,
+        read: false,
+        toUid: post.author.uid,
       },
     });
   }

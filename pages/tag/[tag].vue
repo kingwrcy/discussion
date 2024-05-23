@@ -1,12 +1,12 @@
 <template>
-  <UCard class="w-full mt-2">    
+  <UCard class="w-full mt-2" style="min-height: 300px;">    
     <template #header class="py-1">
       <XTagList />
     </template>
     <div class="flex flex-col divide-y divide-gray-100">
       <XPost :showAvatar="true" v-for="post in postList" :key="post.pid" v-bind="post" />
     </div>
-    <UPagination :to="(page: number) => ({
+    <UPagination size="sm" :to="(page: number) => ({
       query: { page },
     })" class="my-2" v-model="state.page" :page-count="state.size" :total="totalPosts"
       v-if="totalPosts > state.size" />

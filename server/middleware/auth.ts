@@ -25,6 +25,9 @@ export default defineEventHandler(async (event) => {
   }
 
   if (url.pathname.startsWith("/manage")) {
+    if(!token){
+      throw createError("请先登录");
+    }
     const user = await prisma.user.findUnique({
       where: { uid: event.context.uid },
     });

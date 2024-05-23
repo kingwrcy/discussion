@@ -13,7 +13,7 @@
           <div>编辑</div>
         </UBadge>
       </NuxtLink>
-      <UBadge variant="soft" size="xs" class="cursor-pointer hover:text-primary/80" @click="toggleFav">
+      <UBadge v-if="token" variant="soft" size="xs" class="cursor-pointer hover:text-primary/80" @click="toggleFav">
         <UIcon :name="post.fav ? 'i-carbon-favorite-filled' : 'i-carbon-favorite'" class="mr-1"
           :class="[post.fav ? 'text-red-500' : '']" />{{ post.fav ? '取消' : '加入' }}收藏
       </UBadge>
@@ -22,7 +22,7 @@
     <div class=" gap-2 divide-y divide-gray-200 dark:divide-gray-800">
       <XComment v-for="(comment, index) in post.comments" :likeCount="post._count.commentLike"
         :dislikeCount="post._count.commentDisLike" :key="comment.cid" v-bind="comment" :index="index" />
-      <UPagination class="p-4" :to="(page: number) => ({
+      <UPagination size="sm" class="p-4" :to="(page: number) => ({
         query: { page },
       })" v-model="state.page" :page-count="state.size" :total="totalComments" v-if="totalComments > state.size" />
     </div>

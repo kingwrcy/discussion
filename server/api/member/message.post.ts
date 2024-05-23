@@ -1,32 +1,38 @@
+type ListMessageRequest = {
+  page: number;
+  size: number;
+};
+
 export default defineEventHandler(async (event) => {
   if (!event.context.uid) {
     throw createError("请先去登录");
   }
+  const request = (await readBody(event)) as ListMessageRequest;
 
   const messages = await prisma.message.findMany({
     where: {
       toUid: event.context.uid,
     },
-    include:{
-      from:{
-        select:{
-          uid:true,
-          username:true,
-        }
+    include: {
+      from: {
+        select: {
+          uid: true,
+          username: true,
+        },
       },
-      to:{
-        select:{
-          uid:true,
-          username:true,
-        }
-      }
+      to: {
+        select: {
+          uid: true,
+          username: true,
+        },
+      },
     },
     orderBy: {
       createdAt: "desc",
     },
+    skip: (request.page - 1) * request.size,
+    take: request.size,
   });
-
-  console.log(messages)
 
   const total = await prisma.message.count({
     where: {

@@ -20,7 +20,7 @@
       </template>
     </UTable>
     <template #footer>
-      <UPagination :to="(page: number) => ({
+      <UPagination size="sm" :to="(page: number) => ({
         query: { page },
       })" class="my-2" v-model="page" :page-count="size" :total="total || 0" v-if="total > size" />
     </template>

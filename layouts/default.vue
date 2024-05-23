@@ -2,19 +2,29 @@
   <div>
     <x-header></x-header>
     <div class="flex max-w-[1080px] mx-auto h-full gap-4 ">
-
-      <slot />
-      <div class="space-y-4 w-[350px]">
+      <div class="flex-1 ">
+        <slot />
+      </div>
+      <div class="space-y-4 w-[300px]">
         <XUserCard v-if="userinfo && userinfo.username && !route.fullPath.startsWith('/member')" />
-
-        <UCard class="w-full mt-2">
+        <UCard class="w-full mt-2" v-if="route.fullPath.startsWith('/tag/') && tag" :ui="{header:{padding:'px-0 py-0 sm:px-0'}}">
           <template #header>
-            <div class="text-sm">关于本站</div>
+            <div class="text-sm px-4 py-1 rounded-t sm:px-6 font-semibold bg-gray-100">{{ tag.name }}</div>
+          </template>
+          <div class="text-xs ">
+            {{ tag.desc }}
+          </div>
+        </UCard>
+        <UCard class="w-full mt-2" v-if="sysconfig" :ui="{header:{padding:'px-0 py-0 sm:px-0'}}">
+          <template #header>
+            <div class="text-sm px-4 py-1 rounded-t sm:px-6 font-semibold bg-gray-100">关于本站</div>
           </template>
           <div class="text-xs ">
             <MdPreview :model-value="sysconfig.websiteAnnouncement" editor-id="websiteAnnouncement" />
           </div>
         </UCard>
+
+       
       </div>
     </div>
     <XFooter />
@@ -25,7 +35,7 @@
 import { MdPreview } from "md-editor-v3";
 
 import { Toaster } from 'vue-sonner';
-import type { SysConfigDTO, UserDTO } from '~/types';
+import type { SysConfigDTO, TagDTO, UserDTO } from '~/types';
 let userinfo = useState<UserDTO>('userinfo')
 const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)
@@ -40,13 +50,8 @@ const loadProfile = async () => {
   }
 }
 
-const {data:configData} = await useFetch('/api/config', { 
-  method: 'POST' ,
-  // transform:(res)=>{
-  //   return {
-  //     ann:res.data?
-  //   }
-  // }
+const { data: configData } = await useFetch('/api/config', {
+  method: 'POST',
 })
 const sysconfig = configData.value?.data as SysConfigDTO
 
@@ -79,5 +84,28 @@ useHead({
     { name: "keywords", content: "极简论坛" },
     { name: "description", content: "极简论坛" },
   ],
+})
+
+const tag = ref<TagDTO>()
+
+watch(() => route.fullPath, async () => {
+  if (route.fullPath.startsWith('/tag/')) {
+    const name = route.fullPath.replaceAll('/tag/', '')
+    const res = await $fetch<{ tags: Array<TagDTO>}>('/api/tag/list?name=' + name, {
+      method: 'POST',
+    })
+    tag.value = res.tags[0] as TagDTO
+  }
+}, { immediate: true })
+let intervalId: any
+onMounted(() => {
+  if (intervalId) {
+    clearInterval(intervalId)
+    intervalId = undefined
+  }
+  intervalId = setInterval(() => {
+    userCardChanged.emit()
+  }, 60 * 1000)
+
 })
 </script>

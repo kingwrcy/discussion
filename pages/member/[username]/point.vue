@@ -1,19 +1,22 @@
 <template>
   <div>
-    <UTable :rows="pointList" :columns="columns">
+    <UTable :rows="pointList" :columns="columns" :ui="{td:{padding:'py-2'},th:{padding:'py-2'}}">
     <template #createdAt-data="{ row }">
       {{ $dayjs(row.createdAt).format('YYYY/MM/DD HH:mm:ss') }}
     </template>
     <template #post.title-data="{ row }">
       <div class="max-w-[300px] text-wrap line-clamp-3" v-if="row.post">
-        <NuxtLink :to="`/post/${row.post.pid}`">{{ row.post.title }}</NuxtLink>
+        <NuxtLink class="text-blue-500" :to="`/post/${row.post.pid}`">{{ row.post.title }}</NuxtLink>
       </div>
     </template>
     <template #reason-data="{ row }">
       {{ getReason(row.reason) }}
     </template>
+    <template #empty-state>
+        <div class="text-center text-gray-400 my-4 text-sm">暂无积分变动</div>
+      </template>
   </UTable>
-  <UPagination :to="(page: number) => ({
+  <UPagination size="sm" :to="(page: number) => ({
     query: { page },
   })" class="my-2" v-model="state.page" :page-count="state.size" :total="total" v-if="total > state.size" />
   </div>
@@ -46,7 +49,6 @@ const getReason = (reason: PointReason) => {
       return '评论'
     case 'LIKE':
       return '点赞'
-
     case 'DISLIKE':
       return '点踩'
     case 'SIGNIN':

@@ -4,7 +4,7 @@
     <NuxtLink :to="`/member/${author.username}`" v-if="showAvatar">
       <UAvatar v-if="author && author.avatarUrl" :src="getAvatarUrl(author.avatarUrl)" size="md" alt="Avatar" />
     </NuxtLink>
-    <div class="flex-1 ">
+    <div class="">
       <div v-if="detailPage" :to="`/post/${props.pid}`" :class="[detailPage ? 'text-lg' : 'text-sm']"
         class="text-gray-600 font-semibold  ">
         <div :class="{ 'line-clamp-1': !detailPage }">{{ title }}
@@ -26,14 +26,14 @@
           <UIcon name="i-carbon-user" />
           <NuxtLink :to="`/member/${author.username}`"><span>{{ author.username }}</span></NuxtLink>
         </div>
-        <div class="flex items-center space-x-1 ">
+        <div :to="`/post/${props.pid}`" class="flex items-center space-x-1 ">
           <UIcon name="i-carbon-view" />
           <span>{{ viewCount }}</span>
         </div>
-        <div class="flex items-center space-x-1 cursor-pointer hover:text-primary/50">
+        <NuxtLink :to="`/post/${props.pid}`" class="flex items-center space-x-1 cursor-pointer hover:text-primary/50">
           <UIcon name="i-carbon-book" />
           <span>{{ replyCount }}</span>
-        </div>
+        </NuxtLink>
         <div class="flex items-center space-x-1 ">
           <UIcon name="i-carbon-time" />
           <span>{{ $dayjs(createdAt).fromNow() }}</span>
