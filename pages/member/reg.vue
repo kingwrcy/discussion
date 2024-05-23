@@ -10,7 +10,7 @@
           <UInput v-model="state.username" autocomplete="off" />
         </UFormGroup>
         <UFormGroup label="邮箱" name="email" hint="请使用常用邮箱,会用来生成头像">
-          <UInput v-model="state.email" autocomplete="off"  />
+          <UInput v-model="state.email" autocomplete="off" />
         </UFormGroup>
         <UFormGroup label="密码" name="password">
           <UInput v-model="state.password" type="password" autocomplete="on" />
@@ -22,7 +22,8 @@
           <UButton type="submit" :loading="pending">
             注册账户
           </UButton>
-          <NuxtLink to="/member/login" class="text-primary text-sm ml-2 underline underline-offset-4">已有账户?去登录</NuxtLink>
+          <NuxtLink to="/member/login" class="text-primary text-sm ml-2 underline underline-offset-4">已有账户?去登录
+          </NuxtLink>
         </div>
       </UForm>
     </div>
@@ -39,6 +40,14 @@ import { toast } from 'vue-sonner';
 
 type Schema = z.output<typeof regRequestSchema>
 
+useHead({
+  title: `注册用户`,
+  meta: [
+    { name: "keywords", content: "极简论坛" },
+    { name: "description", content: "极简论坛" },
+  ],
+})
+
 const state = reactive<Schema>({
   email: "",
   password: "",
@@ -47,7 +56,7 @@ const state = reactive<Schema>({
 })
 const pending = ref(false)
 
-async function onSubmit(event: FormSubmitEvent<Schema>) {  
+async function onSubmit(event: FormSubmitEvent<Schema>) {
   pending.value = true
   const result = await $fetch('/api/member/reg', {
     method: 'POST',

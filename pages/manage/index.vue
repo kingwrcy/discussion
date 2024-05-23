@@ -52,6 +52,13 @@
 <script lang="ts" setup>
 import { UserStatus } from '@prisma/client';
 import type { UserDTO } from '~/types';
+useHead({
+  title:"用户管理",
+  meta:[
+    {name:"keywords",content:"极简论坛"},
+    {name:"description",content:"极简论坛"},
+  ],
+})
 const route = useRoute()
 definePageMeta({
   layout: 'backend'

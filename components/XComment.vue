@@ -29,7 +29,8 @@
       </div>
     </div>
 
-    <div class="text-xs text-gray-600 select-none cursor-pointer" v-if="index >= 0">{{ `#${index + 1}` }}</div>
+    <div class="text-xs text-gray-600 select-none cursor-pointer" v-if="route.fullPath.startsWith('/post')">#{{
+      props.floor }}</div>
   </div>
 </template>
 
@@ -37,8 +38,8 @@
 import { MdPreview } from "md-editor-v3";
 import type { CommentDTO } from "~/types";
 
-const props = defineProps<CommentDTO & { index: number }>();
-
+const props = defineProps<CommentDTO>();
+const route = useRoute()
 const state = reactive({
   likeCount: props.likeCount,
   dislikeCount: props.dislikeCount,
@@ -51,6 +52,7 @@ const doLike = async () => {
     method: "POST",
   });
   Object.assign(state, res)
+  userCardChanged.emit()
 }
 
 const doDisLike = async () => {
@@ -58,9 +60,7 @@ const doDisLike = async () => {
     method: "POST",
   });
   Object.assign(state, res)
+  userCardChanged.emit()
 }
-
-
 </script>
-
 <style scoped></style>

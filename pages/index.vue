@@ -1,5 +1,5 @@
 <template>
-  <UCard class="w-full mt-2">
+  <UCard class="w-full mt-2" :ui="{body:{padding:'px-0 sm:p-0'}}">
     <template #header class="py-1">
       <XTagList />
     </template>
@@ -43,7 +43,7 @@ watch(() => route.fullPath, async () => {
 })
 
 watch(() => state.page, async () => {
-  if(state.page === 1){
+  if (state.page === 1) {
     navigateTo('/')
     return
   }
@@ -58,6 +58,23 @@ const postList = computed(() => {
 const totalPosts = computed(() => {
   return data.value?.total || 0
 })
+const { getAbsoluteUrl } = useAbsoluteUrl();
+
+useHead({
+  title: `首页`,
+  meta: [
+    { name: "keywords", content: "极简论坛" },
+    { name: "description", content: "极简论坛" },
+  ],
+  link: [
+    {
+      rel: 'canonical',
+      href: getAbsoluteUrl(route.path),
+    },
+  ]
+})
+
+
 
 </script>
 

@@ -1,3 +1,5 @@
+import Username from "~/pages/member/[username].vue";
+
 export default defineEventHandler(async (event) => {
   if (!event.context.uid) {
     return {};
@@ -9,13 +11,22 @@ export default defineEventHandler(async (event) => {
     },
     include: {
       _count: {
-        select:{
-          fav:true
-        }
-      }
+        select: {
+          fav: true,
+        },
+      },
+    },
+  });
+
+  const unRead = await prisma.message.count({
+    where: {
+      toUid: event.context.uid,
+      read: false,
     },
   });
   //@ts-ignore
   delete user?.password;
-  return user;
+  return {
+    ...user,unRead
+  };
 });

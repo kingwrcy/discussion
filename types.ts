@@ -1,4 +1,4 @@
-import type { UserRole, UserStatus } from "@prisma/client";
+import type { PointReason, UserRole, UserStatus } from "@prisma/client";
 import { z } from "zod";
 
 export const regRequestSchema = z
@@ -53,10 +53,12 @@ export type UserDTO = {
   lastLogin: Date;
   level: number;
   bannedEnd: Date;
+  unRead: number;
   _count: {
     fav: number;
     comments: number;
     posts: number;
+    ReceiveMessage: number;
   };
 };
 export type TagDTO = {
@@ -76,7 +78,18 @@ export type CommentDTO = {
   like?: boolean;
   dislike?: boolean;
   post?: PostDTO;
+  floor: number;
 };
+
+export type PointHistoryDTO = {
+  createdAt: string;
+  pid: string;
+  cid: string;
+  post: PostDTO;
+  comment: CommentDTO;
+  reason: PointReason;
+};
+
 export type PostDTO = {
   title: string;
   content: string;
@@ -115,9 +128,21 @@ export const SafeUser = {
 };
 
 export type SysConfigDTO = {
-  pointPerPost: number;
-  pointPerComment: number;
   websiteName: string;
+  pointPerPost: number;
+  pointPerPostByDay: number;
+  pointPerComment: number;
+  pointPerCommentByDay: number;
+  pointPerLikeOrDislike: number;
+  pointPerDaySignInMin: number;
+  pointPerDaySignInMax: number;
   websiteAnnouncement: string;
-  userInitPoint: number;
+};
+
+export type MessageDTO = {
+  from: UserDTO;
+  to: UserDTO;
+  content: string;
+  read: Boolean;
+  createdAt: number;
 };

@@ -26,7 +26,7 @@
         query: { page },
       })" v-model="state.page" :page-count="state.size" :total="totalComments" v-if="totalComments > state.size" />
     </div>
-    <div class="px-4 border-t" v-if="userinfo.status === 'NORMAL'">
+    <div class="px-4 border-t" v-if="userinfo.status === 'NORMAL' && userinfo.point > 0">
       <XReply :pid="post.pid" @commented="refresh" />
     </div>
   </div>
@@ -87,7 +87,21 @@ const totalComments = computed(() => {
   return post.value._count.comments ?? 0
 })
 
+useSeoMeta({
+  title: post.value.title,
+  description: post.value.content.substring(0, 100),
+  keywords: post.value.title
+})
+const { getAbsoluteUrl } = useAbsoluteUrl();
 
+useHead({
+  link: [
+    {
+      rel: 'canonical',
+      href: getAbsoluteUrl(route.path),
+    },
+  ]
+})
 </script>
 
 <style scoped></style>

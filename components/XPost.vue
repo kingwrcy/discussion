@@ -1,5 +1,5 @@
 <template>
-  <div class="flex space-x-2  items-start py-2">
+  <div class="flex space-x-2  items-start py-2" :class="{'sm:px-4 px-2':route.fullPath  === '/'}">
 
     <NuxtLink :to="`/member/${author.username}`" v-if="showAvatar">
       <UAvatar v-if="author && author.avatarUrl" :src="getAvatarUrl(author.avatarUrl)" size="md" alt="Avatar" />
@@ -54,7 +54,6 @@ const props = withDefaults(defineProps<PostDTO & {
   showAvatar: true,
   fav: false
 })
-
 </script>
 
 <style scoped></style>

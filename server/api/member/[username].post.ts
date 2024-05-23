@@ -1,23 +1,23 @@
 export default defineEventHandler(async (event) => {
+  const username = getRouterParam(event, "username");
 
-  const username = getRouterParam(event, 'username')
-
-  if(!username){
-    throw createError('用户不存在')
+  if (!username) {
+    throw createError("用户不存在");
   }
-  
+
   const user = await prisma.user.findUnique({
     where: {
-      username
+      username,
     },
     include: {
       _count: {
-        select:{
-          fav:true,
-          comments:true,
-          posts:true
-        }
-      }
+        select: {
+          fav: true,
+          comments: true,
+          posts: true,
+          ReceiveMessage: true,
+        },
+      },
     },
   });
   //@ts-ignore

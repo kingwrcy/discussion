@@ -7,14 +7,14 @@
   line-height: 1.8rem !important;
 }
 
-.md-editor-previewOnly li{
-  list-style:decimal;
-}
-.md-editor-previewOnly ol{
+.md-editor-previewOnly ul{
   list-style:disc;
 }
+.md-editor-previewOnly ol{
+  list-style:decimal;
+}
 
-.github-theme p, .github-theme blockquote, .github-theme ul, .github-theme ol, .github-theme dl, .github-theme table, .github-theme pre, .github-theme details {
+.default-theme p, .default-theme blockquote, .default-theme ul, .default-theme ol, .default-theme dl, .default-theme table, .default-theme pre, .default-theme details {
   margin-bottom:0 !important;
 }
 

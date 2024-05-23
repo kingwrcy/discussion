@@ -1,44 +1,48 @@
 export default defineEventHandler(async (event) => {
   const params = getQuery(event);
-  const pid = (params.pid as string) || "";
-  if (!pid) {
-    throw createError("帖子不存在");
+  const cid = (params.cid as string) || "";
+  if (!cid) {
+    throw createError("评论不存在");
   }
 
-  const post = await prisma.post.findUnique({
-    where: { pid },
+  const comment = await prisma.comment.findUnique({
+    where: {
+      cid,
+    },
   });
-  if (!post) {
-    throw createError("帖子不存在");
+  if (!comment) {
+    throw createError("评论不存在");
   }
 
   await prisma.like.deleteMany({
     where: {
-      pid,
+      pid: comment.pid,
+      cid,
     },
   });
   await prisma.disLike.deleteMany({
     where: {
-      pid,
+      pid: comment.pid,
+      cid,
     },
   });
   await prisma.comment.deleteMany({
     where: {
-      pid,
+      cid,
     },
   });
 
-  await prisma.post.delete({ where: { pid } });
   await prisma.user.update({
     where: {
-      uid: post.uid,
+      uid: comment.uid,
     },
     data: {
-      postCount: {
+      commentCount: {
         decrement: 1,
       },
     },
   });
+
   return {
     success: true,
   };

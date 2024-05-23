@@ -52,7 +52,17 @@
 </template>
 
 <script lang="ts" setup>
+import { toast } from 'vue-sonner';
 import type { CommentDTO } from '~/types';
+
+useHead({
+  title:"评论管理",
+  meta:[
+    {name:"keywords",content:"极简论坛"},
+    {name:"description",content:"极简论坛"},
+  ],
+})
+
 const route = useRoute()
 definePageMeta({
   layout: 'backend'
@@ -87,7 +97,14 @@ const columns = [{
 }]
 
 
-const doRemove = async (row:CommentDTO)=>{}
+const doRemove = async (row:CommentDTO)=>{
+  await $fetch(`/api/manage/comment/delete?cid=${row.cid}`, {
+    method: 'POST',
+  })
+  await toast.success('操作成功')
+  await reload()
+}
+
 let { data: commentListRes } = await useFetch('/api/manage/commentList', {
   method: 'POST',
   body: JSON.stringify(state)

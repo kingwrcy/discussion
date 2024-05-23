@@ -1,4 +1,5 @@
-import { UserStatus } from "@prisma/client";
+import { PointReason, UserStatus } from "@prisma/client";
+import { SysConfigDTO } from "~/types";
 
 type commentRequest = {
   content: string;
@@ -32,6 +33,19 @@ export default defineEventHandler(async (event) => {
   if (!user || user.status === UserStatus.BANNED) {
     throw createError("用户不存在或已被封禁");
   }
+  if (user.point <= 0) {
+    throw createError("用户积分小于或等于0分,不能回帖");
+  }
+  const {
+    _max: { floor: maxFloor },
+  } = await prisma.comment.aggregate({
+    _max: {
+      floor: true,
+    },
+    where: {
+      pid: request.pid,
+    },
+  });
 
   await prisma.comment.create({
     data: {
@@ -40,8 +54,39 @@ export default defineEventHandler(async (event) => {
       pid: request.pid,
       uid: event.context.uid,
       mentioned: mentioned,
+      floor: (maxFloor ?? 0) + 1,
     },
   });
+
+  mentioned.forEach(async (user) => {
+    const username = user.slice(1);
+    const target = await prisma.user.findUnique({ where: { username } });
+    if (target) {
+      await prisma.message.create({
+        data: {
+          content: `你在帖子<a href='/post/${request.pid}#${cid}'中被提到了`,
+          read: false,
+          toUid: target.uid,
+        },
+      });
+    }
+  });
+
+  const sysConfig = await prisma.sysConfig.findFirst();
+  const sysConfigDTO = sysConfig?.content as SysConfigDTO;
+  let {
+    _sum: { point: totalToday },
+  } = await prisma.pointHistory.aggregate({
+    _sum: {
+      point: true,
+    },
+    where: {
+      uid: event.context.uid,
+      reason: PointReason.COMMENT,
+    },
+  });
+  totalToday = totalToday ?? 0;
+  const limit = totalToday >= sysConfigDTO.pointPerCommentByDay;
 
   await prisma.user.update({
     where: {
@@ -64,6 +109,29 @@ export default defineEventHandler(async (event) => {
       },
     },
   });
+
+  await prisma.user.update({
+    where: {
+      uid: user.uid,
+    },
+    data: {
+      point: {
+        increment: limit ? 0 : sysConfigDTO.pointPerComment,
+      },
+    },
+  });
+
+  if (!limit) {
+    await prisma.pointHistory.create({
+      data: {
+        uid: event.context.uid,
+        pid: request.pid,
+        cid,
+        point: sysConfigDTO.pointPerComment,
+        reason: PointReason.COMMENT,
+      },
+    });
+  }
 
   return { success: true };
 });

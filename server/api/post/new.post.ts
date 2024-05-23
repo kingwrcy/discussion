@@ -1,6 +1,6 @@
-import { UserStatus } from "@prisma/client";
+import { PointReason, UserStatus } from "@prisma/client";
 import { z } from "zod";
-import { createPostSchema } from "~/types";
+import { SysConfigDTO, createPostSchema } from "~/types";
 
 type createPostRequest = z.infer<typeof createPostSchema>;
 
@@ -35,6 +35,9 @@ export default defineEventHandler(async (event) => {
   if (!user || user.status === UserStatus.BANNED) {
     throw createError("用户不存在或已被封禁");
   }
+  if (user.point <=0) {
+    throw createError("用户积分小于或等于0分,不能发帖");
+  }
   const pid = `p${randomId()}`;
 
   try {
@@ -67,6 +70,22 @@ export default defineEventHandler(async (event) => {
         },
       });
 
+      const sysConfig = await prisma.sysConfig.findFirst();
+      const sysConfigDTO = sysConfig?.content as SysConfigDTO;
+      let {
+        _sum: { point: totalToday },
+      } = await prisma.pointHistory.aggregate({
+        _sum: {
+          point: true,
+        },
+        where: {
+          uid: event.context.uid,
+          reason: PointReason.POST,
+        },
+      });
+      totalToday = totalToday ?? 0;
+      const limit = totalToday >= sysConfigDTO.pointPerPostByDay;
+
       await prisma.user.update({
         where: {
           uid: event.context.uid,
@@ -75,8 +94,22 @@ export default defineEventHandler(async (event) => {
           postCount: {
             increment: 1,
           },
+          point: {
+            increment: limit ? 0 : sysConfigDTO.pointPerPost,
+          },
         },
       });
+
+      if (!limit) {
+        await prisma.pointHistory.create({
+          data: {
+            uid: event.context.uid,
+            pid: request.pid || pid,
+            point: sysConfigDTO.pointPerPost,
+            reason: PointReason.POST,
+          },
+        });
+      }
     }
   } catch (e) {
     console.log("error", e);

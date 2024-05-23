@@ -39,7 +39,13 @@ import { saveSettingsRequestSchema } from '~/types';
 const { data } = await useFetch(`/api/member/profile`, { method: 'POST' })
 const userinfo = data.value as UserDTO
 const config = useRuntimeConfig()
-
+useHead({
+  title:`${userinfo.username}的个人设置`,
+  meta:[
+    {name:"keywords",content:"极简论坛"},
+    {name:"description",content:"极简论坛"},
+  ],
+})
 type Schema = z.output<typeof saveSettingsRequestSchema>
 
 const state = reactive({

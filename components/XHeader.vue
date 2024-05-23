@@ -24,16 +24,19 @@ const logout = () => {
       </NuxtLink>
 
 
-      <div class="flex items-center gap-1 ml-auto ">   
-        <NuxtLink class="flex gap-1 items-center p-2 hover:text-primary/80" to="/manage" v-if="token && userinfo?.role === UserRole.ADMIN">
+      <div class="flex items-center gap-1 ml-auto ">
+        <NuxtLink class="flex gap-1 items-center p-2 hover:text-primary/80" to="/manage"
+          v-if="token && userinfo?.role === UserRole.ADMIN">
           <UIcon name="i-carbon-add-comment" />
           <span>管理</span>
-        </NuxtLink>  
-        <NuxtLink class="flex gap-1 items-center p-2 hover:text-primary/80" to="/post/new" v-if="token && userinfo?.status === 'NORMAL'">
+        </NuxtLink>
+        <NuxtLink class="flex gap-1 items-center p-2 hover:text-primary/80" to="/post/new"
+          v-if="token && userinfo?.status === 'NORMAL' && userinfo.point > 0">
           <UIcon name="i-carbon-add-comment" />
           <span>发帖</span>
         </NuxtLink>
-        <UBadge v-if="token && userinfo?.status === 'BANNED'">被禁言,到{{ $dayjs(userinfo?.bannedEnd).format('YYYY-MM-DD HH:mm:ss') }}</UBadge>
+        <UBadge v-if="token && userinfo?.status === 'BANNED'">被禁言,到{{ $dayjs(userinfo?.bannedEnd).format
+          ('YYYY-MM-DD HH:mm:ss') }}</UBadge>
         <NuxtLink class="flex gap-1 items-center p-2 hover:text-primary/80" to="/member/login" v-if="!token">
           <UIcon name="i-carbon-login" />
           <span>登录</span>

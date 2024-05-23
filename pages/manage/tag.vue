@@ -42,6 +42,13 @@
 <script lang="ts" setup>
 import { toast } from 'vue-sonner';
 import type { TagDTO } from '~/types';
+useHead({
+  title:"标签管理",
+  meta:[
+    {name:"keywords",content:"极简论坛"},
+    {name:"description",content:"极简论坛"},
+  ],
+})
 const route = useRoute()
 definePageMeta({
   layout: 'backend'

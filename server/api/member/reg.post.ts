@@ -37,6 +37,7 @@ export default defineEventHandler(async (event) => {
         email: request.email.trim(),
         avatarUrl: sha256(request.email.trim()),
         role: exist ? UserRole.USER : UserRole.ADMIN,
+        point: 100,
       },
     });
   } catch (e) {
