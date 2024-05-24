@@ -15,5 +15,6 @@
     "className",
     "ngClass",
     "ui"
-  ]
+  ],
+  "editor.fontSize": 14
 }

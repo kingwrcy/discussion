@@ -1,13 +1,15 @@
 <template>
   <div class="flex">
     <div class="flex space-x-2 flex-1">
-      <UBadge :color="selectedTag === tag.name ? 'primary' : 'gray'" variant="solid" size="xs" class="cursor-pointer "
-      v-for="tag in tagList">
-      <NuxtLink :to="`/tag/${tag.name}`">{{ tag.name }}({{ tag.count }})</NuxtLink>
-    </UBadge>
+      <UBadge :color="selectedTag === tag.name ? 'primary' : 'gray'" variant="solid" size="xs" class="cursor-pointer"
+        v-for="tag in tagList">
+        <NuxtLink :to="`/tag/${tag.name}`">{{ tag.name }}({{ tag.count }})</NuxtLink>
+      </UBadge>
+      <div v-if="tagList.length === 0" class="text-sm">暂无标签,请去后台添加</div>
     </div>
-    <UBadge :color="selectedTag === 'all' ? 'primary' : 'gray'" variant="solid" size="xs" class="cursor-pointer ">
-      <NuxtLink to="/tags">全部节点</NuxtLink></UBadge>
+    <UBadge :color="selectedTag === 'all' ? 'primary' : 'gray'" variant="solid" size="xs" class="cursor-pointer">
+      <NuxtLink to="/tags">全部节点</NuxtLink>
+    </UBadge>
   </div>
 </template>
 

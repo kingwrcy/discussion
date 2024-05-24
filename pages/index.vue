@@ -1,10 +1,11 @@
 <template>
-  <UCard class="w-full mt-2" :ui="{body:{padding:'px-0 sm:p-0'}}">
+  <UCard class="w-full mt-2 min-h-60" :ui="{ body: { padding: 'px-0 sm:p-0' } }">
     <template #header class="py-1">
       <XTagList />
     </template>
     <div class="flex flex-col divide-y divide-gray-100">
       <XPost :showAvatar="true" v-for="post in postList" :key="post.pid" v-bind="post" />
+      <div class="text-sm">暂无帖子,注册登录发言吧</div>
     </div>
     <UPagination size="sm" :to="(page: number) => ({
       query: { page },

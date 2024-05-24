@@ -1,27 +1,28 @@
 # Nuxt 3 builder
 FROM node:20-alpine as builder
 
+ENV NODE_ENV=production
+
+RUN corepack enable && corepack prepare pnpm@latest --activate
+ENV PNPM_HOME=/usr/local/bin
+
 ARG VERSION
 
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml ./
 
-RUN npm install -g pnpm
-
 # 安装生产依赖
 RUN pnpm install --frozen-lockfile --prod
-RUN pnpm install -D tailwindcss
 
 # 复制整个项目
 COPY . .
 
 # 生成Prisma客户端
-RUN npx prisma generate
+# RUN npx prisma generate
 
 RUN echo $VERSION > /app/version
 
-ENV NODE_ENV=production
 
 # 构建Nuxt应用
 RUN pnpm run build

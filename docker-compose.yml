@@ -2,6 +2,7 @@ version: '3'
 services:
   simple-dicuss:
     image: simple-discuss:latest
+    container_name: simple-discuss
     #pull_policy: always
     pull_policy: if-not-present
     ports:
@@ -13,6 +14,7 @@ services:
     environment:
       DATABASE_URL: "postgres://simple-discuss-user:simple-discuss-password@postgres/simple-discuss"
   postgres:
+    container_name: postgres
     image: postgres:alpine
     restart: always
     environment:
@@ -20,6 +22,6 @@ services:
       POSTGRES_PASSWORD: simple-discuss-password
       POSTGRES_DB: simple-discuss
     volumes:
-      - simple-dicuss-data:/var/lib/postgresql/data
+      - simple-discuss-data:/var/lib/postgresql/data
 volumes:
-  simple-dicuss-data:
+  simple-discuss-data:

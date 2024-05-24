@@ -30,7 +30,8 @@
     "vue-sonner": "^1.1.2",
     "zod": "^3.23.8",
     "@vueuse/core": "^10.9.0",
-    "@vueuse/nuxt": "^10.9.0"
+    "@vueuse/nuxt": "^10.9.0",
+    "tailwindcss": "^3.4.3"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -38,7 +39,6 @@
     "@types/markdown-it-link-attributes": "^3.0.5",
     "@types/pg": "^8.11.6",
     "@types/shortid": "^0.0.32",
-    "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5"
   }
 }

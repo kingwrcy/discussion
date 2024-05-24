@@ -221,3 +221,7 @@ ALTER TABLE "Post" ADD CONSTRAINT "Post_tagId_fkey" FOREIGN KEY ("tagId") REFERE
 -- AddForeignKey
 ALTER TABLE "Post" ADD CONSTRAINT "Post_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
+
+INSERT INTO public."SysConfig"
+(id, "content")
+VALUES(1, '{"websiteName": "极简论坛", "pointPerPost": 5, "pointPerComment": 1, "pointPerPostByDay": 20, "websiteAnnouncement": "这里可以去后台系统设置里自定义公告,支持markdown语法.", "pointPerCommentByDay": 20, "pointPerDaySignInMax": 10, "pointPerDaySignInMin": 1, "pointPerLikeOrDislike": 1}'::jsonb);
