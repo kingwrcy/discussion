@@ -10,12 +10,16 @@
           <UInput v-model="state.title" autocomplete="off" />
         </UFormGroup>
         <UFormGroup label="标签" name="tags">
-          <USelectMenu value-attribute="id" option-attribute="desc" v-model="state.tagId" :options="tags" >
+          <USelectMenu value-attribute="id" option-attribute="desc" v-model="state.tagId" :options="tags">
           </USelectMenu>
         </UFormGroup>
         <UFormGroup label="正文" name="content">
           <MdEditor :no-upload-img="true" style="max-height: 400px;" v-model="state.content" :preview="false"
-            :toolbars="toolbars" editor-id="newPost" />
+            :toolbars="toolbars" editor-id="newPost">
+            <template #defToolbars>
+              <XEmoji />
+            </template>
+          </MdEditor>
         </UFormGroup>
         <div>
           <UButton type="submit" :loading="pending">
@@ -45,12 +49,13 @@ mdConfig({
       attrs: {
         target: '_blank'
       }
-    });    
+    });
   }
 });
 const route = useRoute()
 
 const toolbars: ToolbarNames[] = [
+  0,
   'bold',
   'underline',
   '-',
@@ -124,10 +129,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 }
 
 useHead({
-  title:`发表帖子`,
-  meta:[
-    {name:"keywords",content:"极简论坛"},
-    {name:"description",content:"极简论坛"},
+  title: `发表帖子`,
+  meta: [
+    { name: "keywords", content: "极简论坛" },
+    { name: "description", content: "极简论坛" },
   ],
 })
 </script>

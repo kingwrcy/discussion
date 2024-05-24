@@ -13,6 +13,8 @@ html,body,#__nuxt{
 </style>
 
 <script setup lang="ts">
+import 'md-editor-v3/lib/style.css';
+
 useHead({
   // as a string,
   // where `%s` is replaced with the title

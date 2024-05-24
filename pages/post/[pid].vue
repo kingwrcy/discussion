@@ -35,7 +35,6 @@
 <script lang="ts" setup>
 import type { PostDTO, UserDTO } from '~/types';
 import { MdPreview } from 'md-editor-v3';
-import 'md-editor-v3/lib/style.css';
 let userinfo = useState<UserDTO>('userinfo')
 const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)

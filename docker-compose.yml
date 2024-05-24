@@ -1,0 +1,24 @@
+version: '3'
+services:
+  simple-dicuss:
+    image: kingwrcy/simple-dicuss:latest
+    pull_policy: always
+    ports:
+      - "3000:3000"
+    links:
+      - postgres
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: "postgres://simple-discuss-user:simple-discuss-password@postgres/simple-discuss"
+  postgres:
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_USER: simple-discuss-user
+      POSTGRES_PASSWORD: simple-discuss-password
+      POSTGRES_DB: simple-discuss
+    volumes:
+      - simple-dicuss-data:/var/lib/postgresql/data
+volumes:
+  simple-dicuss-data:

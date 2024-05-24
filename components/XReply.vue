@@ -1,7 +1,11 @@
 <template>
   <div class="flex flex-col  py-2 " v-if="token">
     <MdEditor style="height:200px;" :no-upload-img="true" v-model="state.content" :preview="false" :toolbars="toolbars"
-      :editor-id="`post-${pid}`" />
+      :editor-id="`post-${pid}`" >
+      <template #defToolbars>
+              <XEmoji />
+            </template>
+          </MdEditor>
     <div class="flex my-2">
       <UButton @click="reply">发表评论</UButton>
     </div>
@@ -33,6 +37,7 @@ mdConfig({
 const emits = defineEmits(['commented'])
 
 const toolbars: ToolbarNames[] = [
+  0,
   'bold',
   'underline',
   '-',
