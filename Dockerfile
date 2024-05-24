@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # 安装生产依赖
-RUN npm ci 
+RUN npm install --production --no-optional
 
 # 复制整个项目
 COPY . .
@@ -37,10 +37,11 @@ ENV SIMPLE_DISCUSS_VERSION=$VERSION
 COPY --from=builder /app/.output /app/.output
 COPY --from=builder /app/prisma /app/prisma
 COPY --from=builder /app/version /app/version
+COPY --from=builder /app/start.sh /app/start.sh
 
 RUN npm init -y
 RUN npm install -g prisma
-RUN npx prisma migrate deploy
 EXPOSE 3000
 
-CMD ["node" , "/app/.output/server/index.mjs"]
+RUN chmod +x /app/start.sh
+CMD /app/start.sh
