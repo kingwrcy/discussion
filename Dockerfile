@@ -5,10 +5,12 @@ ARG VERSION
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json pnpm-lock.yaml ./
+
+RUN npm install -g pnpm
 
 # 安装生产依赖
-RUN npm install --omit=dev
+RUN pnpm install --frozen-lockfile --prod
 
 # 复制整个项目
 COPY . .
@@ -21,11 +23,11 @@ RUN echo $VERSION > /app/version
 ENV NODE_ENV=production
 
 # 构建Nuxt应用
-RUN npm run build
+RUN pnpm run build
 
 # Nuxt 3 production
 FROM node:20-alpine
-
+RUN npm install -g pnpm
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -39,8 +41,8 @@ COPY --from=builder /app/prisma /app/prisma
 COPY --from=builder /app/version /app/version
 COPY --from=builder /app/start.sh /app/start.sh
 
-RUN npm init -y
-RUN npm install -g prisma
+RUN pnpm init -y
+RUN pnpm install -g prisma
 EXPOSE 3000
 
 RUN chmod +x /app/start.sh
