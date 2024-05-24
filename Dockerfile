@@ -11,6 +11,7 @@ RUN npm install -g pnpm
 
 # 安装生产依赖
 RUN pnpm install --frozen-lockfile --prod
+RUN pnpm install -D tailwindcss
 
 # 复制整个项目
 COPY . .
@@ -27,7 +28,10 @@ RUN pnpm run build
 
 # Nuxt 3 production
 FROM node:20-alpine
-RUN npm install -g pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+ENV PNPM_HOME=/usr/local/bin
+RUN pnpm add --global prisma
+
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -40,9 +44,6 @@ COPY --from=builder /app/.output /app/.output
 COPY --from=builder /app/prisma /app/prisma
 COPY --from=builder /app/version /app/version
 COPY --from=builder /app/start.sh /app/start.sh
-
-RUN pnpm init -y
-RUN pnpm install -g prisma
 EXPOSE 3000
 
 RUN chmod +x /app/start.sh

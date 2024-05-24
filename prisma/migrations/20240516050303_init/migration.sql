@@ -1,4 +1,7 @@
 -- CreateEnum
+CREATE TYPE "PointReason" AS ENUM ('POST', 'COMMENT', 'LIKE', 'DISLIKE', 'SIGNIN', 'PUNISH');
+
+-- CreateEnum
 CREATE TYPE "UserRole" AS ENUM ('ADMIN', 'USER');
 
 -- CreateEnum
@@ -14,6 +17,7 @@ CREATE TABLE "Comment" (
     "pid" TEXT NOT NULL,
     "mentioned" TEXT[],
     "content" TEXT NOT NULL,
+    "floor" INTEGER NOT NULL DEFAULT 1,
 
     CONSTRAINT "Comment_pkey" PRIMARY KEY ("id")
 );
@@ -54,6 +58,33 @@ CREATE TABLE "Like" (
 );
 
 -- CreateTable
+CREATE TABLE "Message" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "read" BOOLEAN NOT NULL DEFAULT false,
+    "fromUid" TEXT,
+    "toUid" TEXT NOT NULL,
+    "content" TEXT NOT NULL,
+
+    CONSTRAINT "Message_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "PointHistory" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "reason" "PointReason" NOT NULL,
+    "uid" TEXT NOT NULL,
+    "pid" TEXT,
+    "cid" TEXT,
+    "point" INTEGER NOT NULL,
+
+    CONSTRAINT "PointHistory_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Post" (
     "id" SERIAL NOT NULL,
     "pid" TEXT NOT NULL,
@@ -75,11 +106,20 @@ CREATE TABLE "Post" (
 );
 
 -- CreateTable
+CREATE TABLE "SysConfig" (
+    "id" SERIAL NOT NULL,
+    "content" JSONB NOT NULL,
+
+    CONSTRAINT "SysConfig_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Tag" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "desc" TEXT NOT NULL,
     "count" INTEGER NOT NULL DEFAULT 0,
+    "hot" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Tag_pkey" PRIMARY KEY ("id")
 );
@@ -159,6 +199,21 @@ ALTER TABLE "Like" ADD CONSTRAINT "Like_pid_fkey" FOREIGN KEY ("pid") REFERENCES
 
 -- AddForeignKey
 ALTER TABLE "Like" ADD CONSTRAINT "Like_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Message" ADD CONSTRAINT "Message_fromUid_fkey" FOREIGN KEY ("fromUid") REFERENCES "User"("uid") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Message" ADD CONSTRAINT "Message_toUid_fkey" FOREIGN KEY ("toUid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PointHistory" ADD CONSTRAINT "PointHistory_cid_fkey" FOREIGN KEY ("cid") REFERENCES "Comment"("cid") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PointHistory" ADD CONSTRAINT "PointHistory_pid_fkey" FOREIGN KEY ("pid") REFERENCES "Post"("pid") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PointHistory" ADD CONSTRAINT "PointHistory_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Post" ADD CONSTRAINT "Post_tagId_fkey" FOREIGN KEY ("tagId") REFERENCES "Tag"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -1,8 +1,9 @@
 version: '3'
 services:
   simple-dicuss:
-    image: kingwrcy/simple-dicuss:latest
-    pull_policy: always
+    image: simple-discuss:latest
+    #pull_policy: always
+    pull_policy: if-not-present
     ports:
       - "3000:3000"
     links:
