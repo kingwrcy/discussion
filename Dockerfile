@@ -20,7 +20,7 @@ RUN pnpm install --frozen-lockfile --prod
 COPY . .
 
 # 生成Prisma客户端
-# RUN npx prisma generate
+RUN npx prisma generate
 
 RUN echo $VERSION > /app/version
 

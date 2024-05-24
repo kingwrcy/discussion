@@ -5,7 +5,7 @@
     </template>
     <div class="flex flex-col divide-y divide-gray-100">
       <XPost :showAvatar="true" v-for="post in postList" :key="post.pid" v-bind="post" />
-      <div class="text-sm">暂无帖子,注册登录发言吧</div>
+      <div class="p-4 text-sm">暂无帖子,注册登录发言吧</div>
     </div>
     <UPagination size="sm" :to="(page: number) => ({
       query: { page },

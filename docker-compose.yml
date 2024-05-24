@@ -4,7 +4,7 @@ services:
     image: simple-discuss:latest
     container_name: simple-discuss
     #pull_policy: always
-    pull_policy: if-not-present
+    pull_policy: if_not_present
     ports:
       - "3000:3000"
     links:
