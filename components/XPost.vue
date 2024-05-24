@@ -36,7 +36,7 @@
         </NuxtLink>
         <div class="flex items-center space-x-1 ">
           <UIcon name="i-carbon-time" />
-          <span>{{ $dayjs(createdAt).fromNow() }}</span>
+          <span>{{ dateFormatAgo(createdAt) }}</span>
         </div>
       </div>
     </div>
@@ -45,6 +45,7 @@
 
 <script lang="ts" setup>
 import type { PostDTO } from '~/types';
+
 const route = useRoute()
 const detailPage = route.fullPath.startsWith('/post')
 

@@ -24,6 +24,7 @@
     "pg": "^8.11.5",
     "prisma": "^5.14.0",
     "short-uuid": "^5.2.0",
+    "vtils": "^4.113.3",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
     "vue-sonner": "^1.1.2",
@@ -37,8 +38,6 @@
     "@types/shortid": "^0.0.32",
     "@vueuse/core": "^10.9.0",
     "@vueuse/nuxt": "^10.9.0",
-    "dayjs": "^1.11.11",
-    "dayjs-nuxt": "^2.1.9",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5"
   }

@@ -5,7 +5,7 @@
     </div>
     <UTable :rows="messageList" :columns="columns" :ui="{td:{padding:'py-2'},th:{padding:'py-2'}}">
       <template #createdAt-data="{ row }">
-        {{ $dayjs(row.createdAt).format('YYYY/MM/DD HH:mm:ss') }}
+        {{ dateFormat(row.createdAt) }}
       </template>
       <template #content-data="{ row }">
         <div class="max-w-[300px] text-wrap line-clamp-3" v-html="row.content">
@@ -31,6 +31,7 @@
 <script lang="ts" setup>
 import { toast } from 'vue-sonner';
 import type { MessageDTO } from '~/types';
+
 const route = useRoute()
 
 const columns = [{

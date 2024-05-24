@@ -9,12 +9,11 @@
             <UBadge color="green" variant="soft" size="xs">{{ userinfo.role === UserRole.ADMIN ? '管理员' : '普通用户' }}
               (lv{{ userinfo.level }})
             </UBadge>
-            <UBadge v-if="token && userinfo?.status === 'BANNED'">被禁言,到{{ $dayjs(userinfo?.bannedEnd).
-              format('YYYY-MM-DD HH:mm:ss') }}</UBadge>
+            <UBadge v-if="token && userinfo?.status === 'BANNED'">被禁言,到{{ dateFormat(userinfo?.bannedEnd)}}</UBadge>
 
           </div>
           <div class="flex gap-1">
-            <div class="text-xs text-gray-400">{{ $dayjs(userinfo.createdAt).format('YYYY/MM/DD') }}加入</div>
+            <div class="text-xs text-gray-400">{{ dateFormat(userinfo.createdAt)}}加入</div>
           </div>
         </div>
       </div>

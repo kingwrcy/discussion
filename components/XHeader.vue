@@ -2,7 +2,6 @@
 import { UserRole } from '@prisma/client';
 import type { UserDTO } from '~/types';
 
-
 const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)
 const userinfo = useState<UserDTO | undefined>('userinfo')
@@ -35,8 +34,7 @@ const logout = () => {
           <UIcon name="i-carbon-add-comment" />
           <span>发帖</span>
         </NuxtLink>
-        <UBadge v-if="token && userinfo?.status === 'BANNED'">被禁言,到{{ $dayjs(userinfo?.bannedEnd).format
-          ('YYYY-MM-DD HH:mm:ss') }}</UBadge>
+        <UBadge v-if="token && userinfo?.status === 'BANNED'">被禁言,到{{ dateFormat(userinfo?.bannedEnd)}}</UBadge>
         <NuxtLink class="flex gap-1 items-center p-2 hover:text-primary/80" to="/member/login" v-if="!token">
           <UIcon name="i-carbon-login" />
           <span>登录</span>

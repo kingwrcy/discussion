@@ -1,11 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ["dayjs-nuxt", "@nuxt/ui",'@vueuse/nuxt',],
-  dayjs: {
-    locales: ["zh-CN"],
-    plugins: ["relativeTime"],
-    defaultLocale: "zh-CN",
-  },
+  modules: ["@nuxt/ui",'@vueuse/nuxt',],  
   ui: {
     icons: ["carbon"],
   },

@@ -35,7 +35,7 @@
         </div>
       </template>
       <template #createdAt-data="{ row }">
-        {{ $dayjs(row.createdAt).format('YYYY/MM/DD HH:mm:ss') }}
+        {{ dateFormat(row.createdAt)}}
       </template>
       <template #actions-data="{ row }">
         <div class="space-x-2">

@@ -22,13 +22,13 @@
         <UButton :to="`/member/${row.username}`" color="white">{{ row.username }}</UButton>
       </template>
       <template #createdAt-data="{ row }">
-        {{ $dayjs(row.createdAt).format('YYYY/MM/DD HH:mm:ss') }}
+        {{ dateFormat(row.createdAt) }}
       </template>
       <template #lastLogin-data="{ row }">
-        {{ $dayjs(row.lastLogin).format('YYYY/MM/DD HH:mm:ss') }}
+        {{ dateFormat(row.lastLogin) }}
       </template>
       <template #bannedEnd-data="{ row }">
-        {{ row.bannedEnd && $dayjs(row.bannedEnd).format('YYYY/MM/DD HH:mm:ss') }}
+        {{ row.bannedEnd && dateFormat(row.bannedEnd)}}
       </template>
       <template #actions-data="{ row }">
         <div class="space-x-2">
@@ -52,6 +52,7 @@
 <script lang="ts" setup>
 import { UserStatus } from '@prisma/client';
 import type { UserDTO } from '~/types';
+
 const route = useRoute()
 definePageMeta({
   layout: 'backend'

@@ -21,7 +21,7 @@
             </NuxtLink>
             <UIcon @click="signIn" name="i-carbon-checkmark-outline" title="签到"
               class="size-4 cursor-pointer hover:text-primary/90" />
-            <div class="ml-auto text-xs text-gray-400">{{ $dayjs(userinfo.createdAt).format('YYYY/MM/DD') }}加入</div>
+            <div class="ml-auto text-xs text-gray-400">{{  dateFormat(userinfo.createdAt,'yyyy-MM-dd')}}加入</div>
           </div>
         </div>
       </div>
@@ -64,6 +64,7 @@
           <div class="flex items-center gap-1 text-gray-400">
             <UIcon name="i-carbon-favorite" />
             <div>收藏</div>
+            
           </div>
           <div class="">{{ userinfo._count.fav }}</div>
         </NuxtLink>

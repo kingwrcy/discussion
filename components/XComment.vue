@@ -12,7 +12,7 @@
 
         <div class="flex items-center space-x-1 ">
           <UIcon name="i-carbon-time" />
-          <span>{{ $dayjs(createdAt).fromNow() }}</span>
+          <span>{{ dateFormatAgo(createdAt) }}</span>
         </div>
         <div v-if="token && userinfo && userinfo.uid !== props.author.uid" title="支持"
           class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer" @click="doLike">
@@ -38,6 +38,7 @@
 <script lang="ts" setup>
 import { MdPreview } from "md-editor-v3";
 import type { CommentDTO, UserDTO } from "~/types";
+
 const userinfo = useState<UserDTO | undefined>('userinfo')
 const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)

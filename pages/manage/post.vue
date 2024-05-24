@@ -30,7 +30,7 @@
        </div>
       </template>
       <template #createdAt-data="{ row }">
-        {{ $dayjs(row.createdAt).format('YYYY/MM/DD HH:mm:ss') }}
+        {{ dateFormat(row.createdAt)}}
       </template>
       <template #actions-data="{ row }">
         <div class="space-x-2">
@@ -50,6 +50,7 @@
 <script lang="ts" setup>
 import { toast } from 'vue-sonner';
 import type { PostDTO } from '~/types';
+
 useHead({
   title:"帖子管理",
   meta:[

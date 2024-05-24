@@ -6,7 +6,7 @@
 
         <div class="flex items-center space-x-1 ">
           <UIcon name="i-carbon-time" />
-          <span>{{ $dayjs(createdAt).fromNow() }}</span>
+          <span>{{ dateFormatAgo(createdAt)}}</span>
         </div>
 
         <div class="">

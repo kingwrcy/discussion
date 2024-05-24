@@ -50,9 +50,9 @@ export type UserDTO = {
   commentCount: number;
   role: UserRole;
   status: UserStatus;
-  lastLogin: Date;
+  lastLogin: string;
   level: number;
-  bannedEnd: Date;
+  bannedEnd: string;
   unRead: number;
   _count: {
     fav: number;
@@ -114,18 +114,18 @@ export type PostDTO = {
   pinned: boolean;
 };
 
-export const SafeUser = {
-  createdAt: true,
-  uid: true,
-  id: true,
-  username: true,
-  lastLogin: true,
-  email: true,
-  avatarUrl: true,
-  point: true,
-  postCount: true,
-  commentCount: true,
-};
+// export const SafeUser = {
+//   createdAt: '',
+//   uid: true,
+//   id: true,
+//   username: true,
+//   lastLogin: true,
+//   email: true,
+//   avatarUrl: true,
+//   point: true,
+//   postCount: true,
+//   commentCount: true,
+// };
 
 export type SysConfigDTO = {
   websiteName: string;
@@ -139,11 +139,12 @@ export type SysConfigDTO = {
   websiteAnnouncement: string;
 };
 
+
 export type MessageDTO = {
   id: number;
   from: UserDTO;
   to: UserDTO;
   content: string;
   read: Boolean;
-  createdAt: number;
+  createdAt: string;
 };
