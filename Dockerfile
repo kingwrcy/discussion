@@ -1,5 +1,5 @@
 # Nuxt 3 builder
-FROM node:22.2.0-alpine as builder
+FROM node:20-alpine as builder
 
 ARG VERSION
 
@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # 安装生产依赖
-RUN npm install --production --no-optional
+RUN npm install --omit=dev
 
 # 复制整个项目
 COPY . .
@@ -24,7 +24,7 @@ ENV NODE_ENV=production
 RUN npm run build
 
 # Nuxt 3 production
-FROM node:22.2.0-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
