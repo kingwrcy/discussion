@@ -5,6 +5,7 @@ ENV NODE_ENV=production
 
 RUN corepack enable && corepack prepare pnpm@latest --activate
 ENV PNPM_HOME=/usr/local/bin
+RUN pnpm add --global prisma
 
 ARG VERSION
 
