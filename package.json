@@ -11,7 +11,7 @@
     "exportSql": "npx prisma migrate diff --from-empty --to-schema-datasource prisma/schema.prisma --script > prisma/migrations/20240516050303_init/migration.sql"
   },
   "dependencies": {
-    "@iconify-json/carbon": "^1.1.32",
+    "@iconify-json/carbon": "^1.1.34",
     "@nuxt/ui": "^2.16.0",
     "@prisma/adapter-pg": "^5.14.0",
     "@prisma/client": "5.14.0",
