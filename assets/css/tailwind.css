@@ -1,23 +1,52 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-.md-editor-preview-wrapper{padding:0 !important; }
-.md-editor-preview{
-  font-size:14px !important;  
+
+* {
+  font-family: "Comic Sans MS", "Luxi Sans", "Segoe UI", "Hiragino Sans GB",
+    "Microsoft Yahei", sans-serif, "Apple Logo";
+}
+
+.md-editor-preview-wrapper {
+  padding: 0 !important;
+}
+.md-editor-preview {
+  font-size: 14px !important;
   line-height: 1.8rem !important;
 }
 
-.md-editor-previewOnly ul{
-  list-style:disc;
-}
-.md-editor-previewOnly ol{
-  list-style:decimal;
-}
-
-.default-theme p, .default-theme blockquote, .default-theme ul, .default-theme ol, .default-theme dl, .default-theme table, .default-theme pre, .default-theme details {
-  margin-bottom:0 !important;
+.md-editor-preview ul{
+  padding:0 !important;
+  margin: 15px 0 15px 20px !important;
+  list-style-type: disc !important;
 }
 
-.md-editor-preview img{
+.md-editor-preview ol{
+  padding:0 !important;
+  margin: 15px 0 15px 20px !important;
+  list-style-type:decimal !important;
+}
+
+.md-editor-preview li{
+  margin: 0 !important;
+  padding:0 !important;
+}
+
+.default-theme p,
+.default-theme blockquote,
+.default-theme dl,
+.default-theme table,
+.default-theme pre,
+.default-theme details {
+  margin: 0.875rem 0 !important;
+}
+
+.default-theme > :first-child {
+  margin-top: 0px !important;
+}
+.default-theme > :last-child {
+  margin-bottom: 0px !important;
+}
+.md-editor-preview img {
   border-radius: 5px;
 }

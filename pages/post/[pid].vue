@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full mt-2  text-sm bg-white dark:bg-gray-900 rounded-lg shadow ">
+  <div class="w-full mt-2  bg-white dark:bg-gray-900 rounded-lg shadow ">
     <div class="px-4 py-2 ">
       <XPost :show-avatar="true" v-bind="post" />
     </div>

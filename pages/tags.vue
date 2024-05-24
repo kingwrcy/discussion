@@ -1,9 +1,9 @@
 <template>
   <UCard class="flex-1 mt-2 " style="min-height: 300px;">
     <div class="flex flex-wrap gap-2 ">
-    <UBadge color="gray" variant="solid"  class="cursor-pointer "
+    <UBadge color="gray" variant="solid" size="md" class="cursor-pointer "
       v-for="tag in tagList">
-      <NuxtLink :to="`/tag/${tag.name}`">{{ tag.name }}({{ tag.count }})</NuxtLink>
+      <NuxtLink :to="`/tag/${tag.name}`">{{ tag.name }}</NuxtLink>
     </UBadge>
   </div>
   </UCard>

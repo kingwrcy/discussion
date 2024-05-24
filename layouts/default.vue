@@ -17,9 +17,9 @@
         </UCard>
         <UCard class="w-full mt-2" v-if="sysconfig" :ui="{header:{padding:'px-0 py-0 sm:px-0'}}">
           <template #header>
-            <div class="text-sm px-4 py-1 rounded-t sm:px-6 font-semibold bg-gray-100">关于本站</div>
+            <div class="text-sm px-4 py-1 rounded-t sm:px-6 text-primary/40 bg-gray-100">关于本站</div>
           </template>
-          <div class="text-xs ">
+          <div class="text-xs">
             <MdPreview :model-value="sysconfig.websiteAnnouncement" editor-id="websiteAnnouncement" />
           </div>
         </UCard>

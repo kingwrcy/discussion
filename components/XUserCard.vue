@@ -8,10 +8,10 @@
         <div class="flex flex-col text-sm gap-1">
           <div class="flex justify-between">
 
-            <NuxtLink :to="`/member/${userinfo.username}`">
+            <NuxtLink class="text-base text-primary font-semibold" :to="`/member/${userinfo.username}`">
               {{ userinfo.username }}</NuxtLink>
 
-            <UBadge color="primary" variant="solid" size="xs">{{ userinfo.role === UserRole.ADMIN ? '管理员' : '普通用户' }}
+            <UBadge class="ml-1" color="primary" variant="solid" size="xs">{{ userinfo.role === UserRole.ADMIN ? '管理员' : '普通用户' }}
               (lv{{ userinfo.level }})
             </UBadge>
           </div>
@@ -32,19 +32,19 @@
           class="space-x-1 flex flex-row items-center cursor-pointer">
           <div class="flex items-center gap-1  text-gray-400" :class="{'text-red-500':userinfo.unRead > 0}">
             <UIcon name="i-carbon-notification-filled" />
-            <div>消息</div>
+            <div>未读</div>
           </div>
           <div class="">{{ userinfo.unRead }}</div>
         </NuxtLink>
 
-        <NuxtLink :to="`/member/${userinfo.username}/fav`"
+        <div
           class="space-x-1 flex flex-row items-center cursor-pointer hover:text-primary/60">
           <div class="flex items-center gap-1 text-gray-400">
             <UIcon name="i-carbon-task-approved" />
             <div>等级</div>
           </div>
           <div class="">{{ userinfo.level }}</div>
-        </NuxtLink>
+        </div>
 
       </div>
 
