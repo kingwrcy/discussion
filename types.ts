@@ -112,20 +112,10 @@ export type PostDTO = {
   };
   fav?: boolean;
   pinned: boolean;
+  lastCommentTime?: string;
+  lastCommentUid?: string;
+  lastCommentUser?: UserDTO;
 };
-
-// export const SafeUser = {
-//   createdAt: '',
-//   uid: true,
-//   id: true,
-//   username: true,
-//   lastLogin: true,
-//   email: true,
-//   avatarUrl: true,
-//   point: true,
-//   postCount: true,
-//   commentCount: true,
-// };
 
 export type SysConfigDTO = {
   websiteName: string;
@@ -138,7 +128,6 @@ export type SysConfigDTO = {
   pointPerDaySignInMax: number;
   websiteAnnouncement: string;
 };
-
 
 export type MessageDTO = {
   id: number;

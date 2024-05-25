@@ -6,7 +6,7 @@
         <div class="flex flex-col text-sm gap-1">
           <div class="flex">
             <NuxtLink :to="`/member/${userinfo.username}`">{{ userinfo.username }}</NuxtLink>
-            <UBadge color="green" variant="soft" size="xs">{{ userinfo.role === UserRole.ADMIN ? '管理员' : '普通用户' }}
+            <UBadge class="ml-1" color="primary" variant="solid" size="xs">{{ userinfo.role === UserRole.ADMIN ? '管理员' : '普通用户' }}
               (lv{{ userinfo.level }})
             </UBadge>
             <UBadge v-if="token && userinfo?.status === 'BANNED'">被禁言,到{{ dateFormat(userinfo?.bannedEnd)}}</UBadge>

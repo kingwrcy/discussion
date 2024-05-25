@@ -1,10 +1,9 @@
 version: '3'
 services:
-  simple-dicuss:
-    image: simple-discuss:latest
-    container_name: simple-discuss
+  dicussion:
+    image: kingwrcy/dicussion
+    container_name: dicussion
     #pull_policy: always
-    pull_policy: if_not_present
     ports:
       - "3000:3000"
     links:
@@ -12,16 +11,16 @@ services:
     depends_on:
       - postgres
     environment:
-      DATABASE_URL: "postgres://simple-discuss-user:simple-discuss-password@postgres/simple-discuss"
+      DATABASE_URL: "postgres://dicussion-user:dicussion-password@postgres/dicussion"
   postgres:
     container_name: postgres
     image: postgres:alpine
     restart: always
     environment:
-      POSTGRES_USER: simple-discuss-user
-      POSTGRES_PASSWORD: simple-discuss-password
-      POSTGRES_DB: simple-discuss
+      POSTGRES_USER: dicussion-user
+      POSTGRES_PASSWORD: dicussion-password
+      POSTGRES_DB: dicussion
     volumes:
-      - simple-discuss-data:/var/lib/postgresql/data
+      - dicussion-data:/var/lib/postgresql/data
 volumes:
-  simple-discuss-data:
+  dicussion-data:

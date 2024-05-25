@@ -1,13 +1,13 @@
 <template>
   <div class="flex flex-row gap-2 container mx-auto">
-    <UCard class="flex flex-col space-y-1 max-w-[150px] text-sm">
+    <UCard class="flex flex-col space-y-1 max-w-[150px]">
       <NuxtLink to="/manage" :class="{'active':selectedMenu === 'user' }" class="flex items-center space-x-1 p-2 cursor-pointer hover:text-primary/80">
         <UIcon name="i-carbon-user" class="text-primary/80" />
         <span>用户管理</span>
       </NuxtLink>
 
       <NuxtLink to="/manage/tag" :class="{'active':selectedMenu === 'tag' }" class="flex items-center space-x-1 p-2 cursor-pointer hover:text-primary/80">
-        <UIcon name="i-carbon-user" class="text-primary/80" />
+        <UIcon name="i-carbon-bookmark" class="text-primary/80" />
         <span>标签管理</span>
       </NuxtLink>
 
@@ -26,7 +26,7 @@
         <span>系统设置</span>
       </NuxtLink>
       <NuxtLink to="/" class="flex items-center space-x-1 p-2 cursor-pointer hover:text-primary/80">
-        <UIcon name="i-carbon-settings" class="text-primary/80" />
+        <UIcon name="i-carbon-return" class="text-primary/80" />
         <span>返回首页</span>
       </NuxtLink>
     </UCard>

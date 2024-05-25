@@ -3,7 +3,7 @@
     <div class="flex ">
       <UButton icon="i-carbon-checkmark-outline" color="green" size="xs" @click="setMessageRead()">全部已读</UButton>
     </div>
-    <UTable :rows="messageList" :columns="columns" :ui="{td:{padding:'py-2'},th:{padding:'py-2'}}">
+    <UTable :rows="messageList" :columns="columns" :ui="{td:{padding:'py-3'},th:{padding:'py-2'}}">
       <template #createdAt-data="{ row }">
         {{ dateFormat(row.createdAt) }}
       </template>
@@ -46,9 +46,6 @@ const columns = [{
 }, {
   key: 'actions'
 }]
-
-
-
 
 const state = reactive({
   page: parseInt(route.query.page as any as string) || 1,

@@ -15,15 +15,14 @@ const logout = () => {
 
 <template>
   <div class="w-full bg-white shadow">
-    <div class="max-w-[1080px] mx-auto flex text-sm">
-
+    <div class="max-w-[1080px] mx-auto flex text-[15px] py-1 items-center">
+      <NuxtLink to="/" class="cursor-pointer hover:text-primary/80"><div class="font-semibold text-xl">Discussion</div></NuxtLink>
+      <div class="flex items-center gap-1 ml-auto ">      
+        
       <NuxtLink class="flex gap-1 items-center p-2 hover:text-primary/80" to="/">
-        <UIcon name="i-carbon-home" />
+        <UIcon name="i-carbon-home"/>
         <span>首页</span>
       </NuxtLink>
-
-
-      <div class="flex items-center gap-1 ml-auto ">      
         <NuxtLink class="flex gap-1 items-center p-2 hover:text-primary/80" to="/manage"
           v-if="token && userinfo?.role === UserRole.ADMIN">
           <UIcon name="i-carbon-add-comment" />

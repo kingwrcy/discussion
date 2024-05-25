@@ -19,7 +19,7 @@
       </UBadge>
     </div>
 
-    <div class=" gap-2 divide-y divide-gray-200 dark:divide-gray-800">
+    <div class=" gap-2 divide-y divide-gray-300 dark:divide-gray-800">
       <XComment v-for="(comment, index) in post.comments" :likeCount="post._count.commentLike"
         :dislikeCount="post._count.commentDisLike" :key="comment.cid" v-bind="comment" :index="index" />
       <UPagination size="sm" class="p-4" :to="(page: number) => ({
@@ -27,7 +27,7 @@
       })" v-model="state.page" :page-count="state.size" :total="totalComments" v-if="totalComments > state.size" />
     </div>
     <div class="px-4 border-t" v-if="userinfo.status === 'NORMAL' && userinfo.point > 0">
-      <XReply :pid="post.pid" @commented="refresh" />
+      <XReply :pid="post.pid" @commented="reload" />
     </div>
   </div>
 </template>
@@ -45,11 +45,23 @@ const state = reactive({
 })
 
 const url = '/api/post/' + route.params.pid
-let { data, refresh } = await useFetch(url, {
+let { data } = await useFetch(url, {
   method: 'POST',
-  body: JSON.stringify(state)
+  body: JSON.stringify({
+    ...state, count: true,
+  })
 })
 
+
+const reload = async () => {
+  const res = await $fetch(url, {
+    method: 'POST',
+    body: JSON.stringify({
+      ...state, count: false
+    })
+  })
+  data.value = res
+}
 
 watch(() => route.fullPath, async () => {
   const page = parseInt(route.query.page as any as string)
@@ -74,7 +86,7 @@ const toggleFav = async () => {
   await $fetch('/api/post/fav?pid=' + post.value.pid, {
     method: 'POST'
   })
-  await refresh()
+  await reload()
   userCardChanged.emit()
 }
 

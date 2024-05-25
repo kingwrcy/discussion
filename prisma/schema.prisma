@@ -43,31 +43,35 @@ model User {
   PointHistory   PointHistory[]
   SendMessage    Message[]      @relation("sendMessage")
   ReceiveMessage Message[]      @relation("receiveMessage")
+  LastComment    Post[]         @relation("lastComment")
 }
 
 model Post {
-  id             Int            @id @default(autoincrement())
-  pid            String         @unique
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @default(now()) @updatedAt
-  title          String
-  content        String
-  uid            String
-  viewCount      Int            @default(0)
-  replyCount     Int            @default(0)
-  likeCount      Int            @default(0)
-  disLikeCount   Int            @default(0)
-  minLevel       Int            @default(1)
-  comments       Comment[]
-  author         User           @relation(fields: [uid], references: [uid])
-  tagId          Int
-  commentDisLike DisLike[]
-  commentLike    Like[]
-  fav            Fav[]
-  pinned         Boolean        @default(false)
-  point          Int            @default(0)
-  tag            Tag            @relation(fields: [tagId], references: [id])
-  PointHistory   PointHistory[]
+  id              Int            @id @default(autoincrement())
+  pid             String         @unique
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @default(now()) @updatedAt
+  title           String
+  content         String
+  uid             String
+  viewCount       Int            @default(0)
+  replyCount      Int            @default(0)
+  likeCount       Int            @default(0)
+  disLikeCount    Int            @default(0)
+  minLevel        Int            @default(1)
+  comments        Comment[]
+  author          User           @relation(fields: [uid], references: [uid])
+  tagId           Int
+  commentDisLike  DisLike[]
+  commentLike     Like[]
+  fav             Fav[]
+  pinned          Boolean        @default(false)
+  point           Int            @default(0)
+  tag             Tag            @relation(fields: [tagId], references: [id])
+  PointHistory    PointHistory[]
+  lastCommentUser User?          @relation(name: "lastComment", fields: [lastCommentUid], references: [uid])
+  lastCommentTime DateTime       @default(now())
+  lastCommentUid  String?
 }
 
 model Tag {

@@ -135,6 +135,16 @@ export default defineEventHandler(async (event) => {
     },
   });
 
+  await prisma.post.update({
+    where: {
+      pid: request.pid,
+    },
+    data: {
+      lastCommentTime: new Date(),
+      lastCommentUid: event.context.uid,
+    },
+  });
+
   if (!limit) {
     await prisma.pointHistory.create({
       data: {

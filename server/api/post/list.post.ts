@@ -40,12 +40,14 @@ export default defineEventHandler(async (event) => {
         uid: true,
         avatarUrl: true,
         username: true,
+        role: true,
       },
     },
     tag: true,
     comments: false,
     fav: true,
-  }
+    lastCommentUser: true,
+  };
 
   let pinnedPost = await prisma.post.findMany({
     where: { ...where, pinned: true },

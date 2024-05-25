@@ -8,6 +8,7 @@
         <div class="flex  items-center space-x-1 cursor-pointer hover:text-primary/80 font-semibold">
           <UIcon name="i-carbon-user" />
           <NuxtLink :to="`/member/${author.username}`">{{ author.username }} </NuxtLink>
+          <span v-if="author.role === UserRole.ADMIN" class="text-[11px] ml-1 bg-green-500 text-white rounded px-1">mod</span>
         </div>
 
         <div class="flex items-center space-x-1 text-primary/40">
@@ -38,6 +39,7 @@
 <script lang="ts" setup>
 import { MdPreview } from "md-editor-v3";
 import type { CommentDTO, UserDTO } from "~/types";
+import { UserRole } from '@prisma/client';
 
 const userinfo = useState<UserDTO | undefined>('userinfo')
 const config = useRuntimeConfig()

@@ -1,4 +1,5 @@
 <template>
+
   <div>
     <x-header></x-header>
     <div class="flex max-w-[1080px] mx-auto h-full gap-4 ">
@@ -9,22 +10,20 @@
         <XUserCard v-if="userinfo && userinfo.username && !route.fullPath.startsWith('/member')" />
         <UCard class="w-full mt-2" v-if="route.fullPath.startsWith('/tag/') && tag" :ui="{header:{padding:'px-0 py-0 sm:px-0'}}">
           <template #header>
-            <div class="text-sm px-4 py-1 rounded-t sm:px-6 font-semibold bg-gray-100">{{ tag.name }}</div>
+            <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100">{{tag.name}}</div>
           </template>
-          <div class="text-xs ">
+          <div class="text-sm">
             {{ tag.desc }}
           </div>
         </UCard>
         <UCard class="w-full mt-2" v-if="sysconfig" :ui="{header:{padding:'px-0 py-0 sm:px-0'}}">
           <template #header>
-            <div class="text-sm px-4 py-1 rounded-t sm:px-6 text-primary/40 bg-gray-100">关于本站</div>
+            <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100">关于本站</div>
           </template>
-          <div class="text-xs">
+          <div class="text-sm">
             <MdPreview :model-value="sysconfig.websiteAnnouncement" editor-id="websiteAnnouncement" />
           </div>
-        </UCard>
-
-       
+        </UCard>       
       </div>
     </div>
     <XFooter />

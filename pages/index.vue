@@ -1,9 +1,9 @@
 <template>
-  <UCard class="w-full mt-2 min-h-60" :ui="{ body: { padding: 'px-0 sm:p-0' } }">
-    <template #header class="py-1">
+  <UCard class="w-full mt-2 min-h-60" :ui="{ body: { padding: 'px-0 sm:p-0' },header:{padding:' py-2 sm:px-4 px-2'} }">
+    <template #header>
       <XTagList />
     </template>
-    <div class="flex flex-col divide-y divide-gray-100">
+    <div class="flex flex-col divide-y divide-gray-300">
       <XPost :showAvatar="true" v-for="post in postList" :key="post.pid" v-bind="post" />
       <div class="p-4 text-sm" v-if="postList.length === 0">暂无帖子,注册登录发言吧</div>
     </div>
