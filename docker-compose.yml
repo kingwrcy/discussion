@@ -1,8 +1,8 @@
 version: '3'
 services:
-  dicussion:
-    image: kingwrcy/dicussion
-    container_name: dicussion
+  discussion:
+    image: kingwrcy/discussion:latest
+    container_name: discussion
     #pull_policy: always
     ports:
       - "3000:3000"
@@ -11,16 +11,16 @@ services:
     depends_on:
       - postgres
     environment:
-      DATABASE_URL: "postgres://dicussion-user:dicussion-password@postgres/dicussion"
+      DATABASE_URL: "postgres://discussion-user:discussion-password@postgres/discussion"
   postgres:
     container_name: postgres
     image: postgres:alpine
     restart: always
     environment:
-      POSTGRES_USER: dicussion-user
-      POSTGRES_PASSWORD: dicussion-password
-      POSTGRES_DB: dicussion
+      POSTGRES_USER: discussion-user
+      POSTGRES_PASSWORD: discussion-password
+      POSTGRES_DB: discussion
     volumes:
-      - dicussion-data:/var/lib/postgresql/data
+      - discussion-data:/var/lib/postgresql/data
 volumes:
-  dicussion-data:
+  discussion-data:

@@ -24,10 +24,10 @@
 
 进入项目根目录,执行`docker-compose up -d`即可,无其他任何配置.
 
-由于依赖了PostgresSQL数据库,所以没办法单独使用Docker启动,如果你本地已经有了PostgresSQL环境,你可以去掉[docker-compose.yml](https://hub.docker.com/repository/docker/kingwrcy/discussion/master/docker-compose.yml)文件中的关于数据库的部分,并且把discussion中关于数据库的链接换成你自己的数据库链接.
+由于依赖了PostgresSQL数据库,所以没办法单独使用Docker启动,如果你本地已经有了PostgresSQL环境,你可以去掉[docker-compose.yml](https://github.com/kingwrcy/discussion/blob/master/docker-compose.yml)文件中的关于数据库的部分,并且把discussion中关于数据库的链接换成你自己的数据库链接.
 
 ## docker compose 升级
-删掉[docker-compose.yml](https://hub.docker.com/repository/docker/kingwrcy/discussion/master/docker-compose.yml)文件中的`#pull_policy: always`这一行最前面的`#`号,然后执行`docker-compose up -d`即可升级
+删掉[docker-compose.yml](https://github.com/kingwrcy/discussion/blob/master/docker-compose.yml)文件中的`#pull_policy: always`这一行最前面的`#`号,然后执行`docker-compose up -d`即可升级
 
 有任何问题环境在论坛里谈论,或者直接在github上讨论.
 
