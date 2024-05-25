@@ -21,7 +21,7 @@
             </NuxtLink>
             <UIcon @click="signIn" name="i-carbon-checkmark-outline" title="签到"
               class="size-4 cursor-pointer hover:text-primary/90" />
-            <div class="ml-auto text-xs text-gray-400">{{  dateFormat(userinfo.createdAt,'yyyy-MM-dd')}}加入</div>
+            <div class="ml-auto text-xs text-gray-400">{{  dateFormat(userinfo.createdAt,'YYYY-MM-DD')}}加入</div>
           </div>
         </div>
       </div>

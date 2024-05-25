@@ -1,12 +1,12 @@
 <template>
   <div class="w-full mt-2  bg-white dark:bg-gray-900 rounded-lg shadow ">
     <div class="px-4 py-2 ">
-      <XPost :show-avatar="true" v-bind="post" />
+      <XPost :show-avatar="true" v-bind="post" @support="doSupport" />
     </div>
     <div class="px-4 pt-2 leading-5 border-t">
       <MdPreview v-model="post.content" :editor-id="post.pid" />
     </div>
-    <div class="px-4 flex justify-end pb-2 border-b items-center space-x-2">
+    <div class="px-4 flex justify-end pb-2 border-b items-center space-x-2 my-2">
       <NuxtLink :to="`/post/new?pid=${post.pid}`" v-if="token && post.uid === userinfo.uid">
         <UBadge variant="soft" size="xs" class="flex gap-1 items-center cursor-pointer hover:text-primary/80">
           <UIcon name="i-carbon-edit" />
@@ -61,6 +61,13 @@ const reload = async () => {
     })
   })
   data.value = res
+}
+
+const doSupport = async (pid: string) => {
+  await $fetch('/api/post/support?pid='+pid, {
+    method: 'POST'
+  })
+  await reload()
 }
 
 watch(() => route.fullPath, async () => {

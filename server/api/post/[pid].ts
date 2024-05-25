@@ -33,6 +33,7 @@ export default defineEventHandler(async (event) => {
       pid: pid,
     },
     include: {
+      PostSupport: true,
       author: {
         select: {
           username: true,
@@ -83,16 +84,17 @@ export default defineEventHandler(async (event) => {
           comments: true,
           commentLike: true,
           commentDisLike: true,
+          PostSupport: true,
         },
       },
     },
   });
 
-
   const res = {
     success: true,
     post: {
       ...post,
+      support: uid ? post?.PostSupport.length! > 0 : false,
       fav: uid ? post?.fav.length! > 0 : false,
       comments: post?.comments.map((comment) => ({
         ...comment,

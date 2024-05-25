@@ -57,7 +57,7 @@ export default defineEventHandler(async (event) => {
         pinned: "desc",
       },
       {
-        updatedAt: "desc",
+        createdAt: "desc",
       },
     ],
   });
@@ -65,7 +65,7 @@ export default defineEventHandler(async (event) => {
     where: { ...where, pinned: false },
     include,
     orderBy: {
-      createdAt: "desc",
+      point: "desc",
     },
     skip: (request.page - 1) * request.size,
     take: request.size,
@@ -79,7 +79,7 @@ export default defineEventHandler(async (event) => {
   const postsWithExtraInfo = posts.map((post) => {
     return {
       ...post,
-      fav: uid && post.fav && post.fav.length > 0 ? true : false,
+      fav: uid && post.fav && post.fav.length > 0 ? true : false,      
     };
   });
 

@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <div class="text-xs text-primary/40 select-none cursor-pointer" v-if="route.fullPath.startsWith('/post')">#{{
+    <div @click="quoted" class="text-xs text-primary/40 select-none cursor-pointer" v-if="route.fullPath.startsWith('/post')">#{{
       props.floor }}</div>
   </div>
 </template>
@@ -53,6 +53,10 @@ const state = reactive({
   like: props.like,
   dislike: props.dislike,
 });
+
+const quoted = ()=>{
+  commentQuoted.emit(props.content)
+}
 
 const doLike = async () => {
   const res = await $fetch(`/api/comment/like?cid=${props.cid}`, {

@@ -34,6 +34,10 @@ mdConfig({
   }
 });
 
+commentQuoted.on((content: string) => {
+  state.content = `> ${content}\n\n`
+})
+
 const emits = defineEmits(['commented'])
 
 const toolbars: ToolbarNames[] = [

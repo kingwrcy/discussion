@@ -1,10 +1,14 @@
 import { createRequire } from "module";
 
-const prismaClientPath = createRequire(import.meta.url).resolve("@prisma/client");
 
+
+
+
+const prismaClientPath = createRequire(import.meta.url).resolve("@prisma/client");
+import dayjs from "dayjs";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ["@nuxt/ui",'@vueuse/nuxt',],  
+  modules: ["@nuxt/ui",'@vueuse/nuxt','nuxt-scheduler'],  
   ui: {
     icons: ["carbon"],
   },
@@ -26,4 +30,5 @@ export default defineNuxtConfig({
       },
     },
   },
+
 });

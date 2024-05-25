@@ -78,7 +78,7 @@ export default defineEventHandler(async (event) => {
     if (target) {
       await prisma.message.create({
         data: {
-          content: `你在帖子<a href='/post/${request.pid}#${cid}'中被提到了`,
+          content: `你在<a class="text-blue-500 mx-1" href='/post/${request.pid}#${cid}'>帖子</a>中被提到了`,
           read: false,
           toUid: target.uid,
         },

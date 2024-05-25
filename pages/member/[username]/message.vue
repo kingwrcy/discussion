@@ -73,6 +73,7 @@ const setMessageRead = async(id?:number) =>{
     method: 'POST'
   })
   toast.success('操作成功')
+  userCardChanged.emit()
   await reload()
 }
 

@@ -10,6 +10,10 @@
 .md-editor-preview-wrapper {
   padding: 0 !important;
 }
+
+.md-editor-preview code {
+  white-space: pre-wrap !important;
+}
 .md-editor-preview {
   font-size: 14px !important;
   line-height: 1.8rem !important;
@@ -36,7 +40,6 @@
 .default-theme blockquote,
 .default-theme dl,
 .default-theme table,
-.default-theme pre,
 .default-theme details {
   margin: 0.875rem 0 !important;
 }

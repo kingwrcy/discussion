@@ -100,11 +100,22 @@ CREATE TABLE "Post" (
     "minLevel" INTEGER NOT NULL DEFAULT 1,
     "tagId" INTEGER NOT NULL,
     "pinned" BOOLEAN NOT NULL DEFAULT false,
-    "point" INTEGER NOT NULL DEFAULT 0,
+    "point" DOUBLE PRECISION NOT NULL DEFAULT 0.0,
     "lastCommentTime" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "lastCommentUid" TEXT,
 
     CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "PostSupport" (
+    "id" SERIAL NOT NULL,
+    "uid" TEXT NOT NULL,
+    "pid" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "PostSupport_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -159,6 +170,9 @@ CREATE UNIQUE INDEX "Like_uid_cid_key" ON "Like"("uid" ASC, "cid" ASC);
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Post_pid_key" ON "Post"("pid" ASC);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "PostSupport_uid_pid_key" ON "PostSupport"("uid" ASC, "pid" ASC);
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Tag_name_key" ON "Tag"("name" ASC);
@@ -225,6 +239,12 @@ ALTER TABLE "Post" ADD CONSTRAINT "Post_tagId_fkey" FOREIGN KEY ("tagId") REFERE
 
 -- AddForeignKey
 ALTER TABLE "Post" ADD CONSTRAINT "Post_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PostSupport" ADD CONSTRAINT "PostSupport_pid_fkey" FOREIGN KEY ("pid") REFERENCES "Post"("pid") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PostSupport" ADD CONSTRAINT "PostSupport_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 INSERT INTO public."SysConfig"
 (id, "content")

@@ -8,22 +8,23 @@
       </div>
       <div class="space-y-4 w-[300px]">
         <XUserCard v-if="userinfo && userinfo.username && !route.fullPath.startsWith('/member')" />
-        <UCard class="w-full mt-2" v-if="route.fullPath.startsWith('/tag/') && tag" :ui="{header:{padding:'px-0 py-0 sm:px-0'}}">
+        <UCard class="w-full mt-2" v-if="route.fullPath.startsWith('/tag/') && tag"
+          :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
           <template #header>
-            <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100">{{tag.name}}</div>
+            <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100">{{ tag.name }}</div>
           </template>
           <div class="text-sm">
             {{ tag.desc }}
           </div>
         </UCard>
-        <UCard class="w-full mt-2" v-if="sysconfig" :ui="{header:{padding:'px-0 py-0 sm:px-0'}}">
+        <UCard class="w-full mt-2" v-if="sysconfig" :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
           <template #header>
             <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100">关于本站</div>
           </template>
           <div class="text-sm">
             <MdPreview :model-value="sysconfig.websiteAnnouncement" editor-id="websiteAnnouncement" />
           </div>
-        </UCard>       
+        </UCard>
       </div>
     </div>
     <XFooter />
@@ -89,21 +90,10 @@ const tag = ref<TagDTO>()
 watch(() => route.fullPath, async () => {
   if (route.fullPath.startsWith('/tag/')) {
     const name = route.fullPath.replaceAll('/tag/', '')
-    const res = await $fetch<{ tags: Array<TagDTO>}>('/api/tag/list?name=' + name, {
+    const res = await $fetch<{ tags: Array<TagDTO> }>('/api/tag/list?name=' + name, {
       method: 'POST',
     })
     tag.value = res.tags[0] as TagDTO
   }
 }, { immediate: true })
-let intervalId: any
-onMounted(() => {
-  if (intervalId) {
-    clearInterval(intervalId)
-    intervalId = undefined
-  }
-  intervalId = setInterval(() => {
-    userCardChanged.emit()
-  }, 60 * 1000)
-
-})
 </script>

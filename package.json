@@ -15,7 +15,10 @@
     "@nuxt/ui": "^2.16.0",
     "@prisma/adapter-pg": "^5.14.0",
     "@prisma/client": "5.14.0",
+    "@vueuse/core": "^10.9.0",
+    "@vueuse/nuxt": "^10.9.0",
     "bcryptjs": "^2.4.3",
+    "dayjs": "^1.11.11",
     "js-sha256": "^0.11.0",
     "jsonwebtoken": "^9.0.2",
     "markdown-it-link-attributes": "^4.0.1",
@@ -24,14 +27,11 @@
     "pg": "^8.11.5",
     "prisma": "^5.14.0",
     "short-uuid": "^5.2.0",
-    "vtils": "^4.113.3",
+    "tailwindcss": "^3.4.3",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
     "vue-sonner": "^1.1.2",
-    "zod": "^3.23.8",
-    "@vueuse/core": "^10.9.0",
-    "@vueuse/nuxt": "^10.9.0",
-    "tailwindcss": "^3.4.3"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -39,6 +39,7 @@
     "@types/markdown-it-link-attributes": "^3.0.5",
     "@types/pg": "^8.11.6",
     "@types/shortid": "^0.0.32",
+    "nuxt-scheduler": "^0.1.9",
     "typescript": "^5.4.5"
   }
 }

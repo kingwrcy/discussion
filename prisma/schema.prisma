@@ -44,6 +44,7 @@ model User {
   SendMessage    Message[]      @relation("sendMessage")
   ReceiveMessage Message[]      @relation("receiveMessage")
   LastComment    Post[]         @relation("lastComment")
+  PostSupport    PostSupport[]
 }
 
 model Post {
@@ -66,12 +67,24 @@ model Post {
   commentLike     Like[]
   fav             Fav[]
   pinned          Boolean        @default(false)
-  point           Int            @default(0)
+  point           Float          @default(0.0)
   tag             Tag            @relation(fields: [tagId], references: [id])
   PointHistory    PointHistory[]
   lastCommentUser User?          @relation(name: "lastComment", fields: [lastCommentUid], references: [uid])
   lastCommentTime DateTime       @default(now())
   lastCommentUid  String?
+  PostSupport     PostSupport[]
+}
+
+model PostSupport {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [uid], references: [uid])
+  uid       String
+  post      Post     @relation(fields: [pid], references: [pid])
+  pid       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  @@unique([uid, pid])
 }
 
 model Tag {

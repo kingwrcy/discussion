@@ -15,8 +15,14 @@
         <UIcon v-if="props.pinned" name="i-carbon-pin-filled" class="ml-1 text-primary"></UIcon>
       </NuxtLink>
 
-      <div class="flex space-x-4 text-xs mt-1 text-gray-500">
-        <UBadge color="gray" variant="soft" size="xs" class="self-start text-xs cursor-pointer hover:bg-gray-100">
+      <div class="flex space-x-2 text-xs mt-1 text-gray-500 items-center">
+        <div class="flex items-center space-x-1  cursor-pointer" v-if="route.fullPath.startsWith('/post')" @click="doSupport()"> 
+          <UIcon name="i-carbon-chevron-up" v-if="!props.support" title="支持" ></UIcon>
+          <UIcon name="i-carbon-chevron-down" v-else="props.support" title="不支持" ></UIcon>
+          <span v-if="props._count.PostSupport > 0">{{ props._count.PostSupport }}</span>
+        </div>
+
+        <UBadge color="gray" variant="soft" size="xs" class="text-xs cursor-pointer hover:bg-gray-100">
           <NuxtLink :to="`/tag/${props.tag.name}`">{{ props.tag.name }}</NuxtLink>
         </UBadge>
 
@@ -27,8 +33,8 @@
               <span class="inline-block">{{ author.username }}</span>
             </NuxtLink>
           </div>
-          <span v-if="author.role === UserRole.ADMIN"
-            class="text-[11px] ml-1 bg-green-500 text-white rounded px-1">mod</span>
+          <!-- <span v-if="author.role === UserRole.ADMIN"
+            class="text-[11px] ml-1 bg-green-500 text-white rounded px-1">mod</span> -->
         </div>
         <div :to="`/post/${props.pid}`" class="flex items-center space-x-1 text-primary/40">
           <UIcon name="i-carbon-view" />
@@ -36,7 +42,8 @@
         </div>
         <div class="flex items-center space-x-1 text-primary/40">
           <UIcon name="i-carbon-time" />
-          <span>{{ dateFormatAgo(props.lastCommentTime || createdAt) }}</span>
+          <span v-if="!route.fullPath.startsWith('/post')">{{ dateFormatAgo(props.lastCommentTime || createdAt) }}</span>
+          <span v-else>{{ dateFormatAgo(createdAt) }}</span>
         </div>
         <div class="flex items-center space-x-1 text-primary/40" v-if="props.lastCommentUser" title="最后回复人">
           <UIcon name="i-carbon-download-study"></UIcon>
@@ -48,21 +55,26 @@
       </div>
     </div>
 
-    <UBadge variant="soft" size="lg">
-      <NuxtLink :to="`/post/${props.pid}`" class="flex items-center space-x-1  cursor-pointer ">
-        <UIcon name="i-carbon-book" />
-        <span>{{ replyCount }}</span>
-      </NuxtLink>
-    </UBadge>
+    <div class="flex flex-col">
+      <UBadge variant="soft" size="lg">
+        <NuxtLink :to="`/post/${props.pid}`" class="flex items-center space-x-1  cursor-pointer ">
+          <UIcon name="i-carbon-book" />
+          <span>{{ replyCount }}</span>
+        </NuxtLink>
+      </UBadge>
+      
+    </div>
+
   </div>
 </template>
 
 <script lang="ts" setup>
 import type { PostDTO } from '~/types';
-import { UserRole } from '@prisma/client';
 
 const route = useRoute()
 const detailPage = route.fullPath.startsWith('/post')
+
+const emit = defineEmits(['support'])
 
 const props = withDefaults(defineProps<PostDTO & {
   showAvatar: boolean
@@ -70,6 +82,11 @@ const props = withDefaults(defineProps<PostDTO & {
   showAvatar: true,
   fav: false
 })
+
+const doSupport = ()=>{
+  emit('support', props.pid)
+}
+
 </script>
 
 <style scoped></style>

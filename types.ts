@@ -54,6 +54,7 @@ export type UserDTO = {
   level: number;
   bannedEnd: string;
   unRead: number;
+
   _count: {
     fav: number;
     comments: number;
@@ -105,16 +106,19 @@ export type PostDTO = {
   comments?: Array<CommentDTO>;
   tagId: number;
   tag: TagDTO;
+  support?: boolean;
   _count: {
     comments: number;
     commentLike: number;
     commentDisLike: number;
+    PostSupport: number;
   };
   fav?: boolean;
   pinned: boolean;
   lastCommentTime?: string;
   lastCommentUid?: string;
   lastCommentUser?: UserDTO;
+  point: number;
 };
 
 export type SysConfigDTO = {
