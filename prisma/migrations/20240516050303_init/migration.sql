@@ -27,9 +27,9 @@ CREATE TABLE "DisLike" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "pid" TEXT NOT NULL,
-    "cid" TEXT NOT NULL,
     "uid" TEXT NOT NULL,
+    "cid" TEXT NOT NULL,
+    "pid" TEXT NOT NULL,
 
     CONSTRAINT "DisLike_pkey" PRIMARY KEY ("id")
 );
@@ -50,9 +50,9 @@ CREATE TABLE "Like" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "pid" TEXT NOT NULL,
-    "cid" TEXT NOT NULL,
     "uid" TEXT NOT NULL,
+    "cid" TEXT NOT NULL,
+    "pid" TEXT NOT NULL,
 
     CONSTRAINT "Like_pkey" PRIMARY KEY ("id")
 );
@@ -76,10 +76,10 @@ CREATE TABLE "PointHistory" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "reason" "PointReason" NOT NULL,
+    "point" INTEGER NOT NULL,
     "uid" TEXT NOT NULL,
     "pid" TEXT,
     "cid" TEXT,
-    "point" INTEGER NOT NULL,
 
     CONSTRAINT "PointHistory_pkey" PRIMARY KEY ("id")
 );
@@ -101,6 +101,8 @@ CREATE TABLE "Post" (
     "tagId" INTEGER NOT NULL,
     "pinned" BOOLEAN NOT NULL DEFAULT false,
     "point" INTEGER NOT NULL DEFAULT 0,
+    "lastCommentTime" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "lastCommentUid" TEXT,
 
     CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
 );
@@ -216,12 +218,11 @@ ALTER TABLE "PointHistory" ADD CONSTRAINT "PointHistory_pid_fkey" FOREIGN KEY ("
 ALTER TABLE "PointHistory" ADD CONSTRAINT "PointHistory_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Post" ADD CONSTRAINT "Post_lastCommentUid_fkey" FOREIGN KEY ("lastCommentUid") REFERENCES "User"("uid") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Post" ADD CONSTRAINT "Post_tagId_fkey" FOREIGN KEY ("tagId") REFERENCES "Tag"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Post" ADD CONSTRAINT "Post_uid_fkey" FOREIGN KEY ("uid") REFERENCES "User"("uid") ON DELETE RESTRICT ON UPDATE CASCADE;
 
-
-INSERT INTO public."SysConfig"
-(id, "content")
-VALUES(1, '{"websiteName": "极简论坛", "pointPerPost": 5, "pointPerComment": 1, "pointPerPostByDay": 20, "websiteAnnouncement": "这里可以去后台系统设置里自定义公告,支持markdown语法.", "pointPerCommentByDay": 20, "pointPerDaySignInMax": 10, "pointPerDaySignInMin": 1, "pointPerLikeOrDislike": 1}'::jsonb);
