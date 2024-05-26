@@ -14,7 +14,7 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 
 # 安装生产依赖
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 # 复制整个项目
 COPY . .

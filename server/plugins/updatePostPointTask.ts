@@ -2,6 +2,10 @@ import { useScheduler } from "#scheduler";
 import dayjs from "dayjs";
 
 export default defineNitroPlugin((nitroApp) => {
+  if (process.env.APP_ENV === 'build') {
+  	console.log('[server/plugins/updatePostPointTask.ts] Skipping scheduler, in build context');
+  	return;
+  }
   const scheduler = useScheduler();
 
   scheduler
