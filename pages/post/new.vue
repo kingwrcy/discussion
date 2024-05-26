@@ -38,11 +38,13 @@ import { MdEditor, type ToolbarNames } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import { toast } from 'vue-sonner';
 import { z } from 'zod';
-import { createPostSchema, type PostDTO, type TagDTO } from '~/types';
+import { createPostSchema, type PostDTO } from '~/types';
 type Schema = z.output<typeof createPostSchema>
 import { config as mdConfig } from 'md-editor-v3';
 import LinkAttr from 'markdown-it-link-attributes';
-
+import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
+const breakpoints = useBreakpoints(breakpointsTailwind)
+const mdAndLarger = breakpoints.greaterOrEqual('md')
 mdConfig({
   markdownItConfig(md) {
     md.use(LinkAttr, {
@@ -54,17 +56,15 @@ mdConfig({
 });
 const route = useRoute()
 
-const toolbars: ToolbarNames[] = [
+const toolbars: ToolbarNames[] = mdAndLarger.value ? [
   0,
   'bold',
   'underline',
   '-',
-  'title',
   'strikeThrough',
   'quote',
   'unorderedList',
   'orderedList',
-  'task',
   '-',
   'codeRow',
   'code',
@@ -76,7 +76,22 @@ const toolbars: ToolbarNames[] = [
   'next',
   '=',
   'preview',
+] : [
+  0,
+  'bold',
+  'underline',
+  '-',
+  'strikeThrough',
+  'quote',
+  'unorderedList',
+  'orderedList',
+  '-',
+  'codeRow',
+  'code',
+  'link',
+  'image'
 ];
+
 const tagRes = await useFetch('/api/tag/list', {
   method: 'POST',
   key: "tagLists"

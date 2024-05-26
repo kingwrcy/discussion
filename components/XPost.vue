@@ -55,7 +55,7 @@
       </div>
     </div>
 
-    <div class="flex flex-col">
+    <div class="hidden md:block">
       <UBadge variant="soft" size="lg">
         <NuxtLink :to="`/post/${props.pid}`" class="flex items-center space-x-1  cursor-pointer ">
           <UIcon name="i-carbon-book" />

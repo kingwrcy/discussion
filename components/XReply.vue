@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col  py-2 " v-if="token">
+  <div class="flex flex-col  py-2 w-full " v-if="token">
     <MdEditor style="height:200px;" :no-upload-img="true" v-model="state.content" :preview="false" :toolbars="toolbars"
       :editor-id="`post-${pid}`" >
       <template #defToolbars>
@@ -17,6 +17,9 @@ import type { ToolbarNames } from 'md-editor-v3';
 import { MdEditor } from 'md-editor-v3';
 import { config as mdConfig } from 'md-editor-v3';
 import LinkAttr from 'markdown-it-link-attributes';
+import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
+const breakpoints = useBreakpoints(breakpointsTailwind)
+const mdAndLarger = breakpoints.greaterOrEqual('md')
 
 const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)
@@ -40,7 +43,7 @@ commentQuoted.on((content: string) => {
 
 const emits = defineEmits(['commented'])
 
-const toolbars: ToolbarNames[] = [
+const toolbars: ToolbarNames[] = mdAndLarger.value ? [
   0,
   'bold',
   'underline',
@@ -60,6 +63,20 @@ const toolbars: ToolbarNames[] = [
   'next',
   '=',
   'preview',
+] : [
+0,
+  'bold',
+  'underline',
+  '-',
+  'strikeThrough',
+  'quote',
+  'unorderedList',
+  'orderedList',
+  '-',
+  'codeRow',
+  'code',
+  'link',
+  'image'
 ];
 const state = reactive({
   content: ""

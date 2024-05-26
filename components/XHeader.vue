@@ -14,7 +14,7 @@ const logout = () => {
 </script>
 
 <template>
-  <div class="w-full bg-white shadow">
+  <div class="w-full bg-white shadow sticky top-0 z-10 px-2 md:px-0">
     <div class="max-w-[1080px] mx-auto flex text-[15px] py-1 items-center">
       <a href="/" class="cursor-pointer hover:text-primary/80"><div class="font-semibold text-xl">Discussion</div></a>
       <div class="flex items-center gap-1 ml-auto ">      

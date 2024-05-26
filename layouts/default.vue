@@ -2,11 +2,11 @@
 
   <div>
     <x-header></x-header>
-    <div class="flex max-w-[1080px] mx-auto h-full gap-4 ">
-      <div class="flex-1 ">
+    <div class="flex max-w-[1080px] mx-auto h-full gap-4">
+      <div class="flex-1 w-full">
         <slot />
       </div>
-      <div class="space-y-4 w-[300px]">
+      <div class="space-y-4 w-[300px] hidden md:block">
         <XUserCard v-if="userinfo && userinfo.username && !route.fullPath.startsWith('/member')" />
         <UCard class="w-full mt-2" v-if="route.fullPath.startsWith('/tag/') && tag"
           :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
