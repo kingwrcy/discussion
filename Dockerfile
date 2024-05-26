@@ -1,7 +1,6 @@
 # Nuxt 3 builder
 FROM node:20-alpine as builder
 
-ENV NODE_ENV=production
 
 RUN corepack enable && corepack prepare pnpm@latest --activate
 ENV PNPM_HOME=/usr/local/bin
@@ -15,6 +14,7 @@ COPY package.json pnpm-lock.yaml ./
 
 # 安装生产依赖
 RUN pnpm install
+ENV NODE_ENV=production
 
 # 复制整个项目
 COPY . .
