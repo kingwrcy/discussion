@@ -2,9 +2,11 @@ import { useScheduler } from "#scheduler";
 import dayjs from "dayjs";
 
 export default defineNitroPlugin((nitroApp) => {
-  if (process.env.APP_ENV === 'build') {
-  	console.log('[server/plugins/updatePostPointTask.ts] Skipping scheduler, in build context');
-  	return;
+  if (process.env.APP_ENV === "build") {
+    console.log(
+      "[server/plugins/updatePostPointTask.ts] Skipping scheduler, in build context"
+    );
+    return;
   }
   const scheduler = useScheduler();
 
@@ -20,6 +22,9 @@ export default defineNitroPlugin((nitroApp) => {
           pid: true,
           createdAt: true,
           uid: true,
+          author: {
+            select: { point: true },
+          },
           _count: {
             select: {
               PostSupport: true,
@@ -39,14 +44,16 @@ export default defineNitroPlugin((nitroApp) => {
           },
         });
         const point =
-          post._count.PostSupport * 2 + count - 1 / Math.pow(second + 600, 1.8);
-
+          (post.author.point * 2 +
+          post._count.PostSupport * 2 +
+          count -
+          1) / Math.pow(second + 600, 1.8)*10000000;
         await prisma.post.update({
           where: {
             pid: post.pid,
           },
           data: {
-            point,
+            point:point,
           },
         });
         // console.log("update post point ", post.pid, point);

@@ -32,6 +32,9 @@
       <template #createdAt-data="{ row }">
         {{ dateFormat(row.createdAt)}}
       </template>
+      <template #point-data="{ row }">
+        {{ row.point.toFixed(4)}}
+      </template>
       <template #actions-data="{ row }">
         <div class="space-x-2">
           <UButton color="white" @click="doRemove(row)">删除</UButton>
@@ -86,6 +89,9 @@ const columns = [{
 },{
   key: '_count.comments',
   label: '评论数量',
+},{
+  key: 'point',
+  label: '积分',
 }, {
   key: 'createdAt',
   label: '创建时间'
