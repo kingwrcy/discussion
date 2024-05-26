@@ -31,15 +31,15 @@
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
     "vue-sonner": "^1.1.2",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "nuxt-scheduler": "^0.1.9"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/markdown-it-link-attributes": "^3.0.5",
     "@types/pg": "^8.11.6",
-    "@types/shortid": "^0.0.32",
-    "nuxt-scheduler": "^0.1.9",
+    "@types/shortid": "^0.0.32",    
     "typescript": "^5.4.5"
   }
 }
