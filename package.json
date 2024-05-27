@@ -22,7 +22,7 @@
     "js-sha256": "^0.11.0",
     "jsonwebtoken": "^9.0.2",
     "markdown-it-link-attributes": "^4.0.1",
-    "md-editor-v3": "^4.15.2",
+    "md-editor-v3": "^4.15.6",
     "nuxt": "^3.11.2",
     "pg": "^8.11.5",
     "prisma": "^5.14.0",
