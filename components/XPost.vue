@@ -5,12 +5,12 @@
       <UAvatar v-if="author && author.avatarUrl" :src="getAvatarUrl(author.avatarUrl)" size="lg" alt="Avatar" />
     </NuxtLink>
     <div class="flex-1">
-      <div v-if="detailPage" :to="`/post/${props.pid}`" class="text-gray-600 w-fit">
+      <div v-if="detailPage" :to="`/post/${props.pid}`" class="dark:text-slate-50 dark:hover:text-slate-300 text-gray-600 w-fit">
         <div class="text-2xl" :class="{ 'line-clamp-1': !detailPage }">{{ title }}
         </div>
       </div>
       <NuxtLink v-else :to="`/post/${props.pid}`"
-        class="text-gray-600 flex items-center  cursor-pointer  hover:text-primary/80 w-fit">
+        class="text-gray-600 dark:text-slate-50 dark:hover:text-slate-300 flex items-center  cursor-pointer  hover:text-primary/80 w-fit">
         <div>{{ title }}</div>
         <UIcon v-if="props.pinned" name="i-carbon-pin-filled" class="ml-1 text-primary"></UIcon>
       </NuxtLink>

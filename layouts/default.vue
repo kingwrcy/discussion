@@ -1,6 +1,6 @@
 <template>
 
-  <div>
+  <div class="dark:bg-slate-800 min-h-screen">
     <x-header></x-header>
     <div class="flex max-w-[1080px] mx-auto h-full gap-4">
       <div class="flex-1 w-full">
@@ -11,7 +11,7 @@
         <UCard class="w-full mt-2" v-if="route.fullPath.startsWith('/tag/') && tag"
           :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
           <template #header>
-            <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100">{{ tag.name }}</div>
+            <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100 dark:bg-slate-500">{{ tag.name }}</div>
           </template>
           <div class="text-sm">
             {{ tag.desc }}
@@ -19,7 +19,7 @@
         </UCard>
         <UCard class="w-full mt-2" v-if="sysconfig" :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
           <template #header>
-            <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100">关于本站</div>
+            <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100 dark:bg-slate-500">关于本站</div>
           </template>
           <div class="text-sm">
             <MdPreview :model-value="sysconfig.websiteAnnouncement" editor-id="websiteAnnouncement" />

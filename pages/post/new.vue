@@ -14,12 +14,14 @@
           </USelectMenu>
         </UFormGroup>
         <UFormGroup label="正文" name="content">
-          <MdEditor :no-upload-img="true" style="max-height: 400px;" v-model="state.content" :preview="false"
-            :toolbars="toolbars" editor-id="newPost">
-            <template #defToolbars>
-              <XEmoji />
-            </template>
-          </MdEditor>
+          <client-only>
+            <MdEditor :theme="mode as any" :no-upload-img="true" style="max-height: 400px;" v-model="state.content" :preview="false"
+              :toolbars="toolbars" editor-id="newPost">
+              <template #defToolbars>
+                <XEmoji />
+              </template>
+            </MdEditor>
+          </client-only>
         </UFormGroup>
         <div>
           <UButton type="submit" :loading="pending">
@@ -40,11 +42,12 @@ import { toast } from 'vue-sonner';
 import { z } from 'zod';
 import { createPostSchema, type PostDTO } from '~/types';
 type Schema = z.output<typeof createPostSchema>
-import { config as mdConfig } from 'md-editor-v3';
+  import { useColorMode } from '@vueuse/core'
+const mode = useColorMode()
 
 const route = useRoute()
 
-const toolbars: ToolbarNames[] =  [
+const toolbars: ToolbarNames[] = [
   0,
   'bold',
   'underline',
@@ -56,7 +59,7 @@ const toolbars: ToolbarNames[] =  [
   'code',
   'link',
   'image',
-  'table', 
+  'table',
   'preview',
 ];
 

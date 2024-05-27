@@ -26,15 +26,18 @@
         query: { page },
       })" v-model="state.page" :page-count="state.size" :total="totalComments" v-if="totalComments > state.size" />
     </div>
-    <div class="px-4 border-t" v-if="userinfo.status === 'NORMAL' && userinfo.point > 0">
+    <ClientOnly >
+      <div class="px-4 border-t" v-if="userinfo.status === 'NORMAL' && userinfo.point > 0">
       <XReply :pid="post.pid" @commented="reload" />
     </div>
+    </ClientOnly>
   </div>
 </template>
 
 <script lang="ts" setup>
 import type { PostDTO, UserDTO } from '~/types';
 import { MdPreview } from 'md-editor-v3';
+
 let userinfo = useState<UserDTO>('userinfo')
 const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)

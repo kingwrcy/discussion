@@ -53,3 +53,8 @@
 .md-editor-preview img {
   border-radius: 5px !important;
 }
+
+.dark .md-editor-preview{
+  background-color: rgb(17 24 39)  !important;
+  color:rgb(248 250 252 ) !important;
+}
