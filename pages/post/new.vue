@@ -41,55 +41,23 @@ import { z } from 'zod';
 import { createPostSchema, type PostDTO } from '~/types';
 type Schema = z.output<typeof createPostSchema>
 import { config as mdConfig } from 'md-editor-v3';
-import LinkAttr from 'markdown-it-link-attributes';
-import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
-const breakpoints = useBreakpoints(breakpointsTailwind)
-const mdAndLarger = breakpoints.greaterOrEqual('md')
-mdConfig({
-  markdownItConfig(md) {
-    md.use(LinkAttr, {
-      attrs: {
-        target: '_blank'
-      }
-    });
-  }
-});
+
 const route = useRoute()
 
-const toolbars: ToolbarNames[] = mdAndLarger.value ? [
+const toolbars: ToolbarNames[] =  [
   0,
   'bold',
   'underline',
-  '-',
   'strikeThrough',
   'quote',
   'unorderedList',
   'orderedList',
-  '-',
   'codeRow',
   'code',
   'link',
   'image',
-  'table',
-  '-',
-  'revoke',
-  'next',
-  '=',
+  'table', 
   'preview',
-] : [
-  0,
-  'bold',
-  'underline',
-  '-',
-  'strikeThrough',
-  'quote',
-  'unorderedList',
-  'orderedList',
-  '-',
-  'codeRow',
-  'code',
-  'link',
-  'image'
 ];
 
 const tagRes = await useFetch('/api/tag/list', {

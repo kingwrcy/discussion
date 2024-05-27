@@ -45,6 +45,11 @@ export default defineEventHandler(async (event) => {
       tag: true,
       comments: {
         include: {
+          post:{
+            select:{
+              pid:true,
+            }
+          },
           author: {
             select: {
               uid: true,
