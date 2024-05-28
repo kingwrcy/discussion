@@ -63,7 +63,7 @@ const toolbars: ToolbarNames[] = [
   'preview',
 ];
 
-const tagRes = await useFetch('/api/tag/list', {
+const tagRes = await useFetch('/api/go/list', {
   method: 'POST',
   key: "tagLists"
 })

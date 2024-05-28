@@ -1,5 +1,5 @@
 <template>
-  <UCard :class="[smAndLarger?'mt-2':'mt-0']" class="w-full min-h-60" :ui="{ rounded:smAndLarger?'rounded-lg':'rounded-none',body: { padding: 'px-0 sm:p-0' },header:{padding:' py-2 sm:px-4 px-2'} }">
+  <UCard  class="mt-0 md:mt-2 w-full min-h-60" :ui="{ rounded:'rounded-none md:rounded-lg',body: { padding: 'px-0 sm:p-0' },header:{padding:' py-2 sm:px-4 px-2'} }">
     <template #header>
       <XTagList />
     </template>
@@ -17,9 +17,7 @@
 
 <script lang="ts" setup>
 import type { PostDTO } from '~/types';
-import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
-const breakpoints = useBreakpoints(breakpointsTailwind)
-const smAndLarger = breakpoints.greaterOrEqual('sm')
+
 const route = useRoute()
 const state = reactive({
   page: 1,

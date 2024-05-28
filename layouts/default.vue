@@ -6,7 +6,7 @@
       <div class="p-4 flex-1 space-y-4 bg-slate-500">
         <UIcon name="i-carbon-close-large" class="size-5 text-white" @click="sliderOpen=false"></UIcon>
         <XUserCard v-if="userinfo && userinfo.username" />
-        <UCard class="w-full mt-2" v-if="route.fullPath.startsWith('/tag/') && tag"
+        <UCard class="w-full mt-2" v-if="route.fullPath.startsWith('/go/') && tag"
           :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
           <template #header>
             <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100 dark:bg-slate-500">{{ tag.name }}</div>
@@ -33,7 +33,7 @@
       </div>
       <div class="space-y-4 w-[300px] hidden md:block">
         <XUserCard v-if="userinfo && userinfo.username && !route.fullPath.startsWith('/member')" />
-        <UCard class="w-full mt-2" v-if="route.fullPath.startsWith('/tag/') && tag"
+        <UCard class="w-full mt-2" v-if="route.fullPath.startsWith('/go/') && tag"
           :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
           <template #header>
             <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100 dark:bg-slate-500">{{ tag.name }}</div>
@@ -119,9 +119,9 @@ useHead({
 const tag = ref<TagDTO>()
 
 watch(() => route.fullPath, async () => {
-  if (route.fullPath.startsWith('/tag/')) {
-    const name = route.fullPath.replaceAll('/tag/', '')
-    const res = await $fetch<{ tags: Array<TagDTO> }>('/api/tag/list?name=' + name, {
+  if (route.fullPath.startsWith('/go/')) {
+    const name = route.fullPath.replaceAll('/go/', '')
+    const res = await $fetch<{ tags: Array<TagDTO> }>('/api/go/list?name=' + name, {
       method: 'POST',
     })
     tag.value = res.tags[0] as TagDTO

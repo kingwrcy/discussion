@@ -1,5 +1,5 @@
 <template>
-  <div class="flex space-x-3  items-start py-2" :class="{ 'sm:px-4 px-2': route.fullPath === '/' || route.fullPath.startsWith('/tag/') }">
+  <div class="flex space-x-3  items-start py-2" :class="{ 'sm:px-4 px-2': route.fullPath === '/' || route.fullPath.startsWith('/go/') }">
 
     <NuxtLink :to="`/member/${author.username}`" v-if="showAvatar">
       <UAvatar v-if="author && author.avatarUrl" :src="getAvatarUrl(author.avatarUrl)" size="lg" alt="Avatar" />
@@ -23,7 +23,7 @@
         </div>
 
         <UBadge color="gray" variant="soft" size="xs" class="text-xs cursor-pointer hover:bg-gray-100">
-          <NuxtLink :to="`/tag/${props.tag.enName}`">{{ props.tag.name }}</NuxtLink>
+          <NuxtLink :to="`/go/${props.tag.enName}`">{{ props.tag.name }}</NuxtLink>
         </UBadge>
 
         <div class="font-semibold flex items-center space-x-1 ">

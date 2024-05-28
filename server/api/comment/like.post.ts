@@ -116,7 +116,7 @@ export default defineEventHandler(async (event) => {
 
   await prisma.message.create({
     data: {
-      content: `你的<a class='text-blue-500 mx-1' href='/post/${comment.post.pid}#${comment.cid}'>评论</a>被<a class='text-blue-500 mx-1' href='/member/${user.username}'>${user.username}</a>${
+      content: `你的<a class='text-blue-500 mx-1' href='/post/${comment.post.pid}#${comment.floor}'>评论</a>被<a class='text-blue-500 mx-1' href='/member/${user.username}'>${user.username}</a>${
         count > 0 ? "取消" : ""
       }点赞了`,
       read: false,
