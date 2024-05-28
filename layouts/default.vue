@@ -27,7 +27,7 @@
         </UCard>
       </div>
     </div>
-    <XFooter />
+    <XFooter :version="version"/>
   </div>
   <Toaster position="top-center" richColors />
 </template>
@@ -54,7 +54,7 @@ const { data: configData } = await useFetch('/api/config', {
   method: 'POST',
 })
 const sysconfig = configData.value?.data as SysConfigDTO
-
+const version = configData.value?.version
 
 userCardChanged.on(async () => {
   const userinfoRes = await $fetch('/api/member/profile', {
