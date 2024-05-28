@@ -45,7 +45,7 @@
           <span v-if="!route.fullPath.startsWith('/post')">{{ dateFormatAgo(props.lastCommentTime || createdAt) }}</span>
           <span v-else>{{ dateFormatAgo(createdAt) }}</span>
         </div>
-        <div class="flex items-center space-x-1 text-primary/40" v-if="props.lastCommentUser" title="最后回复人">
+        <div class="hidden md:flex items-center space-x-1 text-primary/40" v-if="props.lastCommentUser" title="最后回复人">
           <UIcon name="i-carbon-download-study"></UIcon>
           <NuxtLink :to="`/member/${props.lastCommentUser.username}`"
             class="cursor-pointer hover:text-primary/50 font-bold">

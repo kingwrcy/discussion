@@ -19,7 +19,7 @@
       </div>
     </template>
 
-    <div class="flex gap-2 mb-4">
+    <div class="flex gap-2 mb-4 flex-wrap">
       <NuxtLink class="flex flex-row gap-1 items-center" :to="`/member/${userinfo.username}`">
         <UBadge size="lg" :color="selectedTab === 'post' ? 'primary' : 'white'" variant="solid" class="space-x-1">
           <UIcon name="i-carbon-add-comment" />

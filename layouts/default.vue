@@ -1,6 +1,31 @@
 <template>
 
   <div class="dark:bg-slate-800 min-h-screen">
+
+    <USlideover v-model="sliderOpen" class="md:hidden" :side="'left'">
+      <div class="p-4 flex-1 space-y-4 bg-slate-500">
+        <UIcon name="i-carbon-close-large" class="size-5 text-white" @click="sliderOpen=false"></UIcon>
+        <XUserCard v-if="userinfo && userinfo.username" />
+        <UCard class="w-full mt-2" v-if="route.fullPath.startsWith('/tag/') && tag"
+          :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
+          <template #header>
+            <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100 dark:bg-slate-500">{{ tag.name }}</div>
+          </template>
+          <div class="text-sm">
+            {{ tag.desc }}
+          </div>
+        </UCard>
+        <UCard class="w-full mt-2" v-if="sysconfig" :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
+          <template #header>
+            <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100 dark:bg-slate-500">关于本站</div>
+          </template>
+          <div class="text-sm">
+            <MdPreview :model-value="sysconfig.websiteAnnouncement" editor-id="websiteAnnouncement" no-mermaid no-katex no-highlight />
+          </div>
+        </UCard>
+      </div>
+    </USlideover>
+
     <x-header></x-header>
     <div class="flex max-w-[1080px] mx-auto h-full gap-4">
       <div class="flex-1 w-full">
@@ -40,6 +65,7 @@ let userinfo = useState<UserDTO>('userinfo')
 const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)
 const route = useRoute()
+const sliderOpen = useState('sliderOpen', ()=>{return false})
 
 const loadProfile = async () => {
   const userinfoRes = await useFetch('/api/member/profile', {

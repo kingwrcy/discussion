@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full mt-2  bg-white dark:bg-gray-900 rounded-lg shadow ">
+  <div class="w-full   bg-white dark:bg-gray-900 shadow" :class="[smAndLarger?'rounded-lg mt-2':'rounded-none ']">
     <div class="px-4 py-2 ">
       <XPost :show-avatar="true" v-bind="post" @support="doSupport" />
     </div>
@@ -37,7 +37,9 @@
 <script lang="ts" setup>
 import type { PostDTO, UserDTO } from '~/types';
 import { MdPreview } from 'md-editor-v3';
-
+import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
+const breakpoints = useBreakpoints(breakpointsTailwind)
+const smAndLarger = breakpoints.greaterOrEqual('sm')
 let userinfo = useState<UserDTO>('userinfo')
 const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)

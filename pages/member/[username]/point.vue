@@ -2,11 +2,11 @@
   <div>
     <UTable :rows="pointList" :columns="columns" :ui="{ td: { padding: 'py-2' }, th: { padding: 'py-2' } }">
       <template #createdAt-data="{ row }">
-        {{ dateFormat(row.createdAt) }}
+        <div class="whitespace-pre-wrap">{{ dateFormat(row.createdAt) }}</div>
       </template>
       <template #post.title-data="{ row }">
         <div class="max-w-[300px] text-wrap line-clamp-3" v-if="row.post">
-          <NuxtLink class="text-blue-500" :to="`/post/${row.post.pid}`">{{ row.post.title }}</NuxtLink>
+          <NuxtLink class="text-blue-500 whitespace-pre-wrap" :to="`/post/${row.post.pid}`">{{ row.post.title }}</NuxtLink>
         </div>
       </template>
       <template #reason-data="{ row }">

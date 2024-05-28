@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-[1080px] mx-auto flex gap-2 text-xs my-4 px-2 md:px-0 pb-4 text-gray-400">
+  <div class="max-w-[1080px] mx-auto flex gap-2 text-xs my-4 px-2 md:px-0 pb-4 text-gray-400" :class="[smAndLarger?'':'justify-between']">
     <span class="">
       @2024 
     </span>
@@ -14,6 +14,9 @@
 </template>
 
 <script lang="ts" setup>
+import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
+const breakpoints = useBreakpoints(breakpointsTailwind)
+const smAndLarger = breakpoints.greaterOrEqual('sm')
 withDefaults(defineProps<{
   version: string
 }>(), {

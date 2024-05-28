@@ -98,7 +98,6 @@ import { UserRole } from '@prisma/client';
 import { toast } from 'vue-sonner';
 import type { UserDTO } from '~/types';
 import { useDebounceFn } from '@vueuse/core'
-
 const userinfo = useState<UserDTO>('userinfo')
 
 const debouncedFn = useDebounceFn(async () => {

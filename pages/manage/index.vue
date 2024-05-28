@@ -114,13 +114,16 @@ const columns = [{
 }, {
   key: 'createdAt',
   label: '加入时间'
-}, {
+}, 
+{
   key: 'lastLogin',
   label: '最后登录时间',
-}, {
+},
+ {
   key: 'bannedEnd',
   label: '禁言结束时间'
-}, {
+}, 
+{
   key: 'point',
   label: '积分'
 }, {
