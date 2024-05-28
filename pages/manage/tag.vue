@@ -115,6 +115,10 @@ const tagList = computed(() => tagListRes?.value?.tags as any as TagDTO[])
 const total = computed(() => tagListRes?.value?.total as number)
 
 const saveTag = async () => {
+  if(!saveState.enName.trim() && !saveState.name.trim() && !saveState.desc.trim()){
+    toast.error('请填写完整,都是必填字段')
+    return;
+  }
   await $fetch('/api/manage/saveTag', {
     method: 'POST',
     body: JSON.stringify(saveState),

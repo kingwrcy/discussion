@@ -4,7 +4,7 @@
       <XPost :show-avatar="true" v-bind="post" @support="doSupport" />
     </div>
     <div class="px-4 pt-2 leading-5 border-t">
-      <MdPreview v-model="post.content" :editor-id="post.pid" />
+      <MdPreview v-model="post.content" :editor-id="post.pid" no-mermaid no-katex/>
     </div>
     <div class="px-4 flex justify-end pb-2 border-b items-center space-x-2 my-2">
       <NuxtLink :to="`/post/new?pid=${post.pid}`" v-if="token && post.uid === userinfo.uid">

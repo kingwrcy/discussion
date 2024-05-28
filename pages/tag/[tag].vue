@@ -1,5 +1,5 @@
 <template>
-  <UCard class="w-full mt-2" style="min-height: 300px;">    
+  <UCard class="w-full mt-2" style="min-height: 300px;" :ui="{ body: { padding: 'px-0 sm:p-0' },header:{padding:' py-2 sm:px-4 px-2'} }">    
     <template #header class="py-1">
       <XTagList />
     </template>
@@ -10,7 +10,6 @@
       query: { page },
     })" class="my-2" v-model="state.page" :page-count="state.size" :total="totalPosts"
       v-if="totalPosts > state.size" />
-
   </UCard>
 </template>
 

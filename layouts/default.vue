@@ -22,7 +22,7 @@
             <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100 dark:bg-slate-500">关于本站</div>
           </template>
           <div class="text-sm">
-            <MdPreview :model-value="sysconfig.websiteAnnouncement" editor-id="websiteAnnouncement" />
+            <MdPreview :model-value="sysconfig.websiteAnnouncement" editor-id="websiteAnnouncement" no-mermaid no-katex no-highlight />
           </div>
         </UCard>
       </div>
