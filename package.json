@@ -39,7 +39,7 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/markdown-it-link-attributes": "^3.0.5",
     "@types/pg": "^8.11.6",
-    "@types/shortid": "^0.0.32",    
+    "@types/shortid": "^0.0.32",
     "typescript": "^5.4.5"
   }
 }

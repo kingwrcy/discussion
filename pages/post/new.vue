@@ -15,8 +15,8 @@
         </UFormGroup>
         <UFormGroup label="正文" name="content">
           <client-only>
-            <MdEditor :theme="mode as any" :no-upload-img="true" style="max-height: 400px;" v-model="state.content" :preview="false"
-              :toolbars="toolbars" editor-id="newPost">
+            <MdEditor :theme="mode as any" :no-upload-img="true" style="max-height: 400px;" v-model="state.content"
+              :preview="false" :toolbars="toolbars" editor-id="newPost">
               <template #defToolbars>
                 <XEmoji />
               </template>
@@ -42,7 +42,7 @@ import { toast } from 'vue-sonner';
 import { z } from 'zod';
 import { createPostSchema, type PostDTO } from '~/types';
 type Schema = z.output<typeof createPostSchema>
-  import { useColorMode } from '@vueuse/core'
+import { useColorMode } from '@vueuse/core'
 const mode = useColorMode()
 
 const route = useRoute()
@@ -68,7 +68,7 @@ const tagRes = await useFetch('/api/tag/list', {
   key: "tagLists"
 })
 const tags = computed(() => {
-  const items = tagRes.data.value?.tags.map(item => { return { name: item.name, id: item.id, desc: item.name + ' / ' + item.desc } })
+  const items = tagRes.data.value?.tags.map(item => { return { name: item.name, id: item.id, desc: item.enName +  ' / ' + item.desc } })
   return items
 })
 

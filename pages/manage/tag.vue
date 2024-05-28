@@ -31,6 +31,9 @@
       <UFormGroup label="名称" name="name">
         <UInput v-model="saveState.name" />
       </UFormGroup>
+      <UFormGroup label="编码" name="enName">
+        <UInput v-model="saveState.enName" />
+      </UFormGroup>
       <UFormGroup label="描述" name="desc">
         <UTextarea v-model="saveState.desc" />
       </UFormGroup>
@@ -60,6 +63,7 @@ const size = ref(20)
 const saveState = reactive({
   name: '',
   desc: '',
+  enName: '',
   id: 0,
 })
 
@@ -68,6 +72,7 @@ const isOpen = ref(false)
 const doEdit = (row: TagDTO) => {
   saveState.name = row.name
   saveState.desc = row.desc
+  saveState.enName = row.enName
   saveState.id = row.id
   isOpen.value = true
 }
@@ -75,6 +80,7 @@ const doEdit = (row: TagDTO) => {
 const doAdd = () => {
   saveState.name = ''
   saveState.desc = ''
+  saveState.enName = ''
   isOpen.value = true
 }
 
@@ -82,6 +88,9 @@ const doAdd = () => {
 const columns = [{
   key: 'name',
   label: '名称'
+},{
+  key: 'enName',
+  label: '编码'
 }, {
   key: 'desc',
   label: '描述'

@@ -66,6 +66,7 @@ export type TagDTO = {
   id: number;
   name: string;
   desc: string;
+  enName: string;
   count: number;
 };
 export type CommentDTO = {

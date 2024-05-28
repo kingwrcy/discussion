@@ -79,12 +79,13 @@ model PostSupport {
 }
 
 model Tag {
-  id    Int     @id @default(autoincrement())
-  name  String  @unique
-  desc  String
-  count Int     @default(0)
-  hot   Boolean @default(false)
-  posts Post[]
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  enName String? @unique
+  desc   String
+  count  Int     @default(0)
+  hot    Boolean @default(false)
+  posts  Post[]
 }
 
 model Comment {
@@ -169,10 +170,10 @@ model Message {
   fromUid    String?
   toUid      String
   content    String
-  from       User?        @relation("sendMessage", fields: [fromUid], references: [uid])
-  to         User         @relation("receiveMessage", fields: [toUid], references: [uid])
   type       MessageType?
   relationId String?
+  from       User?        @relation("sendMessage", fields: [fromUid], references: [uid])
+  to         User         @relation("receiveMessage", fields: [toUid], references: [uid])
 }
 
 enum UserStatus {

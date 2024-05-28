@@ -23,7 +23,7 @@
         </div>
 
         <UBadge color="gray" variant="soft" size="xs" class="text-xs cursor-pointer hover:bg-gray-100">
-          <NuxtLink :to="`/tag/${props.tag.name}`">{{ props.tag.name }}</NuxtLink>
+          <NuxtLink :to="`/tag/${props.tag.enName}`">{{ props.tag.name }}</NuxtLink>
         </UBadge>
 
         <div class="font-semibold flex items-center space-x-1 ">

@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
   }
   if (request.tag) {
     where.tag = {
-      name: request.tag,
+      enName: request.tag,
     };
   }
 
