@@ -55,6 +55,9 @@ let { data } = await useFetch(url, {
   })
 })
 
+if(userinfo.value){
+  await userCardChanged.emit()
+}
 
 const reload = async () => {
   const res = await $fetch(url, {

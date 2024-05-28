@@ -1,4 +1,4 @@
-import { PointReason, UserStatus } from "@prisma/client";
+import { MessageType, PointReason, UserStatus } from "@prisma/client";
 import { SysConfigDTO } from "~/types";
 
 type commentRequest = {
@@ -81,6 +81,8 @@ export default defineEventHandler(async (event) => {
           content: `你在<a class="text-blue-500 mx-1" href='/post/${request.pid}#${cid}'>帖子</a>中被提到了`,
           read: false,
           toUid: target.uid,
+          type: MessageType.MENTIONED,
+          relationId: request.pid,
         },
       });
     }
@@ -163,6 +165,8 @@ export default defineEventHandler(async (event) => {
         content: `你的<a class="mx-1 text-blue-500" href='/post/${request.pid}#${cid}'>帖子</a>有了新回复`,
         read: false,
         toUid: post.author.uid,
+        type: MessageType.COMMENT,
+        relationId: request.pid,
       },
     });
   }

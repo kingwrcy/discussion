@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { UserRole } from '@prisma/client';
+import { useColorMode } from '@vueuse/core';
 import type { UserDTO } from '~/types';
-import { useColorMode } from '@vueuse/core'
 const router = useRouter()
 const route = useRoute()
 const mode = useColorMode()
@@ -14,8 +14,6 @@ const logout = () => {
 }
 
 
-
-
 const toggleMode = () => {
   if (mode.value === 'dark') {
     mode.value = 'light'
@@ -25,8 +23,9 @@ const toggleMode = () => {
 }
 
 const go2Home = async () => {
-  router.replace('/')
-  if(route.fullPath === '/'){
+  await router.replace('/')
+  userCardChanged.emit()
+  if (route.fullPath === '/') {
     await refreshNuxtData()
   }
 }
@@ -45,7 +44,7 @@ const go2Home = async () => {
           class="text-yellow-500 cursor-pointer"></UIcon>
         <UIcon @click="toggleMode" v-else dynamic name="i-line-md-moon-filled-alt-to-sunny-filled-loop-transition"
           class="text-yellow-500 cursor-pointer"></UIcon>
-        <div @click="go2Home" class="cursor-pointer flex gap-1 items-center p-2 hover:text-primary/80" >
+        <div @click="go2Home" class="cursor-pointer flex gap-1 items-center p-2 hover:text-primary/80">
           <UIcon name="i-carbon-home" />
           <span>首页</span>
         </div>

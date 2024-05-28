@@ -1,4 +1,4 @@
-import { PointReason } from "@prisma/client";
+import { MessageType, PointReason } from "@prisma/client";
 import { SysConfigDTO } from "~/types";
 
 export default defineEventHandler(async (event) => {
@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
     throw createError("评论不存在");
   }
 
-  if(user.point < 1){
+  if (user.point < 1) {
     throw createError("积分不够");
   }
 
@@ -29,13 +29,13 @@ export default defineEventHandler(async (event) => {
     where: {
       cid,
     },
-    include:{
-      post:{
-        select:{
-          pid:true
-        }
-      }
-    }
+    include: {
+      post: {
+        select: {
+          pid: true,
+        },
+      },
+    },
   });
 
   if (!comment) {
@@ -47,7 +47,6 @@ export default defineEventHandler(async (event) => {
       cid: comment.cid,
     },
   });
-
 
   const sysConfig = await prisma.sysConfig.findFirst();
   const sysConfigDTO = sysConfig?.content as SysConfigDTO;
@@ -72,23 +71,23 @@ export default defineEventHandler(async (event) => {
       },
     },
   });
-  
+
   await prisma.like.deleteMany({
-    where:{
+    where: {
       uid: user.uid,
       pid: comment.post.pid,
       cid: comment.cid,
-    }
-  })
+    },
+  });
 
   if (count > 0) {
     await prisma.disLike.deleteMany({
-      where:{
+      where: {
         uid: user.uid,
         pid: comment.post.pid,
         cid: comment.cid,
-      }
-    })
+      },
+    });
   } else {
     await prisma.disLike.create({
       data: {
@@ -104,8 +103,8 @@ export default defineEventHandler(async (event) => {
       cid,
     },
     include: {
-      likes:true,
-      dislikes:true,
+      likes: true,
+      dislikes: true,
       _count: {
         select: {
           likes: true,
@@ -117,11 +116,15 @@ export default defineEventHandler(async (event) => {
 
   await prisma.message.create({
     data: {
-      content: `你的<a class='text-blue-500 mx-1' href='/post/${comment.post.pid}#${comment.cid}'>评论</a>被<a class='text-blue-500 mx-1' href='/member/${user.username}'>${user.username}</a>${
-        count > 0 ? "取消" : ""
-      }点踩了`,
+      content: `你的<a class='text-blue-500 mx-1' href='/post/${
+        comment.post.pid
+      }#${comment.cid}'>评论</a>被<a class='text-blue-500 mx-1' href='/member/${
+        user.username
+      }'>${user.username}</a>${count > 0 ? "取消" : ""}点踩了`,
       read: false,
       toUid: comment.uid,
+      type: MessageType.DISLIKE,
+      relationId: comment.post.pid,
     },
   });
 

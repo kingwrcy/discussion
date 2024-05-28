@@ -1,5 +1,3 @@
-import Username from "~/pages/member/[username].vue";
-
 export default defineEventHandler(async (event) => {
   if (!event.context.uid) {
     return {};
@@ -27,6 +25,7 @@ export default defineEventHandler(async (event) => {
   //@ts-ignore
   delete user?.password;
   return {
-    ...user,unRead
+    ...user,
+    unRead,
   };
 });

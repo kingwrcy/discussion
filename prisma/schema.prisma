@@ -8,16 +8,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum UserStatus {
-  NORMAL
-  BANNED
-}
-
-enum UserRole {
-  ADMIN
-  USER
-}
-
 model User {
   id             Int            @id @default(autoincrement())
   uid            String         @unique
@@ -31,19 +21,19 @@ model User {
   point          Int            @default(0)
   postCount      Int            @default(0)
   commentCount   Int            @default(0)
-  comments       Comment[]
-  posts          Post[]
   role           UserRole       @default(USER)
   level          Int            @default(1)
-  fav            Fav[]
-  commentLike    Like[]
-  commentDisLike DisLike[]
   status         UserStatus     @default(NORMAL)
   bannedEnd      DateTime?
-  PointHistory   PointHistory[]
+  comments       Comment[]
+  commentDisLike DisLike[]
+  fav            Fav[]
+  commentLike    Like[]
   SendMessage    Message[]      @relation("sendMessage")
   ReceiveMessage Message[]      @relation("receiveMessage")
+  PointHistory   PointHistory[]
   LastComment    Post[]         @relation("lastComment")
+  posts          Post[]
   PostSupport    PostSupport[]
 }
 
@@ -60,30 +50,31 @@ model Post {
   likeCount       Int            @default(0)
   disLikeCount    Int            @default(0)
   minLevel        Int            @default(1)
-  comments        Comment[]
-  author          User           @relation(fields: [uid], references: [uid])
   tagId           Int
-  commentDisLike  DisLike[]
-  commentLike     Like[]
-  fav             Fav[]
   pinned          Boolean        @default(false)
   point           Float          @default(0.0)
-  tag             Tag            @relation(fields: [tagId], references: [id])
-  PointHistory    PointHistory[]
-  lastCommentUser User?          @relation(name: "lastComment", fields: [lastCommentUid], references: [uid])
   lastCommentTime DateTime       @default(now())
   lastCommentUid  String?
+  comments        Comment[]
+  commentDisLike  DisLike[]
+  fav             Fav[]
+  commentLike     Like[]
+  PointHistory    PointHistory[]
+  lastCommentUser User?          @relation("lastComment", fields: [lastCommentUid], references: [uid])
+  tag             Tag            @relation(fields: [tagId], references: [id])
+  author          User           @relation(fields: [uid], references: [uid])
   PostSupport     PostSupport[]
 }
 
 model PostSupport {
   id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [uid], references: [uid])
   uid       String
-  post      Post     @relation(fields: [pid], references: [pid])
   pid       String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+  post      Post     @relation(fields: [pid], references: [pid])
+  user      User     @relation(fields: [uid], references: [uid])
+
   @@unique([uid, pid])
 }
 
@@ -92,8 +83,8 @@ model Tag {
   name  String  @unique
   desc  String
   count Int     @default(0)
-  posts Post[]
   hot   Boolean @default(false)
+  posts Post[]
 }
 
 model Comment {
@@ -105,48 +96,48 @@ model Comment {
   pid          String
   mentioned    String[]
   content      String
+  floor        Int            @default(1)
   post         Post           @relation(fields: [pid], references: [pid])
   author       User           @relation(fields: [uid], references: [uid])
-  likes        Like[]
   dislikes     DisLike[]
-  floor        Int            @default(1)
+  likes        Like[]
   PointHistory PointHistory[]
 }
 
 model Fav {
   id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
   userId    Int
-  post      Post     @relation(fields: [pid], references: [pid])
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
   pid       String
+  post      Post     @relation(fields: [pid], references: [pid])
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Like {
   id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [uid], references: [uid])
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+  pid       String
+  cid       String
   uid       String
   comment   Comment  @relation(fields: [cid], references: [cid])
-  cid       String
   post      Post     @relation(fields: [pid], references: [pid])
-  pid       String
+  user      User     @relation(fields: [uid], references: [uid])
 
   @@unique([uid, cid])
 }
 
 model DisLike {
   id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [uid], references: [uid])
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-  comment   Comment  @relation(fields: [cid], references: [cid])
-  uid       String
-  cid       String
-  post      Post     @relation(fields: [pid], references: [pid])
   pid       String
+  cid       String
+  uid       String
+  comment   Comment  @relation(fields: [cid], references: [cid])
+  post      Post     @relation(fields: [pid], references: [pid])
+  user      User     @relation(fields: [uid], references: [uid])
 
   @@unique([uid, cid])
 }
@@ -154,6 +145,44 @@ model DisLike {
 model SysConfig {
   id      Int  @id @default(autoincrement())
   content Json
+}
+
+model PointHistory {
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @default(now()) @updatedAt
+  reason    PointReason
+  uid       String
+  pid       String?
+  cid       String?
+  point     Int
+  comment   Comment?    @relation(fields: [cid], references: [cid])
+  post      Post?       @relation(fields: [pid], references: [pid])
+  user      User        @relation(fields: [uid], references: [uid])
+}
+
+model Message {
+  id         Int          @id @default(autoincrement())
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @default(now()) @updatedAt
+  read       Boolean      @default(false)
+  fromUid    String?
+  toUid      String
+  content    String
+  from       User?        @relation("sendMessage", fields: [fromUid], references: [uid])
+  to         User         @relation("receiveMessage", fields: [toUid], references: [uid])
+  type       MessageType?
+  relationId String?
+}
+
+enum UserStatus {
+  NORMAL
+  BANNED
+}
+
+enum UserRole {
+  ADMIN
+  USER
 }
 
 enum PointReason {
@@ -165,28 +194,10 @@ enum PointReason {
   PUNISH
 }
 
-model PointHistory {
-  id        Int         @id @default(autoincrement())
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @default(now()) @updatedAt
-  reason    PointReason
-  point     Int
-  user      User        @relation(fields: [uid], references: [uid])
-  uid       String
-  post      Post?       @relation(fields: [pid], references: [pid])
-  pid       String?
-  comment   Comment?    @relation(fields: [cid], references: [cid])
-  cid       String?
-}
-
-model Message {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-  read      Boolean  @default(false)
-  from      User?    @relation(name: "sendMessage", fields: [fromUid], references: [uid])
-  to        User     @relation(name: "receiveMessage", fields: [toUid], references: [uid])
-  fromUid   String?
-  toUid     String
-  content   String
+enum MessageType {
+  MENTIONED
+  COMMENT
+  SIGNIN
+  LIKE
+  DISLIKE
 }

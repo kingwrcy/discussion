@@ -1,4 +1,4 @@
-import { PointReason } from "@prisma/client";
+import { MessageType, PointReason } from "@prisma/client";
 import { SysConfigDTO } from "~/types";
 
 export default defineEventHandler(async (event) => {
@@ -121,6 +121,8 @@ export default defineEventHandler(async (event) => {
       }点赞了`,
       read: false,
       toUid: comment.uid,
+      type: MessageType.LIKE,
+      relationId: comment.post.pid,
     },
   });
 

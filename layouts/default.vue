@@ -32,6 +32,7 @@
   <Toaster position="top-center" richColors />
 </template>
 <script lang="ts" setup>
+import { useTitle } from "@vueuse/core";
 import { MdPreview } from "md-editor-v3";
 import { Toaster } from 'vue-sonner';
 import type { SysConfigDTO, TagDTO, UserDTO } from '~/types';
@@ -61,6 +62,10 @@ userCardChanged.on(async () => {
   })
   if (userinfoRes) {
     userinfo.value = userinfoRes as UserDTO
+    if (userinfo.value.unRead > 0) {
+      const title = useTitle()
+      title.value = title.value + `(${userinfo.value.unRead})`
+    }
   }
 })
 

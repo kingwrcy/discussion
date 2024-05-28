@@ -45,10 +45,10 @@ export default defineEventHandler(async (event) => {
       tag: true,
       comments: {
         include: {
-          post:{
-            select:{
-              pid:true,
-            }
+          post: {
+            select: {
+              pid: true,
+            },
           },
           author: {
             select: {
@@ -94,6 +94,28 @@ export default defineEventHandler(async (event) => {
       },
     },
   });
+
+  if (uid) {
+    const unReadCount = await prisma.message.count({
+      where: {
+        toUid: uid,
+        read: false,
+        relationId: pid,
+      },
+    });
+    if (unReadCount > 0) {
+      await prisma.message.updateMany({
+        where: {
+          toUid: uid,
+          read: false,
+          relationId: pid,
+        },
+        data: {
+          read: true,
+        },
+      });
+    }
+  }
 
   const res = {
     success: true,
