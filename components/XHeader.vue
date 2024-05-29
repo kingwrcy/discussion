@@ -50,9 +50,9 @@ const showSlider = ()=>{
       <div class="flex items-center gap-1 ml-auto ">
       
         <UIcon @click="toggleMode" v-if="mode === 'light'" dynamic name="i-line-md-moon-rising-loop"
-          class="text-yellow-500 cursor-pointer"></UIcon>
+          class="text-yellow-500 cursor-pointer size-5"></UIcon>
         <UIcon @click="toggleMode" v-else dynamic name="i-line-md-moon-filled-alt-to-sunny-filled-loop-transition"
-          class="text-yellow-500 cursor-pointer"></UIcon>
+          class="text-yellow-500 cursor-pointer size-5"></UIcon>
         <div @click="go2Home" class="cursor-pointer flex gap-1 items-center p-2 hover:text-primary/80">
           <UIcon name="i-carbon-home" />
           <span class="hidden md:block">首页</span>
