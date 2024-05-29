@@ -4,6 +4,7 @@
       :toolbars="toolbars" :editor-id="`post-${pid}`">
       <template #defToolbars>
         <XEmoji />
+        <XYoutubeDialog/>
       </template>
     </MdEditor>
     <div class="flex my-2">
@@ -48,6 +49,7 @@ const emits = defineEmits(['commented'])
 
 const toolbars: ToolbarNames[] =  [
   0,
+  1,
   'bold',
   'underline',
   'strikeThrough',

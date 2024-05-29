@@ -19,6 +19,7 @@
               :preview="false" :toolbars="toolbars" editor-id="newPost">
               <template #defToolbars>
                 <XEmoji />
+                <XYoutubeDialog />
               </template>
             </MdEditor>
           </client-only>
@@ -48,7 +49,7 @@ const mode = useColorMode()
 const route = useRoute()
 
 const toolbars: ToolbarNames[] = [
-  0,
+  0, 1,
   'bold',
   'underline',
   'strikeThrough',
@@ -68,7 +69,7 @@ const tagRes = await useFetch('/api/go/list', {
   key: "tagLists"
 })
 const tags = computed(() => {
-  const items = tagRes.data.value?.tags.map(item => { return { name: item.name, id: item.id, desc: item.enName +  ' / ' + item.desc } })
+  const items = tagRes.data.value?.tags.map(item => { return { name: item.name, id: item.id, desc: item.enName + ' / ' + item.desc } })
   return items
 })
 

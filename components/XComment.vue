@@ -16,31 +16,29 @@
           <UIcon name="i-carbon-time" />
           <span>{{ dateFormatAgo(createdAt) }}</span>
         </div>
-        <div v-if="token && userinfo && userinfo.uid !== props.author.uid" title="支持"
-          class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer" @click="doLike">
+        <div title="支持" class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer" @click="doLike">
           <UIcon name="i-carbon-favorite" :class="[state.like ? 'text-red-500' : '']" />
           <span>{{ state.likeCount ?? 0 }}</span>
         </div>
-        <div v-if="token && userinfo && userinfo.uid !== props.author.uid" title="反对"
-          class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer" @click="doDisLike">
+        <div title="反对" class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer"
+          @click="doDisLike">
           <UIcon name="i-carbon-thumbs-down" :class="[state.dislike ? 'text-yellow-500' : '']" />
           <span>{{ state.dislikeCount ?? 0 }}</span>
         </div>
-        <div  v-if="token && userinfo && userinfo.uid !== props.author.uid"
-        class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer" @click="quoted">
+        <div v-if="token && userinfo && userinfo.uid !== props.author.uid"
+          class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer" @click="quoted">
           <UIcon name="i-carbon-reply" />
           回复
         </div>
       </div>
       <div class="text-gray-600  text-sm  hover:text-primary/80">
-        <MdPreview :model-value="content" :editor-id="cid" no-mermaid no-katex/>
+        <MdPreview :model-value="content" :editor-id="cid" no-mermaid no-katex />
       </div>
     </div>
 
-      <div class="text-xs text-primary/40 select-none cursor-pointer"
-        v-if="route.fullPath.startsWith('/post')">
-        <a :href="`#${props.floor}`" :id="`${props.floor}`">#{{ props.floor }}</a>
-      </div>
+    <div class="text-xs text-primary/40 select-none cursor-pointer" v-if="route.fullPath.startsWith('/post')">
+      <a :href="`#${props.floor}`" :id="`${props.floor}`">#{{ props.floor }}</a>
+    </div>
   </div>
 </template>
 
@@ -71,19 +69,23 @@ const quoted = () => {
 }
 
 const doLike = async () => {
-  const res = await $fetch(`/api/comment/like?cid=${props.cid}`, {
-    method: "POST",
-  });
-  Object.assign(state, res)
-  userCardChanged.emit()
+  if (token && userinfo && userinfo.value?.uid !== props.author.uid) {
+    const res = await $fetch(`/api/comment/like?cid=${props.cid}`, {
+      method: "POST",
+    });
+    Object.assign(state, res)
+    userCardChanged.emit()
+  }
 }
 
 const doDisLike = async () => {
-  const res = await $fetch(`/api/comment/dislike?cid=${props.cid}`, {
-    method: "POST",
-  });
-  Object.assign(state, res)
-  userCardChanged.emit()
+  if (token && userinfo && userinfo.value?.uid !== props.author.uid) {
+    const res = await $fetch(`/api/comment/dislike?cid=${props.cid}`, {
+      method: "POST",
+    });
+    Object.assign(state, res)
+    userCardChanged.emit()
+  }
 }
 </script>
 <style scoped></style>
