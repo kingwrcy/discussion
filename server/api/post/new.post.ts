@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
   if (!user || user.status === UserStatus.BANNED) {
     throw createError("用户不存在或已被封禁");
   }
-  if (user.point <=0) {
+  if (user.point <= 0) {
     throw createError("用户积分小于或等于0分,不能发帖");
   }
   const pid = `p${randomId()}`;
@@ -56,7 +56,7 @@ export default defineEventHandler(async (event) => {
         content: request.content,
         uid: event.context.uid,
         tagId: request.tagId,
-        point:(user.point*2-1)/Math.pow(600,1.8)*1000000,
+        point: ((user.point * 2 - 1) / Math.pow(600, 1.8)) * 10000000,
       },
     });
     if (!request.pid) {

@@ -86,6 +86,6 @@ export default defineEventHandler(async (event) => {
   return {
     success: true,
     posts: postsWithExtraInfo,
-    total,
+    total
   };
 });

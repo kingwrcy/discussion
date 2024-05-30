@@ -1,5 +1,5 @@
 <template>
-  <div class="flex space-x-3  items-start py-2" :class="{ 'sm:px-4 px-2': route.fullPath === '/' || route.fullPath.startsWith('/go/') }">
+  <div class="flex space-x-3  items-start py-2" :class="{ 'sm:px-4 px-2': route.fullPath === '/' || route.fullPath.startsWith('/?page=') || route.fullPath.startsWith('/go/') }">
 
     <NuxtLink :to="`/member/${author.username}`" v-if="showAvatar">
       <UAvatar v-if="author && author.avatarUrl" :src="getAvatarUrl(author.avatarUrl)" size="lg" alt="Avatar" />

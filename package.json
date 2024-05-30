@@ -15,6 +15,7 @@
     "@nuxt/ui": "^2.16.0",
     "@prisma/adapter-pg": "^5.14.0",
     "@prisma/client": "5.14.0",
+    "@vueuse/components": "^10.10.0",
     "@vueuse/core": "^10.9.0",
     "@vueuse/nuxt": "^10.9.0",
     "bcryptjs": "^2.4.3",
@@ -24,6 +25,7 @@
     "markdown-it-link-attributes": "^4.0.1",
     "md-editor-v3": "^4.15.6",
     "nuxt": "^3.11.2",
+    "nuxt-scheduler": "^0.1.9",
     "pg": "^8.11.5",
     "prisma": "^5.14.0",
     "short-uuid": "^5.2.0",
@@ -31,8 +33,7 @@
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
     "vue-sonner": "^1.1.2",
-    "zod": "^3.23.8",
-    "nuxt-scheduler": "^0.1.9"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

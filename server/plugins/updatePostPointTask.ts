@@ -10,6 +10,34 @@ export default defineNitroPlugin((nitroApp) => {
   }
   const scheduler = useScheduler();
 
+  const updateUserLevel = async (min: number, max: number, level: number) => {
+    return await prisma.user.updateMany({
+      where: {
+        point: {
+          gte: min,
+          lt: max,
+        },
+      },
+      data: {
+        level,
+      },
+    });
+  };
+
+  scheduler.run(async () => {
+    const levels = [
+      [0, 200],
+      [200, 400],
+      [400, 900],
+      [900, 1600],
+      [1600, 2500],
+      [2500, 3600],
+    ];
+    for (let level = 1; level <= levels.length; level++) {
+      await updateUserLevel(levels[level][0], levels[level][1], level);
+    }
+  }).everyHours(1);
+
   scheduler
     .run(async () => {
       const posts = await prisma.post.findMany({
@@ -44,16 +72,15 @@ export default defineNitroPlugin((nitroApp) => {
           },
         });
         const point =
-          (post.author.point * 2 +
-          post._count.PostSupport * 2 +
-          count -
-          1) / Math.pow(second + 600, 1.8)*10000000;
+          ((post.author.point * 2 + post._count.PostSupport * 2 + count - 1) /
+            Math.pow(second + 600, 1.8)) *
+          10000000;
         await prisma.post.update({
           where: {
             pid: post.pid,
           },
           data: {
-            point:point,
+            point: point,
           },
         });
         // console.log("update post point ", post.pid, point);
