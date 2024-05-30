@@ -46,6 +46,21 @@
           <UInput v-model.number="state.pointPerDaySignInMax" autocomplete="off" />
         </UFormGroup>
       </div>
+
+      <div class="flex flex-col space-y-2 ">
+        <div class="flex flex-row space-x-2">
+          <UFormGroup label="自定义css" name="css" class="w-[500px]" hint="修改了此项需要刷新页面">
+            <UTextarea v-model="state.css" />
+          </UFormGroup>
+        </div>
+
+        <div class="flex flex-row space-x-2">
+          <UFormGroup label="自定义JS" name="css" class="w-[500px]" hint="修改了此项需要刷新页面">
+            <UTextarea v-model="state.js" />
+          </UFormGroup>
+        </div>
+      </div>
+
       <UButton @click="saveSettings" class="w-fit">保存</UButton>
 
     </div>
@@ -54,9 +69,8 @@
 
 <script lang="ts" setup>
 import type { ToolbarNames } from 'md-editor-v3';
-import { toast } from 'vue-sonner';
 import { MdEditor } from 'md-editor-v3';
-import { object } from 'zod';
+import { toast } from 'vue-sonner';
 useHead({
   title: "系统设置"
 })
@@ -96,6 +110,8 @@ const state = reactive({
   pointPerDaySignInMin: 1,
   pointPerDaySignInMax: 10,
   websiteAnnouncement: ``,
+  css: '',
+  js: "",
 })
 
 

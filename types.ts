@@ -17,6 +17,7 @@ export const saveSettingsRequestSchema = z.object({
   password: z.string().optional(),
   email: z.string().email("请填写正确邮箱地址"),
   css: z.string().optional(),
+  js: z.string().optional(),
 });
 
 export const loginRequestSchema = z.object({
@@ -54,7 +55,8 @@ export type UserDTO = {
   level: number;
   bannedEnd: string;
   unRead: number;
-
+  css?: string;
+  js?: string;
   _count: {
     fav: number;
     comments: number;
@@ -132,6 +134,8 @@ export type SysConfigDTO = {
   pointPerDaySignInMin: number;
   pointPerDaySignInMax: number;
   websiteAnnouncement: string;
+  css: string;
+  js: string;
 };
 
 export type MessageDTO = {

@@ -18,8 +18,11 @@
       <UFormGroup label="邮箱" name="email" hint="请使用常用邮箱,会用来生成头像">
         <UInput v-model="state.email" type="text" />
       </UFormGroup>
-      <UFormGroup label="自定义css" name="css">
+      <UFormGroup label="自定义css" name="css" hint="修改了此项需要刷新页面">
         <UTextarea v-model="state.css" />
+      </UFormGroup>
+      <UFormGroup label="自定义JS" name="css" hint="修改了此项需要刷新页面">
+        <UTextarea v-model="state.js" />
       </UFormGroup>
       <UButton type="submit">
         保存
@@ -51,7 +54,8 @@ type Schema = z.output<typeof saveSettingsRequestSchema>
 const state = reactive({
   email: userinfo.email,
   password: undefined,
-  css: undefined,
+  css: userinfo.css,
+  js: userinfo.js,
 })
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {

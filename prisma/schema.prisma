@@ -35,6 +35,8 @@ model User {
   LastComment    Post[]         @relation("lastComment")
   posts          Post[]
   PostSupport    PostSupport[]
+  css            String?
+  js             String?
 }
 
 model Post {

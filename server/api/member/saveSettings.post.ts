@@ -2,14 +2,14 @@ import { default as bcrypt } from "bcryptjs";
 import { sha256 } from "js-sha256";
 import { z } from "zod";
 import { saveSettingsRequestSchema } from "~/types";
-type regRequest = z.infer<typeof saveSettingsRequestSchema>;
+type saveSettingsRequest = z.infer<typeof saveSettingsRequestSchema>;
 
 export default defineEventHandler(async (event) => {
   if (!event.context.uid) {
     throw createError("请先去登录");
   }
   const config = useRuntimeConfig();
-  const request = (await readBody(event)) as regRequest;
+  const request = (await readBody(event)) as saveSettingsRequest;
   const validateResult = saveSettingsRequestSchema.safeParse(request);
   if (!validateResult.success) {
     return {
@@ -18,6 +18,13 @@ export default defineEventHandler(async (event) => {
     };
   }
 
+  let data = {
+    email: request.email.trim(),
+    avatarUrl: sha256(request.email.trim()),
+    css: request.css,
+    js: request.js,
+  };
+
   if (request.password) {
     await prisma.user.update({
       where: {
@@ -25,7 +32,7 @@ export default defineEventHandler(async (event) => {
       },
       data: {
         password: bcrypt.hashSync(request.password, 10),
-        email: request.email.trim(),
+        ...data,
       },
     });
   } else {
@@ -33,10 +40,7 @@ export default defineEventHandler(async (event) => {
       where: {
         uid: event.context.uid,
       },
-      data: {
-        email: request.email.trim(),
-        avatarUrl:sha256(request.email.trim())
-      },
+      data,
     });
   }
 
