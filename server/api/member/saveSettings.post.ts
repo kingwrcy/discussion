@@ -23,6 +23,7 @@ export default defineEventHandler(async (event) => {
     avatarUrl: sha256(request.email.trim()),
     css: request.css,
     js: request.js,
+    signature: request.signature,
   };
 
   if (request.password) {

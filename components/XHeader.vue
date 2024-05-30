@@ -24,7 +24,9 @@ const toggleMode = () => {
 
 const go2Home = async () => {
   await router.replace('/')
-  await refreshNuxtData()
+  if (route.fullPath === '/') {
+    await refreshNuxtData()
+  }
 }
 
 const sliderOpen = useState('sliderOpen', ()=>{return false})

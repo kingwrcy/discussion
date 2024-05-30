@@ -37,6 +37,7 @@ model User {
   PostSupport    PostSupport[]
   css            String?
   js             String?
+  signature      String?
 }
 
 model Post {

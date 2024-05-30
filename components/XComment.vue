@@ -34,6 +34,7 @@
       <div class="text-gray-600  text-sm  hover:text-primary/80">
         <MdPreview :model-value="content" :editor-id="cid" no-mermaid no-katex />
       </div>
+      <XUserSig :signature="author.signature" v-if="author.signature" />
     </div>
 
     <div class="text-xs text-primary/40 select-none cursor-pointer" v-if="route.fullPath.startsWith('/post')">

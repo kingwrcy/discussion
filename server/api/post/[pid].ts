@@ -40,6 +40,7 @@ export default defineEventHandler(async (event) => {
           avatarUrl: true,
           uid: true,
           role: true,
+          signature:true,
         },
       },
       tag: true,
@@ -56,6 +57,7 @@ export default defineEventHandler(async (event) => {
               username: true,
               avatarUrl: true,
               role: true,
+              signature:true,
             },
           },
           likes: {

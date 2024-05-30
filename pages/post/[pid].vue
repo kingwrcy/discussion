@@ -3,9 +3,11 @@
     <div class="px-4 py-2 ">
       <XPost :show-avatar="true" v-bind="post" @support="doSupport" />
     </div>
-    <div class="px-4 pt-2 leading-5 border-t">
+    <div class="px-4 pt-2 leading-5 border-t space-y-2">
       <MdPreview v-model="post.content" :editor-id="post.pid" no-mermaid no-katex/>
+      <XUserSig :signature="post.author.signature" v-if="post.author.signature" />
     </div>
+    
     <div class="px-4 flex justify-end pb-2 border-b items-center space-x-2 my-2">
       <NuxtLink :to="`/post/new?pid=${post.pid}`" v-if="token && post.uid === userinfo.uid">
         <UBadge variant="soft" size="xs" class="flex gap-1 items-center cursor-pointer hover:text-primary/80">

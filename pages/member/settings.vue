@@ -9,6 +9,9 @@
       <UFormGroup label="用户名">
         {{ userinfo.username }}
       </UFormGroup>
+      <UFormGroup label="等级">
+        {{ userinfo.level }}级 - (<NuxtLink class="text-blue-500" :to="`/member/${userinfo.username}/point`">{{ userinfo.point }}分</NuxtLink>)
+      </UFormGroup>
       <UFormGroup label="头像">
         <UAvatar :src="getAvatarUrl(userinfo.avatarUrl!)" size="lg" alt="Avatar" />
       </UFormGroup>
@@ -23,6 +26,12 @@
       </UFormGroup>
       <UFormGroup label="自定义JS" name="css" hint="修改了此项需要刷新页面">
         <UTextarea v-model="state.js" />
+      </UFormGroup>
+      <UFormGroup label="自定义签名" name="css">
+        <template #hint>
+          2级以上用户可以添加,只支持markdown语法的链接写法,不支持其它格式,比如图片等
+        </template>
+        <UTextarea v-model="state.signature" placeholder="[Moments](https://m.mblog.club)" :disabled="userinfo.level < 2" />
       </UFormGroup>
       <UButton type="submit">
         保存
@@ -43,10 +52,10 @@ const { data } = await useFetch(`/api/member/profile`, { method: 'POST' })
 const userinfo = data.value as UserDTO
 const config = useRuntimeConfig()
 useHead({
-  title:`${userinfo.username}的个人设置`,
-  meta:[
-    {name:"keywords",content:"极简论坛"},
-    {name:"description",content:"极简论坛"},
+  title: `${userinfo.username}的个人设置`,
+  meta: [
+    { name: "keywords", content: "极简论坛" },
+    { name: "description", content: "极简论坛" },
   ],
 })
 type Schema = z.output<typeof saveSettingsRequestSchema>
@@ -56,6 +65,7 @@ const state = reactive({
   password: undefined,
   css: userinfo.css,
   js: userinfo.js,
+  signature: userinfo.signature,
 })
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
@@ -64,10 +74,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     body: JSON.stringify(event.data)
   })
   if (event.data.password) {
-    toast.success('密码修改成功,请重新登录')    
+    toast.success('密码修改成功,请重新登录')
     await refreshCookie(config.public.tokenKey)
     await navigateTo('/member/login')
-  }else{
+  } else {
     toast.success('修改成功')
   }
 }
