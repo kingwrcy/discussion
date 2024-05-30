@@ -18,6 +18,9 @@
       <template #empty-state>
         <div class="text-center text-gray-400 my-4 text-sm">暂无消息</div>
       </template>
+      <template #actions-data="{ row }">
+        <UBadge size="sm" v-if="!row.read">未读</UBadge>
+      </template>
     </UTable>
     <UPagination size="sm" :to="(page: number) => ({
       query: { page },

@@ -16,9 +16,9 @@ export const regRequestSchema = z
 export const saveSettingsRequestSchema = z.object({
   password: z.string().optional(),
   email: z.string().email("请填写正确邮箱地址"),
-  css: z.string().optional(),
-  js: z.string().optional(),
-  signature: z.string().max(300,"最大不超过300个字符").optional(),
+  css: z.string().optional().nullish(),
+  js: z.string().optional().nullish(),
+  signature: z.string().max(300,"最大不超过300个字符").optional().nullish(),
 });
 
 export const loginRequestSchema = z.object({
@@ -59,6 +59,7 @@ export type UserDTO = {
   css?: string;
   js?: string;
   signature?: string;
+  lastActive?: string;
   _count: {
     fav: number;
     comments: number;

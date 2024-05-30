@@ -38,6 +38,7 @@ model User {
   css            String?
   js             String?
   signature      String?
+  lastActive     DateTime?
 }
 
 model Post {

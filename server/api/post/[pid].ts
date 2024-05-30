@@ -33,6 +33,12 @@ export default defineEventHandler(async (event) => {
       pid: pid,
     },
     include: {
+      lastCommentUser:{
+        select:{
+          uid:true,
+          username:true,
+        }
+      },
       PostSupport: true,
       author: {
         select: {
@@ -41,6 +47,7 @@ export default defineEventHandler(async (event) => {
           uid: true,
           role: true,
           signature:true,
+         
         },
       },
       tag: true,

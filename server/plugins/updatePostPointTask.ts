@@ -34,9 +34,9 @@ export default defineNitroPlugin((nitroApp) => {
       [2500, 3600],
     ];
     for (let level = 1; level <= levels.length; level++) {
-      await updateUserLevel(levels[level][0], levels[level][1], level);
+      await updateUserLevel(levels[level][0], levels[level][1], level+1);
     }
-  }).everyHours(1);
+  }).everyMinutes(1);
 
   scheduler
     .run(async () => {

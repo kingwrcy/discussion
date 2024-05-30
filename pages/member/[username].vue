@@ -14,7 +14,8 @@
           </div>
           <div class="flex gap-1">
             <div class="text-xs text-gray-400">{{ dateFormat(userinfo.createdAt)}}加入</div>
-          </div>
+            <div class="text-xs text-gray-400" v-if="userinfo.lastActive">最后活动时间:{{ dateFormat(userinfo.lastActive)}}</div>
+          </div> 
         </div>
       </div>
     </template>

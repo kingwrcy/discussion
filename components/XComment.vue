@@ -29,16 +29,16 @@
           class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer" @click="quoted">
           <UIcon name="i-carbon-reply" />
           回复
-        </div>
+        </div>        
       </div>
       <div class="text-gray-600  text-sm  hover:text-primary/80">
         <MdPreview :model-value="content" :editor-id="cid" no-mermaid no-katex />
-      </div>
-      <XUserSig :signature="author.signature" v-if="author.signature" />
+      </div>      
     </div>
 
-    <div class="text-xs text-primary/40 select-none cursor-pointer" v-if="route.fullPath.startsWith('/post')">
-      <a :href="`#${props.floor}`" :id="`${props.floor}`">#{{ props.floor }}</a>
+    <div class="flex md:gap-x-2 items-center" >
+      <XUserSig :signature="author.signature" v-if="author.signature" />
+      <a v-if="route.fullPath.startsWith('/post')" class="md:ml-4 text-sm text-primary/40 select-none cursor-pointer" :href="`#${props.floor}`" :id="`${props.floor}`">#{{ props.floor }}</a>
     </div>
   </div>
 </template>

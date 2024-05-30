@@ -95,6 +95,7 @@ export default defineEventHandler(async (event) => {
           postCount: {
             increment: 1,
           },
+          lastActive:new Date(),
           point: {
             increment: limit ? 0 : sysConfigDTO.pointPerPost,
           },

@@ -66,6 +66,7 @@ export default defineEventHandler(async (event) => {
       uid: user.uid,
     },
     data: {
+      lastActive:new Date(),
       point: {
         decrement: sysConfigDTO.pointPerLikeOrDislike,
       },

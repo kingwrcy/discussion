@@ -1,8 +1,9 @@
 <template>
-  <DropdownToolbar title="emoji" :visible="state.visibile" :onChange="onChange">
+  <div>
+    <DropdownToolbar title="emoji" :visible="state.visibile" :onChange="onChange">
     <template #overlay>
-      <div class="p-2 relative left-2 top-2 grid grid-cols-10 gap-1 *:cursor-pointer *:border *:rounded">
-        <div v-for="emoji in emojis">
+      <div class="p-2 relative left-2 top-2 grid grid-cols-10 gap-1 *:cursor-pointer *:border *:rounded max-h-[150px] overflow-auto">
+        <div v-for="emoji in emojis" >
           <div @click="insertEmoji(emoji)" :key="emoji">{{ emoji }}</div>
         </div>
       </div>
@@ -15,17 +16,13 @@
       </svg>
     </template>
   </DropdownToolbar>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { DropdownToolbar, type Insert } from 'md-editor-v3';
 const emojis = [
-  '😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇',
-  '🙂', '🙃', '😉', '😌', '😍', '😘', '😗', '😙', '😚', '😋',
-  '😛', '😝', '😜', '🤪', '🤨', '🧐', '🤓', '😎', '🤩', '🥳',
-  '😏', '😒', '😞', '😔', '😟', '😕', '🙁', '☹️', '😣', '😖',
-  '😫', '😩', '😢', '😭', '😤', '😠', '😡', '🤬', '🤯', '😳',
-  '🥺', '😨', '😰'
+  '😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃', '🫠', '😉', '😊', '😇', '🥰', '😍', '🤩', '😘', '😗', '😚', '😙', '🥲', '😋', '😛', '😜', '🤪', '😝', '🤑', '🤗', '🤭', '🫢', '🫣', '🤫', '🤔', '🫡', '🤐', '🤨', '😐', '😑', '😶', '🫥', '😶‍🌫️', '😏', '😒', '🙄', '😬', '😮‍💨', '🤥', '🫨', '😌', '😔', '😪', '🤤', '😴', '😷', '🤒', '🤕', '🤢', '🤮', '🤧', '🥵', '🥶', '🥴','😵','😵‍💫','🤯','🤠','🥳','🥸','😎','🤓','🧐','😕','🫤','😟','🙁','☹️', '😮', '😯', '😲', '😳', '🥺', '🥹', '😦', '😧', '😨', '😰', '😥', '😢', '😭', '😱', '😖', '😣', '😞', '😓', '😩', '😫', '🥱', '😤', '😡', '😠', '🤬', '😈', '👿', '💀', '☠️', '💩'
 ];
 
 
@@ -52,7 +49,7 @@ const insertEmoji = (emoji: string) => {
 }
 
 const state = reactive({
-  visibile: false
+  visibile:false
 })
 
 const onChange = (visbile: boolean) => {

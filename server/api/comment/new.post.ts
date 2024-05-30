@@ -131,6 +131,7 @@ export default defineEventHandler(async (event) => {
       uid: user.uid,
     },
     data: {
+      lastActive:new Date(),
       point: {
         increment: limit ? 0 : sysConfigDTO.pointPerComment,
       },

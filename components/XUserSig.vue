@@ -1,5 +1,5 @@
 <template>
-  <div class="signature text-xs text-primary/70 py-2 line-clamp-1" v-html="signatureHtml">
+  <div class="hidden md:block signature text-xs text-primary line-clamp-1 " v-html="signatureHtml">
 
   </div>
 </template>

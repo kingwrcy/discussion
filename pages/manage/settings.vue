@@ -49,13 +49,13 @@
 
       <div class="flex flex-col space-y-2 ">
         <div class="flex flex-row space-x-2">
-          <UFormGroup label="自定义css" name="css" class="w-[500px]" hint="修改了此项需要刷新页面">
+          <UFormGroup label="自定义css" name="css" class="w-[500px]" hint="刷新页面生效">
             <UTextarea v-model="state.css" />
           </UFormGroup>
         </div>
 
         <div class="flex flex-row space-x-2">
-          <UFormGroup label="自定义JS" name="css" class="w-[500px]" hint="修改了此项需要刷新页面">
+          <UFormGroup label="自定义JS" name="css" class="w-[500px]" hint="刷新页面生效">
             <UTextarea v-model="state.js" />
           </UFormGroup>
         </div>

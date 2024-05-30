@@ -3,7 +3,7 @@
   <div class="dark:bg-slate-800 min-h-screen">
 
     <USlideover v-model="sliderOpen" class="md:hidden" :side="'left'">
-      <div class="p-4 flex-1 space-y-4 bg-slate-500">
+      <div class="p-4 flex-1 space-y-4 bg-slate-700">
         <UIcon name="i-carbon-close-large" class="size-5 text-white" @click="sliderOpen = false"></UIcon>
         <XUserCard v-if="userinfo && userinfo.username" />
         <UCard class="w-full mt-2" v-if="route.fullPath.startsWith('/go/') && tag"

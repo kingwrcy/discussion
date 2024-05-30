@@ -21,6 +21,13 @@ export default defineEventHandler(async (event) => {
       data: { uid: event.context.uid, pid },
     });
   }
+
+  await prisma.user.update({
+    where: { uid: event.context.uid },
+    data: {
+      lastActive: new Date(),
+    },
+  });
   return {
     success: true,
   };
