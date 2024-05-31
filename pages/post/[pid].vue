@@ -3,11 +3,11 @@
     <div class="px-4 py-2 ">
       <XPost :show-avatar="true" v-bind="post" @support="doSupport" />
     </div>
-    <div class="px-4 pt-2 leading-5 border-t space-y-2">
+    <div class="px-4 pt-2 leading-5 border-t space-y-2 dark:border-slate-700">
       <MdPreview v-model="post.content" :editor-id="post.pid" no-mermaid no-katex />
     </div>
 
-    <div class="px-4 flex justify-end pb-2 border-b items-center space-x-2 my-2">
+    <div class="px-4 flex justify-end pb-2  items-center space-x-2 my-2">
       <NuxtLink :to="`/post/new?pid=${post.pid}`" v-if="token && post.uid === userinfo.uid">
         <UBadge variant="soft" size="xs" class="flex gap-1 items-center cursor-pointer hover:text-primary/80">
           <UIcon name="i-carbon-edit" />
@@ -20,14 +20,14 @@
       </UBadge>
     </div>
 
-    <div class=" gap-2 divide-y divide-gray-300 dark:divide-gray-800">
+    <div class=" gap-2 divide-y divide-gray-300 dark:divide-gray-700">
       <XComment v-for="(comment, index) in post.comments" key="comment.cid" v-bind="comment" :index="index" />
       <UPagination size="sm" class="p-4" :to="(page: number) => ({
         query: { page },
       })" v-model="state.page" :page-count="state.size" :total="totalComments" v-if="totalComments > state.size" />
     </div>
     <ClientOnly>
-      <div class="px-0 md:px-4 border-t" v-if="userinfo.status === 'NORMAL' && userinfo.point > 0">
+      <div class="px-0 md:px-4 border-t dark:border-slate-700" v-if="userinfo.status === 'NORMAL' && userinfo.point > 0">
         <XReply :pid="post.pid" @commented="reload" />
       </div>
     </ClientOnly>

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col divide-y divide-gray-100" v-if="state.comments.length > 0">
+  <div class="flex flex-col divide-y divide-gray-100 dark:divide-slate-700" v-if="state.comments.length > 0">
     <XCommentWithPost  v-for="comment in state.comments" :key="comment.cid" v-bind="comment" />
   </div>
   <div class="flex items-center text-sm text-gray-500" v-else>

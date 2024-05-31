@@ -3,7 +3,7 @@
     <template #header>
       <XTagList />
     </template>
-    <div class="flex flex-col divide-y divide-gray-300 " >
+    <div class="flex flex-col divide-y divide-gray-300 dark:divide-slate-700" >
       <XPost :showAvatar="true" v-for="post in postList" :key="post.pid" v-bind="post" />
       <div class="p-4 text-sm" v-if="postList.length === 0">暂无帖子,注册登录发言吧</div>
     </div>

@@ -9,7 +9,7 @@
 
       <div class="flex flex-row space-x-2">
         <UFormGroup label="站点公告" name="websiteAnnouncement">
-          <MdEditor style="height:200px;" :no-upload-img="true" v-model="state.websiteAnnouncement" :preview="false"
+          <MdEditor style="height:200px;" @on-upload-img="onUploadImg" v-model="state.websiteAnnouncement" :preview="false"
             :toolbars="toolbars" editor-id="sysSettings" />
         </UFormGroup>
       </div>

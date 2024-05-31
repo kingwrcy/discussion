@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col  py-2 w-full " v-if="token">
-    <MdEditor :theme="mode as any" ref="editorRef" style="height:200px;" :no-upload-img="true" v-model="state.content" :preview="false"
+    <MdEditor :theme="mode as any" ref="editorRef" style="height:200px;" @on-upload-img="onUploadImg" v-model="state.content" :preview="false"
       :toolbars="toolbars" :editor-id="`post-${pid}`">
       <template #defToolbars>
         <XEmoji />

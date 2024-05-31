@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col divide-y divide-gray-100" v-if="state.posts.length > 0">
+  <div class="flex flex-col divide-y divide-gray-100 dark:divide-slate-700" v-if="state.posts.length > 0">
     <XPost :show-avatar="false" v-for="post in state.posts" :key="post.pid" v-bind="post" />
   </div>
   <div class="flex items-center text-sm text-gray-500" v-else>

@@ -73,7 +73,11 @@
   background-color: rgb(17 24 39/10)  !important;
 }
 
-.md-editor-toolbar-left > div[theme='light'][language='zh-CN'] {
+.md-editor-toolbar-left > div[theme='light'][language='zh-CN'] ,.md-editor-toolbar-left > div[theme='dark'][language='zh-CN'] {
   display: flex;
   align-items: center;
+}
+
+.dark .md-editor-preview img{
+  border-color: rgb(51 65 85) !important;
 }
