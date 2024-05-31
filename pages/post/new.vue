@@ -15,7 +15,7 @@
         </UFormGroup>
         <UFormGroup label="正文" name="content">
           <client-only>
-            <MdEditor :theme="mode as any" :no-upload-img="true" style="max-height: 400px;" v-model="state.content"
+            <MdEditor :theme="mode as any" @onUploadImg="onUploadImg" style="max-height: 400px;" v-model="state.content"
               :preview="false" :toolbars="toolbars" editor-id="newPost">
               <template #defToolbars>
                 <XEmoji />
