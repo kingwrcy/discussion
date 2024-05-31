@@ -4,8 +4,8 @@
       <div class="text-center text-sm">发表新帖子</div>
     </template>
     <div class="flex flex-col my-2 ">
-      <UForm :schema="createPostSchema" :state="state" :validate-on="['submit']" class="space-y-4" @submit="onSubmit"
-        autocomplete="off">
+      <UForm ref="form" :schema="createPostSchema" :state="state" :validate-on="['submit']" class="space-y-4"
+        @submit="onSubmit" autocomplete="off">
         <UFormGroup label="标题" name="title">
           <UInput v-model="state.title" autocomplete="off" />
         </UFormGroup>
@@ -26,7 +26,7 @@
         </UFormGroup>
         <div>
           <UButton type="submit" :loading="pending">
-            发表
+            发表(Ctrl+Enter提交)
           </UButton>
         </div>
       </UForm>
@@ -114,6 +114,22 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   }
   pending.value = false
 }
+
+const form = ref<HTMLFormElement>()
+
+const handleKeyDown = async (event: KeyboardEvent) => {
+  if (event.ctrlKey && event.key === 'Enter') {
+    form.value?.submit()
+  }
+};
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKeyDown);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeyDown);
+});
 
 useHead({
   title: `发表帖子`,
