@@ -70,6 +70,7 @@ const route = useRoute()
 const sliderOpen = useState('sliderOpen', () => { return false })
 
 const loadProfile = async () => {
+  console.log('reload userinfo loadProfile')
   const userinfoRes = await useFetch('/api/member/profile', {
     method: 'POST'
   })
@@ -85,6 +86,7 @@ const sysconfig = configData.value?.data as SysConfigDTO
 const version = configData.value?.version
 
 userCardChanged.on(async () => {
+  console.log('reload userinfo on userCardChanged')
   const userinfoRes = await $fetch('/api/member/profile', {
     method: 'POST'
   })
@@ -99,6 +101,7 @@ userCardChanged.on(async () => {
 
 watch(token, async () => {
   if (token.value) {
+    console.log('watch userinfo onChanged')
     const userinfoRes = await $fetch('/api/member/profile', {
       method: 'POST'
     })

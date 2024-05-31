@@ -55,6 +55,7 @@ let { data } = await useFetch(url, {
 })
 
 if(userinfo.value){
+  console.log('reload userinfo')
   await userCardChanged.emit()
 }
 
