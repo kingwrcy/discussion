@@ -53,6 +53,7 @@ const insertYoutube = () => {
       return
     }
   }
+  youtubeUrl.value = ''
   state.visibile = false
 }
 

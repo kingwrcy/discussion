@@ -72,3 +72,8 @@
 .md-editor-preview table tr:hover{
   background-color: rgb(17 24 39/10)  !important;
 }
+
+.md-editor-toolbar-left > div[theme='light'][language='zh-CN'] {
+  display: flex;
+  align-items: center;
+}
