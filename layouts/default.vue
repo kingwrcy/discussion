@@ -56,7 +56,7 @@
     </div>
     <XFooter :version="version" />
   </div>
-  <Toaster position="top-center" richColors />
+  <Toaster position="top-center" richColors :duration="1000"/>
 </template>
 <script lang="ts" setup>
 import { useTitle } from "@vueuse/core";

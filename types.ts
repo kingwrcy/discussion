@@ -85,7 +85,7 @@ export type CommentDTO = {
   like?: boolean;
   dislike?: boolean;
   post?: PostDTO;
-  floor: number;
+  floor: number;  
 };
 
 export type PointHistoryDTO = {

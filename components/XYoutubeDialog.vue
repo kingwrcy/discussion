@@ -42,8 +42,7 @@ const insertYoutube = () => {
     if (match) {
       props.insert(() => {
         return {
-          targetValue: `<iframe class="w-full h-[250px] my-2" src="https://www.youtube.com/embed/${match[1]}" scrolling="no" border="0"
-          frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>`,
+          targetValue: `<iframe class="w-full h-[400px] my-2" src="https://www.youtube.com/embed/${match[1]}" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>\n`,
           select: false,
           deviationStart: 0,
           deviationEnd: 0

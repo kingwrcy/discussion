@@ -33,11 +33,11 @@ export default defineEventHandler(async (event) => {
       pid: pid,
     },
     include: {
-      lastCommentUser:{
-        select:{
-          uid:true,
-          username:true,
-        }
+      lastCommentUser: {
+        select: {
+          uid: true,
+          username: true,
+        },
       },
       PostSupport: true,
       author: {
@@ -46,8 +46,7 @@ export default defineEventHandler(async (event) => {
           avatarUrl: true,
           uid: true,
           role: true,
-          signature:true,
-         
+          signature: true,
         },
       },
       tag: true,
@@ -64,7 +63,7 @@ export default defineEventHandler(async (event) => {
               username: true,
               avatarUrl: true,
               role: true,
-              signature:true,
+              signature: true,
             },
           },
           likes: {
@@ -85,6 +84,12 @@ export default defineEventHandler(async (event) => {
               cid: true,
             },
           },
+          _count: {
+            select: {
+              likes: true,
+              dislikes: true,
+            },
+          },
         },
         take: size,
         skip: (page - 1) * size,
@@ -96,8 +101,6 @@ export default defineEventHandler(async (event) => {
       _count: {
         select: {
           comments: true,
-          commentLike: true,
-          commentDisLike: true,
           PostSupport: true,
         },
       },
@@ -136,6 +139,8 @@ export default defineEventHandler(async (event) => {
         ...comment,
         like: uid ? comment.likes.length > 0 : false,
         dislike: uid ? comment.dislikes.length > 0 : false,
+        likeCount: comment._count.likes,
+        dislikeCount: comment._count.dislikes,
       })),
     },
   };

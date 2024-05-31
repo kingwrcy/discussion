@@ -21,8 +21,7 @@
     </div>
 
     <div class=" gap-2 divide-y divide-gray-300 dark:divide-gray-800">
-      <XComment v-for="(comment, index) in post.comments" :likeCount="post._count.commentLike"
-        :dislikeCount="post._count.commentDisLike" :key="comment.cid" v-bind="comment" :index="index" />
+      <XComment v-for="(comment, index) in post.comments" key="comment.cid" v-bind="comment" :index="index" />
       <UPagination size="sm" class="p-4" :to="(page: number) => ({
         query: { page },
       })" v-model="state.page" :page-count="state.size" :total="totalComments" v-if="totalComments > state.size" />

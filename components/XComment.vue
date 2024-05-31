@@ -55,10 +55,10 @@ const token = useCookie(config.public.tokenKey)
 const props = defineProps<CommentDTO>();
 const route = useRoute()
 const state = reactive({
-  likeCount: props.likeCount,
-  dislikeCount: props.dislikeCount,
   like: props.like,
   dislike: props.dislike,
+  likeCount:props.likeCount,
+  dislikeCount:props.dislikeCount,
 });
 
 const quoted = () => {
