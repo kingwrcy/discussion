@@ -1,5 +1,5 @@
 <template>
-  <UCard class="flex-1">
+  <UCard class="flex-1 overflow-hidden">
     <template #header>
       <div class="max-w-[300px]">
         <div class="space-y-4">
@@ -12,7 +12,7 @@
         </div>
       </div>
     </template>
-    <UTable :rows="userList" :columns="columns">
+    <UTable :rows="userList" :columns="columns" class="overflow-auto w-full" :ui="{wrapper:'w-[300px]',th:{'base':'text-nowrap'}}">
       <template #avatarUrl-data="{ row }">
         <NuxtLink :to="`/member/${row.username}`">
           <UAvatar :src="getAvatarUrl(row.avatarUrl!)" size="lg" alt="Avatar" />

@@ -8,7 +8,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "exportSql": "npx prisma migrate diff --from-empty --to-schema-datasource prisma/schema.prisma --script > prisma/migrations/20240516050303_init/migration.sql"
+    "exportSql": "npx prisma migrate diff --from-empty --to-schema-datasource prisma/schema.prisma --script > prisma/migrations/20240516050303_init/migration.sql",
+    "devExportSql": "npx prisma migrate diff --to-schema-datamodel prisma\\schema.prisma --from-migrations prisma\\migrations --shadow-database-url postgresql://postgres:a123456@localhost:5432/discuss --script"
   },
   "dependencies": {
     "@iconify-json/carbon": "^1.1.32",
