@@ -1,12 +1,12 @@
 <template>
-  <div class="w-full   bg-white dark:bg-gray-900 shadow md:rounded-lg md:mt-2 rounded-none" >
+  <div class="w-full   bg-white dark:bg-gray-900 shadow md:rounded-lg md:mt-2 rounded-none relative">
     <div class="px-4 py-2 ">
       <XPost :show-avatar="true" v-bind="post" @support="doSupport" />
     </div>
     <div class="px-4 pt-2 leading-5 border-t space-y-2">
-      <MdPreview v-model="post.content" :editor-id="post.pid" no-mermaid no-katex/>
+      <MdPreview v-model="post.content" :editor-id="post.pid" no-mermaid no-katex />
     </div>
-    
+
     <div class="px-4 flex justify-end pb-2 border-b items-center space-x-2 my-2">
       <NuxtLink :to="`/post/new?pid=${post.pid}`" v-if="token && post.uid === userinfo.uid">
         <UBadge variant="soft" size="xs" class="flex gap-1 items-center cursor-pointer hover:text-primary/80">
@@ -26,11 +26,13 @@
         query: { page },
       })" v-model="state.page" :page-count="state.size" :total="totalComments" v-if="totalComments > state.size" />
     </div>
-    <ClientOnly >
+    <ClientOnly>
       <div class="px-0 md:px-4 border-t" v-if="userinfo.status === 'NORMAL' && userinfo.point > 0">
-      <XReply :pid="post.pid" @commented="reload" />
-    </div>
+        <XReply :pid="post.pid" @commented="reload" />
+      </div>
     </ClientOnly>
+
+    <XScrollToolbar />
   </div>
 </template>
 
@@ -54,8 +56,7 @@ let { data } = await useFetch(url, {
   })
 })
 
-if(userinfo.value){
-  console.log('reload userinfo')
+if (userinfo.value) {
   await userCardChanged.emit()
 }
 
@@ -70,7 +71,7 @@ const reload = async () => {
 }
 
 const doSupport = async (pid: string) => {
-  await $fetch('/api/post/support?pid='+pid, {
+  await $fetch('/api/post/support?pid=' + pid, {
     method: 'POST'
   })
   await reload()

@@ -11,8 +11,10 @@
       query: { page },
     })" class="m-2 p-2" v-model="state.page" :page-count="state.size" :total="totalPosts"
       v-if="totalPosts > state.size" />
-
   </UCard>
+
+  <XScrollToolbar/>
+
 </template>
 
 <script lang="ts" setup>
