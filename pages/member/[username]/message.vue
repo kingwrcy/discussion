@@ -3,7 +3,7 @@
     <div class="flex ">
       <UButton icon="i-carbon-checkmark-outline" color="green" size="xs" @click="setMessageRead()">全部已读</UButton>
     </div>
-    <UTable :rows="messageList" :columns="columns" :ui="{td:{padding:'py-3'},th:{padding:'py-2'}}">
+    <UTable :rows="messageList" :columns="columns" :ui="{ td: { padding: 'py-3' }, th: { padding: 'py-2' } }">
       <template #createdAt-data="{ row }">
         {{ dateFormat(row.createdAt) }}
       </template>
@@ -12,9 +12,10 @@
         </div>
       </template>
       <template #from.username-data="{ row }">
-        <ULink v-if="row.from" class="text-blue-500" :to="`/member/${row.from.username}`">{{ row.from.username }}</ULink>
+        <ULink v-if="row.from" class="text-blue-500" :to="`/member/${row.from.username}`">{{ row.from.username }}
+        </ULink>
         <div v-else>系统</div>
-      </template>    
+      </template>
       <template #empty-state>
         <div class="text-center text-gray-400 my-4 text-sm">暂无消息</div>
       </template>
@@ -42,13 +43,15 @@ const columns = [{
 //   key: 'from.username',
 //   label: '发件人'
 // },
- {
+{
   key: 'content',
   label: '内容'
 }, {
   key: 'actions'
 }]
-
+const props = defineProps({
+  username: String
+})
 const state = reactive({
   page: parseInt(route.query.page as any as string) || 1,
   size: 10,
@@ -56,7 +59,7 @@ const state = reactive({
 
 let { data: messageListRes } = await useFetch('/api/member/message', {
   method: 'POST',
-  body: JSON.stringify(state)
+  body: JSON.stringify({ ...state, username: props.username })
 })
 
 const messageList = computed(() => messageListRes?.value?.messages as any as MessageDTO[])
@@ -65,13 +68,13 @@ const total = computed(() => messageListRes?.value?.total as number)
 const reload = async () => {
   const res = await $fetch('/api/member/message', {
     method: 'POST',
-    body: JSON.stringify(state)
+    body: JSON.stringify({ ...state, username: props.username })
   })
   messageListRes.value = res
 }
 
-const setMessageRead = async(id?:number) =>{
-  await $fetch('/api/member/readMessage?messageId='+id, {
+const setMessageRead = async (id?: number) => {
+  await $fetch('/api/member/readMessage?messageId=' + id, {
     method: 'POST'
   })
   toast.success('操作成功')

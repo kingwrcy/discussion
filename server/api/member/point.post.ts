@@ -1,6 +1,7 @@
 type ListPostRequest = {
   page: number;
   size: number;
+  username:string;
 };
 
 export default defineEventHandler(async (event) => {
@@ -11,7 +12,7 @@ export default defineEventHandler(async (event) => {
   const request = (await readBody(event)) as ListPostRequest;
 
   const user = await prisma.user.findUnique({
-    where: { uid: event.context.uid },
+    where: { username:request.username },
   });
   if (!user) {
     throw createError("用户不存在");

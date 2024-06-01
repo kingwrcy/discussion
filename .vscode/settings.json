@@ -16,5 +16,6 @@
     "ngClass",
     "ui"
   ],
-  "editor.fontSize": 12
+  "editor.fontSize": 16,
+  "editor.fontFamily": "'Cascadia Code','LXGW WenKai','Courier New', monospace"
 }

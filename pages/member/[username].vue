@@ -43,14 +43,14 @@
         </UBadge>
       </NuxtLink>
 
-      <NuxtLink class="flex flex-row gap-1 items-center" :to="`/member/${userinfo.username}/point`" v-if="token">
+      <NuxtLink class="flex flex-row gap-1 items-center" :to="`/member/${userinfo.username}/point`" v-if="currentUser.username === userinfo.username && token">
         <UBadge size="lg" :color="selectedTab === 'point' ? 'primary' : 'white'" variant="solid" class="space-x-1">
           <UIcon name="i-carbon-favorite" />
           <span>积分({{ userinfo.point }})</span>
         </UBadge>
       </NuxtLink>
 
-      <NuxtLink class="flex flex-row gap-1 items-center" :to="`/member/${userinfo.username}/message`" v-if="token">
+      <NuxtLink class="flex flex-row gap-1 items-center" :to="`/member/${userinfo.username}/message`" v-if="currentUser.username === userinfo.username && token">
         <UBadge size="lg" :color="selectedTab === 'message' ? 'primary' : 'white'" variant="solid" class="space-x-1">
           <UIcon name="i-carbon-favorite" />
           <span>消息({{ userinfo._count.ReceiveMessage }})</span>
@@ -74,7 +74,7 @@ const username = route.params.username as string
 const { data } = await useFetch(`/api/member/${username}`, { method: 'POST' })
 const userinfo = data.value as UserDTO
 const selectedTab = ref('post')
-
+const currentUser = useState<UserDTO>('userinfo')
 useHead({
   title: `${username}的详情`,
   meta: [

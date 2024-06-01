@@ -61,7 +61,9 @@ const getReason = (reason: PointReason) => {
   }
 }
 
-
+const props = defineProps({
+  username: String
+})
 const state = reactive({
   page: parseInt(route.query.page as any as string) || 1,
   size: 10,
@@ -69,7 +71,7 @@ const state = reactive({
 
 let { data: pointListRes } = await useFetch('/api/member/point', {
   method: 'POST',
-  body: JSON.stringify(state)
+  body: JSON.stringify({ ...state, username: props.username })
 })
 
 const pointList = computed(() => pointListRes?.value?.points as any as PointHistoryDTO[])
@@ -78,7 +80,7 @@ const total = computed(() => pointListRes?.value?.total as number)
 const reload = async () => {
   const res = await $fetch('/api/member/point', {
     method: 'POST',
-    body: JSON.stringify(state)
+    body: JSON.stringify({ ...state, username: props.username })
   })
   pointListRes.value = res
 }

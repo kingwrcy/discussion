@@ -1,6 +1,7 @@
 type ListMessageRequest = {
   page: number;
   size: number;
+  username:string;
 };
 
 export default defineEventHandler(async (event) => {
@@ -9,9 +10,13 @@ export default defineEventHandler(async (event) => {
   }
   const request = (await readBody(event)) as ListMessageRequest;
 
+
+
   const messages = await prisma.message.findMany({
     where: {
-      toUid: event.context.uid,
+      to:{
+        username:request.username
+      }
     },
     include: {
       from: {
