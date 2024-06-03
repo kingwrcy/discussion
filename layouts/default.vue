@@ -68,6 +68,7 @@ const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)
 const route = useRoute()
 const sliderOpen = useState('sliderOpen', () => { return false })
+const global = useState<{sysConfig:SysConfigDTO,version:string|undefined}>('globalConfig')
 
 const loadProfile = async () => {
   const userinfoRes = await useFetch('/api/member/profile', {
@@ -77,12 +78,8 @@ const loadProfile = async () => {
     userinfo.value = userinfoRes.data.value as UserDTO
   }
 }
-
-const { data: configData } = await useFetch('/api/config', {
-  method: 'POST',
-})
-const sysconfig = configData.value?.data as SysConfigDTO
-const version = configData.value?.version
+const sysconfig = global.value?.sysConfig as SysConfigDTO
+const version = global.value?.version
 
 userCardChanged.on(async () => {
   const userinfoRes = await $fetch('/api/member/profile', {
