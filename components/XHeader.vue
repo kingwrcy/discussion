@@ -8,6 +8,13 @@ const mode = useColorMode()
 const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)
 const userinfo = useState<UserDTO | undefined>('userinfo')
+defineProps({
+  siteName: {
+    type: String,
+    required: true,
+  }
+})
+
 const logout = () => {
   token.value = ''
   userinfo.value = undefined
@@ -44,7 +51,7 @@ const showSlider = ()=>{
           <UIcon name="i-carbon-bare-metal-server" class="size-5" />          
         </div>
       <div @click="go2Home" to="/" class="cursor-pointer hover:text-primary/80">
-        <div class="font-semibold text-xl">Discussion</div>
+        <div class="font-semibold text-xl">{{ siteName || "Discussion" }}</div>
       </div>
       <div class="flex items-center gap-1 ml-auto ">
       
