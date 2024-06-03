@@ -12,7 +12,6 @@ defineProps({
   siteName: {
     type: String,
     required: true,
-    default:'Discussion'
   }
 })
 
@@ -52,7 +51,7 @@ const showSlider = ()=>{
           <UIcon name="i-carbon-bare-metal-server" class="size-5" />          
         </div>
       <div @click="go2Home" to="/" class="cursor-pointer hover:text-primary/80">
-        <div class="font-semibold text-xl">{{ siteName }}</div>
+        <div class="font-semibold text-xl">{{ siteName || "Discussion" }}</div>
       </div>
       <div class="flex items-center gap-1 ml-auto ">
       
