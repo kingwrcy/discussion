@@ -46,4 +46,6 @@ NUXT_PUBLIC_TOKEN_KEY="S3pSQMBAgYWz"
 NUXT_PUBLIC_AVATAR_CDN=https://gravatar.cooluc.com/avatar/
 ```
 
-执行`pnpm i`安装依赖包,执行`pnpm dev`本地启动项目.
+执行`pnpm i`安装依赖包
+执行`npx prisma migrate dev`同步数据库
+执行`pnpm dev`本地启动项目.
