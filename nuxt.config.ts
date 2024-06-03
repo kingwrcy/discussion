@@ -20,6 +20,7 @@ export default defineNuxtConfig({
     public: {
       tokenKey: "",
       avatarCdn: "",
+      cookieSecure: false,
     },
     jwtSecretKey: "",
   },
