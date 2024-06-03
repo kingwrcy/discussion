@@ -3,6 +3,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 
 import zhCn from "dayjs/locale/zh-cn";
 import { toast } from "vue-sonner";
+import { uuid } from "short-uuid";
 
 dayjs.extend(relativeTime).locale(zhCn);
 
@@ -22,28 +23,30 @@ export const dateFormatAgo = (date: Date | number | string) => {
   return dayjs(date).fromNow();
 };
 
-const target = "https://i.111666.best";
+const target = "/api/imgs/upload";
 
 export const onUploadImg = async (files: File[], callback: any) => {
+
+  if('uploadImg' in window){
+    // @ts-ignore
+    window['uploadImg'](files,callback)
+    return
+  }
+  
   const upload = async () => {
     const res = await Promise.all(
       files.map(async (f) => {
         const form = new FormData();
-        form.append("image", f);
-        const headers = {
-          "Auth-Token": "UrQsI696geWByeif6s34dFkmiTYrCV4dpMIk1qZlPYoPr8AfuQ",
-        };
-
-        return (await $fetch(`${target}/image`, {
+        form.append("file", f);
+        return (await $fetch(target, {
           method: "POST",
           body: form,
-          headers,
-        })) as { ok: boolean; src: string };
+        })) as any;
       })
     );
     callback(
       res.map((r) => ({
-        url: `${target}${r.src}`,
+        url: `${r.data.uploadPath.replace(/http:/, 'https:')}`,
         alt: "alt",
         title: "title",
       }))
