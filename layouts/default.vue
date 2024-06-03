@@ -27,7 +27,7 @@
       </div>
     </USlideover>
 
-    <x-header></x-header>
+    <x-header :siteName="sysconfig.websiteName"></x-header>
     <div class="main flex max-w-[1080px] mx-auto h-full gap-4">
       <div class="flex-1 w-full">
         <slot />
