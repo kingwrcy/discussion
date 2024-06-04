@@ -3,7 +3,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "husky && husky install",
     "build": "APP_ENV=build nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
@@ -48,7 +48,7 @@
     "@types/pg": "^8.11.6",
     "@types/shortid": "^0.0.32",
     "eslint": "9.4.0",
-    "husky": "^9.0.11",
+    "husky": "^8.0.0",
     "lint-staged": "^15.2.5",
     "typescript": "^5.4.5"
   },
@@ -63,5 +63,4 @@
       "git add"
     ]
   }
-
 }
