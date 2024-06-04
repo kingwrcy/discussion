@@ -11,9 +11,7 @@
               <UInput v-model="state.pid" />
             </UFormGroup>
           </div>
-          <UButton type="button" @click="reload">
-            查询
-          </UButton>
+          <UButton type="button" @click="reload"> 查询 </UButton>
         </div>
       </div>
     </template>
@@ -31,11 +29,11 @@
       </template>
       <template #content-data="{ row }">
         <div class="max-w-[300px] line-clamp-3 text-wrap" :title="row.content">
-            {{ row.content }}         
+          {{ row.content }}
         </div>
       </template>
       <template #createdAt-data="{ row }">
-        {{ dateFormat(row.createdAt)}}
+        {{ dateFormat(row.createdAt) }}
       </template>
       <template #actions-data="{ row }">
         <div class="space-x-2">
@@ -44,29 +42,33 @@
       </template>
     </UTable>
     <template #footer>
-      <UPagination size="sm" :to="(page: number) => ({
+      <UPagination
+        size="sm"
+        :to="(page: number) => ({
         query: { page },
-      })" class="my-2" v-model="state.page" :page-count="state.size" :total="total" v-if="total > state.size" />
+      })"
+        class="my-2"
+        v-model="state.page"
+        :page-count="state.size"
+        :total="total"
+        v-if="total > state.size"
+      />
     </template>
   </UCard>
 </template>
 
 <script lang="ts" setup>
-import { toast } from 'vue-sonner';
-import type { CommentDTO } from '~/types';
+import { toast } from "vue-sonner";
+import type { CommentDTO } from "~/types";
 
 useHead({
-  title:"评论管理",
-  meta:[
-    {name:"keywords",content:"极简论坛"},
-    {name:"description",content:"极简论坛"},
-  ],
-})
+  title: "评论管理"
+});
 
-const route = useRoute()
+const route = useRoute();
 definePageMeta({
-  layout: 'backend'
-})
+  layout: "backend"
+});
 
 const state = reactive({
   page: parseInt(route.query.page as any as string) || 1,
@@ -74,54 +76,60 @@ const state = reactive({
   begin: undefined,
   end: undefined,
   pid: "",
-  username: "",
-})
+  username: ""
+});
 
-const columns = [{
-  key: 'author.avatarUrl',
-  label: '头像'
-}, {
-  key: 'author.username',
-  label: '用户名称'
-}, {
-  key: 'post.title',
-  label: '帖子标题',
-}, {
-  key: 'content',
-  label: '评论内容'
-}, {
-  key: 'createdAt',
-  label: '创建时间'
-}, {
-  key: 'actions'
-}]
+const columns = [
+  {
+    key: "author.avatarUrl",
+    label: "头像"
+  },
+  {
+    key: "author.username",
+    label: "用户名称"
+  },
+  {
+    key: "post.title",
+    label: "帖子标题"
+  },
+  {
+    key: "content",
+    label: "评论内容"
+  },
+  {
+    key: "createdAt",
+    label: "创建时间"
+  },
+  {
+    key: "actions"
+  }
+];
 
-
-const doRemove = async (row:CommentDTO)=>{
+const doRemove = async (row: CommentDTO) => {
   await $fetch(`/api/manage/comment/delete?cid=${row.cid}`, {
-    method: 'POST',
-  })
-  await toast.success('操作成功')
-  await reload()
-}
+    method: "POST"
+  });
+  await toast.success("操作成功");
+  await reload();
+};
 
-let { data: commentListRes } = await useFetch('/api/manage/commentList', {
-  method: 'POST',
+let { data: commentListRes } = await useFetch("/api/manage/commentList", {
+  method: "POST",
   body: JSON.stringify(state)
-})
+});
 
-const commentList = computed(() => commentListRes?.value?.comments as any as CommentDTO[])
-const total = computed(() => commentListRes?.value?.total as number)
+const commentList = computed(() => commentListRes?.value?.comments as any as CommentDTO[]);
+const total = computed(() => commentListRes?.value?.total as number);
 
 const reload = async () => {
-  const res = await $fetch('/api/manage/commentList', {
-    method: 'POST',
+  const res = await $fetch("/api/manage/commentList", {
+    method: "POST",
     body: JSON.stringify(state)
-  })
-  commentListRes.value = res
-}
+  });
+  commentListRes.value = res;
+};
 
-watch(() => route.fullPath, reload)
+watch(() => route.fullPath, reload);
 </script>
 
 <style scoped></style>

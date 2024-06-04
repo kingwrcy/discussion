@@ -4,8 +4,7 @@
       <div class="text-center text-sm">注册用户</div>
     </template>
     <div class="flex flex-col my-2 lg:w-[300px] mx-auto">
-      <UForm :schema="regRequestSchema" :state="state" :validate-on="['submit']" class="space-y-4" @submit="onSubmit"
-        autocomplete="off">
+      <UForm :schema="regRequestSchema" :state="state" :validate-on="['submit']" class="space-y-4" @submit="onSubmit" autocomplete="off">
         <UFormGroup label="用户名" name="username">
           <UInput v-model="state.username" autocomplete="off" />
         </UFormGroup>
@@ -19,56 +18,47 @@
           <UInput v-model="state.repeatPassword" type="password" autocomplete="on" />
         </UFormGroup>
         <div>
-          <UButton type="submit" :loading="pending">
-            注册账户
-          </UButton>
-          <NuxtLink to="/member/login" class="text-primary text-sm ml-2 underline underline-offset-4">已有账户?去登录
-          </NuxtLink>
+          <UButton type="submit" :loading="pending"> 注册账户 </UButton>
+          <NuxtLink to="/member/login" class="text-primary text-sm ml-2 underline underline-offset-4">已有账户?去登录 </NuxtLink>
         </div>
       </UForm>
     </div>
-
-
   </UCard>
 </template>
 
 <script lang="ts" setup>
-import { z } from 'zod'
-import type { FormSubmitEvent } from '#ui/types'
-import { regRequestSchema } from '~/types';
-import { toast } from 'vue-sonner';
+import { z } from "zod";
+import type { FormSubmitEvent } from "#ui/types";
+import { regRequestSchema } from "~/types";
+import { toast } from "vue-sonner";
 
-type Schema = z.output<typeof regRequestSchema>
+type Schema = z.output<typeof regRequestSchema>;
 
 useHead({
-  title: `注册用户`,
-  meta: [
-    { name: "keywords", content: "极简论坛" },
-    { name: "description", content: "极简论坛" },
-  ],
-})
+  title: `注册用户`
+});
 
 const state = reactive<Schema>({
   email: "",
   password: "",
   username: "",
   repeatPassword: ""
-})
-const pending = ref(false)
+});
+const pending = ref(false);
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  pending.value = true
-  const result = await $fetch('/api/member/reg', {
-    method: 'POST',
+  pending.value = true;
+  const result = await $fetch("/api/member/reg", {
+    method: "POST",
     body: JSON.stringify(event.data)
-  })
+  });
   if (result.success) {
-    toast.success('注册成功,去登录吧')
-    navigateTo('/member/login')
-  } else if ('message' in result) {
-    toast.error('注册失败,' + (result.message))
+    toast.success("注册成功,去登录吧");
+    navigateTo("/member/login");
+  } else if ("message" in result) {
+    toast.error("注册失败," + result.message);
   }
-  pending.value = false
+  pending.value = false;
 }
 </script>
 

@@ -12,17 +12,25 @@
       <template #actions-data="{ row }">
         <div class="space-x-2">
           <UButton color="white" @click="doEdit(row)">编辑</UButton>
-          <UButton color="gray" @click="toggleHot(row)">{{ row.hot ? '取消' : '设为' }}热门</UButton>
+          <UButton color="gray" @click="toggleHot(row)">{{ row.hot ? "取消" : "设为" }}热门</UButton>
         </div>
       </template>
       <template #hot-data="{ row }">
-        {{ row.hot ? '是' : '否' }}
+        {{ row.hot ? "是" : "否" }}
       </template>
     </UTable>
     <template #footer>
-      <UPagination size="sm" :to="(page: number) => ({
+      <UPagination
+        size="sm"
+        :to="(page: number) => ({
         query: { page },
-      })" class="my-2" v-model="page" :page-count="size" :total="total || 0" v-if="total > size" />
+      })"
+        class="my-2"
+        v-model="page"
+        :page-count="size"
+        :total="total || 0"
+        v-if="total > size"
+      />
     </template>
   </UCard>
 
@@ -43,117 +51,122 @@
 </template>
 
 <script lang="ts" setup>
-import { toast } from 'vue-sonner';
-import type { TagDTO } from '~/types';
+import { toast } from "vue-sonner";
+import type { TagDTO } from "~/types";
 useHead({
-  title:"标签管理",
-  meta:[
-    {name:"keywords",content:"极简论坛"},
-    {name:"description",content:"极简论坛"},
-  ],
-})
-const route = useRoute()
+  title: "标签管理"
+});
+const route = useRoute();
 definePageMeta({
-  layout: 'backend'
-})
+  layout: "backend"
+});
 
-const page = ref(parseInt(route.query.page as any as string) || 1)
-const size = ref(20)
+const page = ref(parseInt(route.query.page as any as string) || 1);
+const size = ref(20);
 
 const saveState = reactive({
-  name: '',
-  desc: '',
-  enName: '',
-  id: 0,
-})
+  name: "",
+  desc: "",
+  enName: "",
+  id: 0
+});
 
-const isOpen = ref(false)
+const isOpen = ref(false);
 
 const doEdit = (row: TagDTO) => {
-  saveState.name = row.name
-  saveState.desc = row.desc
-  saveState.enName = row.enName
-  saveState.id = row.id
-  isOpen.value = true
-}
+  saveState.name = row.name;
+  saveState.desc = row.desc;
+  saveState.enName = row.enName;
+  saveState.id = row.id;
+  isOpen.value = true;
+};
 
 const doAdd = () => {
-  saveState.name = ''
-  saveState.desc = ''
-  saveState.enName = ''
-  isOpen.value = true
-}
+  saveState.name = "";
+  saveState.desc = "";
+  saveState.enName = "";
+  isOpen.value = true;
+};
 
+const columns = [
+  {
+    key: "name",
+    label: "名称"
+  },
+  {
+    key: "enName",
+    label: "编码"
+  },
+  {
+    key: "desc",
+    label: "描述"
+  },
+  {
+    key: "hot",
+    label: "是否热门"
+  },
+  {
+    key: "count",
+    label: "帖子数量"
+  },
+  {
+    key: "actions"
+  }
+];
 
-const columns = [{
-  key: 'name',
-  label: '名称'
-},{
-  key: 'enName',
-  label: '编码'
-}, {
-  key: 'desc',
-  label: '描述'
-}, {
-  key: 'hot',
-  label: '是否热门',
-}, {
-  key: 'count',
-  label: '帖子数量',
-}, {
-  key: 'actions'
-}]
-
-page.value = parseInt(route.query.page as any as string) || 1
-let { data: tagListRes } = await useFetch('/api/manage/tagList', {
-  method: 'POST',
+page.value = parseInt(route.query.page as any as string) || 1;
+let { data: tagListRes } = await useFetch("/api/manage/tagList", {
+  method: "POST",
   body: JSON.stringify({
-    page: page.value, size: size.value
+    page: page.value,
+    size: size.value
   })
-})
-const tagList = computed(() => tagListRes?.value?.tags as any as TagDTO[])
-const total = computed(() => tagListRes?.value?.total as number)
+});
+const tagList = computed(() => tagListRes?.value?.tags as any as TagDTO[]);
+const total = computed(() => tagListRes?.value?.total as number);
 
 const saveTag = async () => {
-  if(!saveState.enName.trim() && !saveState.name.trim() && !saveState.desc.trim()){
-    toast.error('请填写完整,都是必填字段')
+  if (!saveState.enName.trim() && !saveState.name.trim() && !saveState.desc.trim()) {
+    toast.error("请填写完整,都是必填字段");
     return;
   }
-  await $fetch('/api/manage/saveTag', {
-    method: 'POST',
-    body: JSON.stringify(saveState),
-  })
-  isOpen.value = false
-  await reload(page.value)
-  toast.success('保存成功')
-}
+  await $fetch("/api/manage/saveTag", {
+    method: "POST",
+    body: JSON.stringify(saveState)
+  });
+  isOpen.value = false;
+  await reload(page.value);
+  toast.success("保存成功");
+};
 
 const toggleHot = async (tag: TagDTO) => {
-  await $fetch('/api/manage/toggleHot', {
-    method: 'POST',
+  await $fetch("/api/manage/toggleHot", {
+    method: "POST",
     body: JSON.stringify({
       id: tag.id
-    }),
-  })
-  await reload(page.value)
-}
+    })
+  });
+  await reload(page.value);
+};
 
-watch(() => route.fullPath, async () => {
-  const page = parseInt(route.query.page as any as string)
-  await reload(page)
-})
+watch(
+  () => route.fullPath,
+  async () => {
+    const page = parseInt(route.query.page as any as string);
+    await reload(page);
+  }
+);
 
 const reload = async (page: number) => {
-  const res = await $fetch('/api/manage/tagList', {
-    method: 'POST',
+  const res = await $fetch("/api/manage/tagList", {
+    method: "POST",
     body: JSON.stringify({
-      page: page, size: size.value
+      page: page,
+      size: size.value
     })
-  })
-  tagListRes.value = res
-}
-
-
+  });
+  tagListRes.value = res;
+};
 </script>
 
 <style scoped></style>
