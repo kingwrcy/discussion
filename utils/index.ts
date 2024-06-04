@@ -22,13 +22,7 @@ export function dateFormatAgo(date: Date | number | string) {
 const target = '/api/imgs/upload'
 
 export async function onUploadImg(files: File[], callback: any) {
-  if ('uploadImg' in window) {
-    // @ts-expect-error 自定义上传图片函数
-    window.uploadImg(files, callback)
-    return
-  }
-
-  const upload = async () => {
+  let upload = async () => {
     const res = await Promise.all(
       files.map(async (f) => {
         const form = new FormData()
@@ -47,6 +41,11 @@ export async function onUploadImg(files: File[], callback: any) {
       })),
     )
   }
+  if ('uploadImg' in window) {
+    // @ts-expect-error 自定义上传图片函数
+    upload = window.uploadImg
+  }
+
   toast.promise(upload, {
     loading: '上传中...请耐心等待..',
     success: () => {
