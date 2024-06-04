@@ -33,7 +33,7 @@ useHead({
   // where `%s` is replaced with the title
   titleTemplate: "%s - " + global.value.sysConfig.websiteName,
   meta: [
-    { name: "keywords", content: "极简论坛" },
+    { name: "keywords", content: global.value.sysConfig.websiteName },
     { name: "description", content: global.value.sysConfig.websiteName }
   ]
 });
