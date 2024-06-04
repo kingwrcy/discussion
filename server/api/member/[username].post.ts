@@ -1,8 +1,8 @@
 export default defineEventHandler(async (event) => {
-  const username = getRouterParam(event, "username");
+  const username = getRouterParam(event, 'username')
 
   if (!username) {
-    throw createError("用户不存在");
+    throw createError('用户不存在')
   }
 
   const user = await prisma.user.findUnique({
@@ -19,8 +19,8 @@ export default defineEventHandler(async (event) => {
         },
       },
     },
-  });
-  //@ts-ignore
-  delete user?.password;
-  return user;
-});
+  })
+  // @ts-expect-error 删除用户密码
+  delete user?.password
+  return user
+})

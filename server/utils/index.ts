@@ -1,22 +1,23 @@
-import short from "short-uuid";
+import short from 'short-uuid'
 
-import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "@prisma/client";
+import { PrismaPg } from '@prisma/adapter-pg'
+import { PrismaClient } from '@prisma/client'
 
-import pg from "pg";
-const { Pool } = pg;
+import pg from 'pg'
 
-const connectionString = `${process.env.DATABASE_URL}`;
-const pool = new Pool({ connectionString });
-const adapter = new PrismaPg(pool);
-export const prisma = new PrismaClient({ adapter });
+const { Pool } = pg
 
-const config = useRuntimeConfig();
+const connectionString = `${process.env.DATABASE_URL}`
+const pool = new Pool({ connectionString })
+const adapter = new PrismaPg(pool)
+export const prisma = new PrismaClient({ adapter })
 
-export const randomId = () => {
-  return short.generate().toString();
-};
+const config = useRuntimeConfig()
 
-export const getAvatarUrl = (hash: string) => {
-  return `${config.public.avatarCdn}${hash}`;
-};
+export function randomId() {
+  return short.generate().toString()
+}
+
+export function getAvatarUrl(hash: string) {
+  return `${config.public.avatarCdn}${hash}`
+}

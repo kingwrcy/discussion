@@ -1,32 +1,32 @@
-import { Prisma } from "@prisma/client";
+import type { Prisma } from '@prisma/client'
 
-type ListPostRequest = {
-  page: number;
-  size: number;
-  uid?: string;
-  tag?: string;
-  query?: string;
-};
+interface ListPostRequest {
+  page: number
+  size: number
+  uid?: string
+  tag?: string
+  query?: string
+}
 
 export default defineEventHandler(async (event) => {
-  const request = (await readBody(event)) as ListPostRequest;
+  const request = (await readBody(event)) as ListPostRequest
 
-  const where: Prisma.PostWhereInput = {};
-  const uid = event.context.uid;
+  const where: Prisma.PostWhereInput = {}
+  const uid = event.context.uid
 
   if (request.page <= 0 && !request.page) {
-    request.page = 1;
+    request.page = 1
   }
   if (request.size <= 0 && !request.size) {
-    request.size = 20;
+    request.size = 20
   }
   if (request.uid) {
-    where.uid = request.uid;
+    where.uid = request.uid
   }
   if (request.tag) {
     where.tag = {
       enName: request.tag,
-    };
+    }
   }
 
   const include = {
@@ -47,45 +47,45 @@ export default defineEventHandler(async (event) => {
     comments: false,
     fav: true,
     lastCommentUser: true,
-  };
+  }
 
-  let pinnedPost = await prisma.post.findMany({
+  const pinnedPost = await prisma.post.findMany({
     where: { ...where, pinned: true },
     include,
     orderBy: [
       {
-        pinned: "desc",
+        pinned: 'desc',
       },
       {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
     ],
-  });
+  })
   let posts = await prisma.post.findMany({
     where: { ...where, pinned: false },
     include,
     orderBy: {
-      point: "desc",
+      point: 'desc',
     },
     skip: (request.page - 1) * request.size,
     take: request.size,
-  });
+  })
 
-  posts = [...pinnedPost, ...posts];
+  posts = [...pinnedPost, ...posts]
   const total = await prisma.post.count({
     where,
-  });
+  })
 
   const postsWithExtraInfo = posts.map((post) => {
     return {
       ...post,
-      fav: uid && post.fav && post.fav.length > 0 ? true : false,      
-    };
-  });
+      fav: !!(uid && post.fav && post.fav.length > 0),
+    }
+  })
 
   return {
     success: true,
     posts: postsWithExtraInfo,
-    total
-  };
-});
+    total,
+  }
+})

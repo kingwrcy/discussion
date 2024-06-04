@@ -1,22 +1,20 @@
-type ListMessageRequest = {
-  page: number;
-  size: number;
-  username:string;
-};
+interface ListMessageRequest {
+  page: number
+  size: number
+  username: string
+}
 
 export default defineEventHandler(async (event) => {
   if (!event.context.uid) {
-    throw createError("请先去登录");
+    throw createError('请先去登录')
   }
-  const request = (await readBody(event)) as ListMessageRequest;
-
-
+  const request = (await readBody(event)) as ListMessageRequest
 
   const messages = await prisma.message.findMany({
     where: {
-      to:{
-        username:request.username
-      }
+      to: {
+        username: request.username,
+      },
     },
     include: {
       from: {
@@ -33,20 +31,20 @@ export default defineEventHandler(async (event) => {
       },
     },
     orderBy: {
-      createdAt: "desc",
+      createdAt: 'desc',
     },
     skip: (request.page - 1) * request.size,
     take: request.size,
-  });
+  })
 
   const total = await prisma.message.count({
     where: {
       toUid: event.context.uid,
     },
-  });
+  })
   return {
     success: true,
     messages,
     total,
-  };
-});
+  }
+})

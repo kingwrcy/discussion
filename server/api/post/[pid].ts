@@ -1,19 +1,19 @@
-type req = {
-  page: number;
-  size: number;
-  count?: boolean;
-};
+interface req {
+  page: number
+  size: number
+  count?: boolean
+}
 
 export default defineEventHandler(async (event) => {
-  const pid = getRouterParam(event, "pid");
-  const body = (await readBody(event)) as req;
+  const pid = getRouterParam(event, 'pid')
+  const body = (await readBody(event)) as req
   if (!pid) {
-    throw createError("不存在的帖子");
+    throw createError('不存在的帖子')
   }
 
-  const page = (body.page as number) || 1;
-  const size = (body.size as number) || 20;
-  const uid = event.context.uid;
+  const page = (body.page as number) || 1
+  const size = (body.size as number) || 20
+  const uid = event.context.uid
 
   if (body.count) {
     await prisma.post.update({
@@ -25,12 +25,12 @@ export default defineEventHandler(async (event) => {
           increment: 1,
         },
       },
-    });
+    })
   }
 
   const post = await prisma.post.findFirst({
     where: {
-      pid: pid,
+      pid,
     },
     include: {
       lastCommentUser: {
@@ -68,7 +68,7 @@ export default defineEventHandler(async (event) => {
           },
           likes: {
             where: {
-              uid: uid,
+              uid,
             },
             select: {
               uid: true,
@@ -77,7 +77,7 @@ export default defineEventHandler(async (event) => {
           },
           dislikes: {
             where: {
-              uid: uid,
+              uid,
             },
             select: {
               uid: true,
@@ -94,7 +94,7 @@ export default defineEventHandler(async (event) => {
         take: size,
         skip: (page - 1) * size,
         orderBy: {
-          createdAt: "asc",
+          createdAt: 'asc',
         },
       },
       fav: true,
@@ -105,7 +105,7 @@ export default defineEventHandler(async (event) => {
         },
       },
     },
-  });
+  })
 
   if (uid) {
     const unReadCount = await prisma.message.count({
@@ -114,7 +114,7 @@ export default defineEventHandler(async (event) => {
         read: false,
         relationId: pid,
       },
-    });
+    })
     if (unReadCount > 0) {
       await prisma.message.updateMany({
         where: {
@@ -125,7 +125,7 @@ export default defineEventHandler(async (event) => {
         data: {
           read: true,
         },
-      });
+      })
     }
   }
 
@@ -133,9 +133,9 @@ export default defineEventHandler(async (event) => {
     success: true,
     post: {
       ...post,
-      support: uid ? post?.PostSupport.length! > 0 : false,
-      fav: uid ? post?.fav.length! > 0 : false,
-      comments: post?.comments.map((comment) => ({
+      support: uid ? post!.PostSupport.length! > 0 : false,
+      fav: uid ? post!.fav.length! > 0 : false,
+      comments: post?.comments.map(comment => ({
         ...comment,
         like: uid ? comment.likes.length > 0 : false,
         dislike: uid ? comment.dislikes.length > 0 : false,
@@ -143,7 +143,7 @@ export default defineEventHandler(async (event) => {
         dislikeCount: comment._count.dislikes,
       })),
     },
-  };
+  }
 
-  return res;
-});
+  return res
+})

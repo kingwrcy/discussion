@@ -1,3 +1,50 @@
+<script lang="ts" setup>
+import { MdPreview } from 'md-editor-v3'
+import { UserRole } from '@prisma/client'
+import type { CommentDTO, UserDTO } from '~/types'
+
+const props = defineProps<CommentDTO>()
+const userinfo = useState<UserDTO | undefined>('userinfo')
+const config = useRuntimeConfig()
+const token = useCookie(config.public.tokenKey)
+
+const route = useRoute()
+const state = reactive({
+  like: props.like,
+  dislike: props.dislike,
+  likeCount: props.likeCount,
+  dislikeCount: props.dislikeCount,
+})
+
+function quoted() {
+  commentQuoted.emit({
+    username: props.author.username,
+    pid: props.post!.pid!,
+    floor: props.floor,
+  })
+}
+
+async function doLike() {
+  if (token && userinfo && userinfo.value?.uid !== props.author.uid) {
+    const res = await $fetch(`/api/comment/like?cid=${props.cid}`, {
+      method: 'POST',
+    })
+    Object.assign(state, res)
+    userCardChanged.emit()
+  }
+}
+
+async function doDisLike() {
+  if (token && userinfo && userinfo.value?.uid !== props.author.uid) {
+    const res = await $fetch(`/api/comment/dislike?cid=${props.cid}`, {
+      method: 'POST',
+    })
+    Object.assign(state, res)
+    userCardChanged.emit()
+  }
+}
+</script>
+
 <template>
   <div class="px-4 flex space-x-2  items-start py-2 ">
     <NuxtLink :to="`/member/${author.username}`">
@@ -7,9 +54,13 @@
       <div class="flex space-x-4 text-xs mt-1 text-gray-500">
         <div class="flex  items-center space-x-1 cursor-pointer hover:text-primary/80 font-semibold">
           <UIcon name="i-carbon-user" />
-          <NuxtLink :to="`/member/${author.username}`">{{ author.username }} </NuxtLink>
-          <span v-if="author.role === UserRole.ADMIN"
-            class="text-[11px] ml-1 bg-green-500 text-white rounded px-1">mod</span>
+          <NuxtLink :to="`/member/${author.username}`">
+            {{ author.username }}
+          </NuxtLink>
+          <span
+            v-if="author.role === UserRole.ADMIN"
+            class="text-[11px] ml-1 bg-green-500 text-white rounded px-1"
+          >mod</span>
         </div>
 
         <div class="flex items-center space-x-1 text-primary/40">
@@ -20,73 +71,31 @@
           <UIcon name="i-carbon-favorite" :class="[state.like ? 'text-red-500' : '']" />
           <span>{{ state.likeCount ?? 0 }}</span>
         </div>
-        <div title="反对" class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer"
-          @click="doDisLike">
+        <div
+          title="反对" class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer"
+          @click="doDisLike"
+        >
           <UIcon name="i-carbon-thumbs-down" :class="[state.dislike ? 'text-yellow-500' : '']" />
           <span>{{ state.dislikeCount ?? 0 }}</span>
         </div>
-        <div v-if="token && userinfo && userinfo.uid !== props.author.uid"
-          class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer" @click="quoted">
+        <div
+          v-if="token && userinfo && userinfo.uid !== props.author.uid"
+          class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer" @click="quoted"
+        >
           <UIcon name="i-carbon-reply" />
           回复
-        </div>        
+        </div>
       </div>
       <div class="text-gray-600  text-sm  hover:text-primary/80">
         <MdPreview :model-value="content" :editor-id="cid" no-mermaid no-katex />
-      </div>      
+      </div>
     </div>
 
-    <div class="flex md:gap-x-2 items-center" >
-      <XUserSig :signature="author.signature" v-if="author.signature" />
-      <a v-if="route.fullPath.startsWith('/post')" class="md:ml-4 text-sm text-primary/40 select-none cursor-pointer" :href="`#${props.floor}`" :id="`${props.floor}`">#{{ props.floor }}</a>
+    <div class="flex md:gap-x-2 items-center">
+      <XUserSig v-if="author.signature" :signature="author.signature" />
+      <a v-if="route.fullPath.startsWith('/post')" :id="`${props.floor}`" class="md:ml-4 text-sm text-primary/40 select-none cursor-pointer" :href="`#${props.floor}`">#{{ props.floor }}</a>
     </div>
   </div>
 </template>
 
-<script lang="ts" setup>
-import { MdPreview } from "md-editor-v3";
-import type { CommentDTO, UserDTO } from "~/types";
-import { UserRole } from '@prisma/client';
-
-const userinfo = useState<UserDTO | undefined>('userinfo')
-const config = useRuntimeConfig()
-const token = useCookie(config.public.tokenKey)
-
-const props = defineProps<CommentDTO>();
-const route = useRoute()
-const state = reactive({
-  like: props.like,
-  dislike: props.dislike,
-  likeCount:props.likeCount,
-  dislikeCount:props.dislikeCount,
-});
-
-const quoted = () => {
-  commentQuoted.emit({
-    username: props.author.username,
-    pid: props.post?.pid!,
-    floor: props.floor
-  })
-}
-
-const doLike = async () => {
-  if (token && userinfo && userinfo.value?.uid !== props.author.uid) {
-    const res = await $fetch(`/api/comment/like?cid=${props.cid}`, {
-      method: "POST",
-    });
-    Object.assign(state, res)
-    userCardChanged.emit()
-  }
-}
-
-const doDisLike = async () => {
-  if (token && userinfo && userinfo.value?.uid !== props.author.uid) {
-    const res = await $fetch(`/api/comment/dislike?cid=${props.cid}`, {
-      method: "POST",
-    });
-    Object.assign(state, res)
-    userCardChanged.emit()
-  }
-}
-</script>
 <style scoped></style>

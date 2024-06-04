@@ -1,15 +1,19 @@
 {
   "name": "nuxt-app",
-  "private": true,
   "type": "module",
+  "private": true,
   "scripts": {
+    "prepare": "husky install",
     "build": "APP_ENV=build nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "exportSql": "npx prisma migrate diff --from-empty --to-schema-datasource prisma/schema.prisma --script > prisma/migrations/20240516050303_init/migration.sql",
-    "devExportSql": "npx prisma migrate diff --to-schema-datamodel prisma\\schema.prisma --from-migrations prisma\\migrations --shadow-database-url postgresql://postgres:a123456@localhost:5432/discuss --script"
+    "devExportSql": "npx prisma migrate diff --to-schema-datamodel prisma\\schema.prisma --from-migrations prisma\\migrations --shadow-database-url postgresql://postgres:a123456@localhost:5432/discuss --script",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint-staged": "lint-staged"
   },
   "dependencies": {
     "@iconify-json/carbon": "^1.1.32",
@@ -17,8 +21,8 @@
     "@prisma/adapter-pg": "^5.14.0",
     "@prisma/client": "5.14.0",
     "@vueuse/components": "^10.10.0",
-    "@vueuse/core": "^10.9.0",
-    "@vueuse/nuxt": "^10.9.0",
+    "@vueuse/core": "^10.10.0",
+    "@vueuse/nuxt": "^10.10.0",
     "bcryptjs": "^2.4.3",
     "dayjs": "^1.11.11",
     "js-sha256": "^0.11.0",
@@ -37,11 +41,27 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^2.20.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/markdown-it-link-attributes": "^3.0.5",
     "@types/pg": "^8.11.6",
     "@types/shortid": "^0.0.32",
+    "eslint": "9.4.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.5",
     "typescript": "^5.4.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,vue,jsx,tsx}": [
+      "eslint --cache --fix",
+      "git add"
+    ]
   }
+
 }

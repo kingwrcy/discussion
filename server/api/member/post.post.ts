@@ -1,31 +1,31 @@
-import { Prisma } from "@prisma/client";
+import type { Prisma } from '@prisma/client'
 
-type ListPostRequest = {
-  page: number;
-  size: number;
-  username: string;
-};
+interface ListPostRequest {
+  page: number
+  size: number
+  username: string
+}
 
 export default defineEventHandler(async (event) => {
-  const request = (await readBody(event)) as ListPostRequest;
+  const request = (await readBody(event)) as ListPostRequest
 
-  const where: Prisma.PostWhereInput = {};
+  const where: Prisma.PostWhereInput = {}
   const user = await prisma.user.findUnique({
     where: { username: request.username },
-  });
+  })
   if (!user) {
-    throw createError("用户不存在");
+    throw createError('用户不存在')
   }
 
   if (request.page <= 0 && !request.page) {
-    request.page = 1;
+    request.page = 1
   }
   if (request.size <= 0 && !request.size) {
-    request.size = 20;
+    request.size = 20
   }
-  where.uid = user.uid;
+  where.uid = user.uid
 
-  let posts = await prisma.post.findMany({
+  const posts = await prisma.post.findMany({
     where,
     include: {
       _count: {
@@ -41,22 +41,22 @@ export default defineEventHandler(async (event) => {
         },
       },
       tag: true,
-      comments: false,      
+      comments: false,
     },
     orderBy: {
-      createdAt: "desc",
+      createdAt: 'desc',
     },
 
     skip: (request.page - 1) * request.size,
     take: request.size,
-  });
+  })
   const total = await prisma.post.count({
     where,
-  });
+  })
 
   return {
     success: true,
     posts,
     total,
-  };
-});
+  }
+})

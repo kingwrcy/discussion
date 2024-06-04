@@ -1,65 +1,51 @@
-<template>
-  <div class="flex flex-col  py-2 w-full " v-if="token">
-    <MdEditor :theme="mode as any" ref="editorRef" style="height:200px;" @on-upload-img="onUploadImg"
-      v-model="state.content" :preview="false" :toolbars="toolbars" :editor-id="`post-${pid}`">
-      <template #defToolbars>
-        <XEmoji />
-        <XYoutubeDialog />
-      </template>
-    </MdEditor>
-    <div class="flex my-2">
-      <UButton @click="reply">发表评论(Ctrl+Enter提交)</UButton>
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
-import type { ToolbarNames } from 'md-editor-v3';
-import { MdEditor } from 'md-editor-v3';
-import type { CommentQuotedPayload } from '~/utils/eventbus';
+import type { ToolbarNames } from 'md-editor-v3'
+import { MdEditor } from 'md-editor-v3'
 import { useColorMode } from '@vueuse/core'
+import type { CommentQuotedPayload } from '~/utils/eventbus'
 
+const props = defineProps<{
+  pid: string
+}>()
+const emits = defineEmits(['commented'])
 const mode = useColorMode()
 const editorRef = ref()
 const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)
-const props = defineProps<{
-  pid: string
-}>()
 
-const handleKeyDown = async (event: KeyboardEvent) => {
+const state = reactive({
+  content: '',
+})
+
+async function handleKeyDown(event: KeyboardEvent) {
   if (event.ctrlKey && event.key === 'Enter') {
     await reply()
   }
-};
+}
 
 onMounted(() => {
-  window.addEventListener('keydown', handleKeyDown);
-});
+  window.addEventListener('keydown', handleKeyDown)
+})
 
 onUnmounted(() => {
-  window.removeEventListener('keydown', handleKeyDown);
-});
+  window.removeEventListener('keydown', handleKeyDown)
+})
 
 commentQuoted.on((param: CommentQuotedPayload) => {
   let content = ''
   if (state.content.length > 0) {
     content = '\r\n'
-  } else {
-
   }
-  content = content + `@${param.username} [#${param.floor}](/post/${param.pid}#${param.floor}) `
+  content = `${content}@${param.username} [#${param.floor}](/post/${param.pid}#${param.floor}) `
   editorRef.value?.insert(() => {
     return {
       targetValue: content,
       select: false,
       deviationStart: state.content.length + content.length + 1,
-      deviationEnd: 0
+      deviationEnd: 0,
     }
   })
 })
-
-const emits = defineEmits(['commented'])
 
 const toolbars: ToolbarNames[] = [
   0,
@@ -76,18 +62,15 @@ const toolbars: ToolbarNames[] = [
   'image',
   'table',
   'preview',
-];
-const state = reactive({
-  content: ""
-})
+]
 
-const reply = async () => {
+async function reply() {
   const res = await $fetch('/api/comment/new', {
     method: 'POST',
     body: JSON.stringify({
       content: state.content.trim(),
-      pid: props.pid
-    })
+      pid: props.pid,
+    }),
   })
   if (res.success) {
     state.content = ''
@@ -96,5 +79,24 @@ const reply = async () => {
   }
 }
 </script>
+
+<template>
+  <div v-if="token" class="flex flex-col  py-2 w-full ">
+    <MdEditor
+      ref="editorRef" v-model="state.content" :theme="mode as any" style="height:200px;"
+      :preview="false" :toolbars="toolbars" :editor-id="`post-${pid}`" @on-upload-img="onUploadImg"
+    >
+      <template #defToolbars>
+        <XEmoji />
+        <XYoutubeDialog />
+      </template>
+    </MdEditor>
+    <div class="flex my-2">
+      <UButton @click="reply">
+        发表评论(Ctrl+Enter提交)
+      </UButton>
+    </div>
+  </div>
+</template>
 
 <style scoped></style>

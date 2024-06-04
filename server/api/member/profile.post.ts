@@ -1,6 +1,6 @@
 export default defineEventHandler(async (event) => {
   if (!event.context.uid) {
-    return {};
+    return {}
   }
 
   const user = await prisma.user.findUnique({
@@ -14,18 +14,18 @@ export default defineEventHandler(async (event) => {
         },
       },
     },
-  });
+  })
 
   const unRead = await prisma.message.count({
     where: {
       toUid: event.context.uid,
       read: false,
     },
-  });
-  //@ts-ignore
-  delete user?.password;
+  })
+  // @ts-expect-error 删除用户密码
+  delete user.password
   return {
     ...user,
     unRead,
-  };
-});
+  }
+})

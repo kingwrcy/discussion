@@ -1,3 +1,64 @@
+<script lang="ts" setup>
+import type { ToolbarNames } from 'md-editor-v3'
+import { MdEditor } from 'md-editor-v3'
+import { toast } from 'vue-sonner'
+
+useHead({
+  title: '系统设置',
+})
+definePageMeta({
+  layout: 'backend',
+})
+
+const toolbars: ToolbarNames[] = [
+  'bold',
+  'underline',
+  '-',
+  'strikeThrough',
+  'quote',
+  'unorderedList',
+  'orderedList',
+  '-',
+  'codeRow',
+  'code',
+  'link',
+  'image',
+  'table',
+  '-',
+  'revoke',
+  'next',
+  '=',
+  'preview',
+]
+
+const state = reactive({
+  websiteName: '极简论坛',
+  pointPerPost: 5,
+  pointPerPostByDay: 20,
+  pointPerComment: 1,
+  pointPerCommentByDay: 20,
+  pointPerLikeOrDislike: 1,
+  pointPerDaySignInMin: 1,
+  pointPerDaySignInMax: 10,
+  websiteAnnouncement: ``,
+  css: '',
+  js: '',
+})
+
+const { data: configData, refresh } = await useFetch('/api/manage/config/get', { method: 'POST' })
+
+Object.assign(state, configData.value?.config)
+
+async function saveSettings() {
+  await $fetch('/api/manage/config/save', {
+    method: 'POST',
+    body: JSON.stringify(state),
+  })
+  await refresh()
+  toast.success('保存成功')
+}
+</script>
+
 <template>
   <UCard class="flex-1">
     <div class="flex flex-col space-y-2">
@@ -9,8 +70,10 @@
 
       <div class="flex flex-row space-x-2">
         <UFormGroup label="站点公告" name="websiteAnnouncement">
-          <MdEditor style="height:200px;" @on-upload-img="onUploadImg" v-model="state.websiteAnnouncement" :preview="false"
-            :toolbars="toolbars" editor-id="sysSettings" />
+          <MdEditor
+            v-model="state.websiteAnnouncement" style="height:200px;" :preview="false" :toolbars="toolbars"
+            editor-id="sysSettings" @on-upload-img="onUploadImg"
+          />
         </UFormGroup>
       </div>
 
@@ -36,7 +99,6 @@
         <UFormGroup label="每次点赞/点踩扣减积分" name="pointPerLikeOrDislike">
           <UInput v-model.number="state.pointPerLikeOrDislike" autocomplete="off" />
         </UFormGroup>
-
       </div>
       <div class="flex flex-row space-x-2">
         <UFormGroup label="每天签到送积分(最小)" name="pointPerDaySignInMin">
@@ -61,72 +123,11 @@
         </div>
       </div>
 
-      <UButton @click="saveSettings" class="w-fit">保存</UButton>
-
+      <UButton class="w-fit" @click="saveSettings">
+        保存
+      </UButton>
     </div>
   </UCard>
 </template>
-
-<script lang="ts" setup>
-import type { ToolbarNames } from 'md-editor-v3';
-import { MdEditor } from 'md-editor-v3';
-import { toast } from 'vue-sonner';
-useHead({
-  title: "系统设置"
-})
-const route = useRoute()
-definePageMeta({
-  layout: 'backend'
-})
-
-const toolbars: ToolbarNames[] = [
-  'bold',
-  'underline',
-  '-',
-  'strikeThrough',
-  'quote',
-  'unorderedList',
-  'orderedList',
-  '-',
-  'codeRow',
-  'code',
-  'link',
-  'image',
-  'table',
-  '-',
-  'revoke',
-  'next',
-  '=',
-  'preview',
-];
-
-const state = reactive({
-  websiteName: '极简论坛',
-  pointPerPost: 5,
-  pointPerPostByDay: 20,
-  pointPerComment: 1,
-  pointPerCommentByDay: 20,
-  pointPerLikeOrDislike: 1,
-  pointPerDaySignInMin: 1,
-  pointPerDaySignInMax: 10,
-  websiteAnnouncement: ``,
-  css: '',
-  js: "",
-})
-
-
-const { data: configData, refresh } = await useFetch('/api/manage/config/get', { method: 'POST' })
-
-Object.assign(state, configData.value?.config)
-
-const saveSettings = async () => {
-  await $fetch('/api/manage/config/save', {
-    method: 'POST',
-    body: JSON.stringify(state)
-  })
-  await refresh()
-  toast.success('保存成功')
-}
-</script>
 
 <style scoped></style>

@@ -1,6 +1,6 @@
 export default defineEventHandler(async (event) => {
-  const cid = getRouterParam(event, "cid");
-  const userId = event.context.userId;
+  const cid = getRouterParam(event, 'cid')
+  const userId = event.context.userId
 
   const comment = await prisma.comment.findUnique({
     where: {
@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
         },
       },
     },
-  });
+  })
   return {
     success: true,
     comment: {
@@ -45,5 +45,5 @@ export default defineEventHandler(async (event) => {
       dislike:
         userId && comment?.dislikes ? comment?.dislikes.length > 0 : false,
     },
-  };
-});
+  }
+})

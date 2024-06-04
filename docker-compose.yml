@@ -3,15 +3,15 @@ services:
   discussion:
     image: kingwrcy/discussion:latest
     container_name: discussion
-    #pull_policy: always
+    # pull_policy: always
     ports:
-      - "3000:3000"
+      - '3000:3000'
     links:
       - postgres
     depends_on:
       - postgres
     environment:
-      DATABASE_URL: "postgres://discussion-user:discussion-password@postgres/discussion"
+      DATABASE_URL: 'postgres://discussion-user:discussion-password@postgres/discussion'
   postgres:
     container_name: postgres
     image: postgres:alpine

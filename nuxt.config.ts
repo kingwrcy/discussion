@@ -1,16 +1,11 @@
-import { createRequire } from "module";
+import { createRequire } from 'node:module'
 
-
-
-
-
-const prismaClientPath = createRequire(import.meta.url).resolve("@prisma/client");
-import dayjs from "dayjs";
+const prismaClientPath = createRequire(import.meta.url).resolve('@prisma/client')
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ["@nuxt/ui",'@vueuse/nuxt','nuxt-scheduler'],  
+  modules: ['@nuxt/ui', '@vueuse/nuxt', 'nuxt-scheduler'],
   ui: {
-    icons: ["carbon"],
+    icons: ['carbon'],
   },
 
   devtools: {
@@ -18,18 +13,18 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      tokenKey: "",
-      avatarCdn: "",
+      tokenKey: '',
+      avatarCdn: '',
       cookieSecure: false,
     },
-    jwtSecretKey: "",
+    jwtSecretKey: '',
   },
   vite: {
     resolve: {
       alias: {
-        ".prisma/client/index-browser": prismaClientPath.replace("@prisma/client/default.js", ".prisma/client/index-browser.js"),
+        '.prisma/client/index-browser': prismaClientPath.replace('@prisma/client/default.js', '.prisma/client/index-browser.js'),
       },
     },
   },
 
-});
+})

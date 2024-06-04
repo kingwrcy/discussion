@@ -1,48 +1,28 @@
-<template>
-  <div>
-    <UTable :rows="pointList" :columns="columns" :ui="{ td: { padding: 'py-2' }, th: { padding: 'py-2' } }">
-      <template #createdAt-data="{ row }">
-        <div class="whitespace-pre-wrap">{{ dateFormat(row.createdAt) }}</div>
-      </template>
-      <template #post.title-data="{ row }">
-        <div class="max-w-[300px] text-wrap line-clamp-3" v-if="row.post">
-          <NuxtLink class="text-blue-500 whitespace-pre-wrap" :to="`/post/${row.post.pid}`">{{ row.post.title }}</NuxtLink>
-        </div>
-      </template>
-      <template #reason-data="{ row }">
-        {{ getReason(row.reason) }}
-      </template>
-      <template #empty-state>
-        <div class="text-center text-gray-400 my-4 text-sm">暂无积分变动</div>
-      </template>
-    </UTable>
-    <UPagination size="sm" :to="(page: number) => ({
-      query: { page },
-    })" class="my-2" v-model="state.page" :page-count="state.size" :total="total" v-if="total > state.size" />
-  </div>
-</template>
-
 <script lang="ts" setup>
-import type { PointReason } from '@prisma/client';
-import type { PointHistoryDTO } from '~/types';
+import type { PointReason } from '@prisma/client'
+import type { PointHistoryDTO } from '~/types'
+
+const props = defineProps({
+  username: String,
+})
 
 const route = useRoute()
 
 const columns = [{
   key: 'createdAt',
-  label: '时间'
+  label: '时间',
 }, {
   key: 'reason',
-  label: '事由'
+  label: '事由',
 }, {
   key: 'point',
-  label: '积分'
+  label: '积分',
 }, {
   key: 'post.title',
-  label: '帖子'
+  label: '帖子',
 }]
 
-const getReason = (reason: PointReason) => {
+function getReason(reason: PointReason) {
   switch (reason) {
     case 'POST':
       return '发帖'
@@ -61,31 +41,60 @@ const getReason = (reason: PointReason) => {
   }
 }
 
-const props = defineProps({
-  username: String
-})
 const state = reactive({
-  page: parseInt(route.query.page as any as string) || 1,
+  page: Number.parseInt(route.query.page as any as string) || 1,
   size: 10,
 })
 
-let { data: pointListRes } = await useFetch('/api/member/point', {
+const { data: pointListRes } = await useFetch('/api/member/point', {
   method: 'POST',
-  body: JSON.stringify({ ...state, username: props.username })
+  body: JSON.stringify({ ...state, username: props.username }),
 })
 
 const pointList = computed(() => pointListRes?.value?.points as any as PointHistoryDTO[])
 const total = computed(() => pointListRes?.value?.total as number)
 
-const reload = async () => {
+async function reload() {
   const res = await $fetch('/api/member/point', {
     method: 'POST',
-    body: JSON.stringify({ ...state, username: props.username })
+    body: JSON.stringify({ ...state, username: props.username }),
   })
   pointListRes.value = res
 }
 
 watch(() => route.fullPath, reload)
 </script>
+
+<template>
+  <div>
+    <UTable :rows="pointList" :columns="columns" :ui="{ td: { padding: 'py-2' }, th: { padding: 'py-2' } }">
+      <template #createdAt-data="{ row }">
+        <div class="whitespace-pre-wrap">
+          {{ dateFormat(row.createdAt) }}
+        </div>
+      </template>
+      <template #post.title-data="{ row }">
+        <div v-if="row.post" class="max-w-[300px] text-wrap line-clamp-3">
+          <NuxtLink class="text-blue-500 whitespace-pre-wrap" :to="`/post/${row.post.pid}`">
+            {{ row.post.title }}
+          </NuxtLink>
+        </div>
+      </template>
+      <template #reason-data="{ row }">
+        {{ getReason(row.reason) }}
+      </template>
+      <template #empty-state>
+        <div class="text-center text-gray-400 my-4 text-sm">
+          暂无积分变动
+        </div>
+      </template>
+    </UTable>
+    <UPagination
+      v-if="total > state.size" v-model="state.page" size="sm" :to="(page: number) => ({
+        query: { page },
+      })" class="my-2" :page-count="state.size" :total="total"
+    />
+  </div>
+</template>
 
 <style scoped></style>

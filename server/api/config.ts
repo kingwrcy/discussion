@@ -1,25 +1,26 @@
-import fs from "fs";
+import fs from 'node:fs'
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (_) => {
   const config = await prisma.sysConfig.findFirst({
     select: {
       content: true,
     },
-  });
-  let version = "1.0";
+  })
+  let version = '1.0'
   try {
-    if (fs.existsSync("/app/version")) {
-      version = await fs.readFileSync("/app/version", {
-        encoding: "utf8",
-        flag: "r",
-      });
+    if (fs.existsSync('/app/version')) {
+      version = await fs.readFileSync('/app/version', {
+        encoding: 'utf8',
+        flag: 'r',
+      })
     }
-  } catch (e) {
+  }
+  catch (e) {
     // console.log('read version file error',e)
   }
   return {
     success: true,
     data: config?.content,
     version,
-  };
-});
+  }
+})

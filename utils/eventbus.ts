@@ -1,8 +1,8 @@
-export const userCardChanged = useEventBus<void>("user-card-changed");
+export const userCardChanged = useEventBus<void>('user-card-changed')
 
-export type CommentQuotedPayload = {
-  username: string;
-  pid: string;
-  floor:number;
+export interface CommentQuotedPayload {
+  username: string
+  pid: string
+  floor: number
 }
-export const commentQuoted = useEventBus<CommentQuotedPayload>("comment-quoted");
+export const commentQuoted = useEventBus<CommentQuotedPayload>('comment-quoted')

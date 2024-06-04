@@ -1,3 +1,46 @@
+<script lang="ts" setup>
+import { toast } from 'vue-sonner'
+import type { z } from 'zod'
+import type { FormSubmitEvent } from '#ui/types'
+import type { UserDTO } from '~/types'
+import { saveSettingsRequestSchema } from '~/types'
+
+const { data } = await useFetch(`/api/member/profile`, { method: 'POST' })
+const userinfo = data.value as UserDTO
+const config = useRuntimeConfig()
+useHead({
+  title: `${userinfo.username}的个人设置`,
+  meta: [
+    { name: 'keywords', content: '极简论坛' },
+    { name: 'description', content: '极简论坛' },
+  ],
+})
+type Schema = z.output<typeof saveSettingsRequestSchema>
+
+const state = reactive({
+  email: userinfo.email,
+  password: undefined,
+  css: userinfo.css,
+  js: userinfo.js,
+  signature: userinfo.signature,
+})
+
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  await $fetch('/api/member/saveSettings', {
+    method: 'POST',
+    body: JSON.stringify(event.data),
+  })
+  if (event.data.password) {
+    toast.success('密码修改成功,请重新登录')
+    await refreshCookie(config.public.tokenKey)
+    await navigateTo('/member/login')
+  }
+  else {
+    toast.success('修改成功')
+  }
+}
+</script>
+
 <template>
   <UCard class="w-full mt-2 text-sm">
     <template #header>
@@ -10,7 +53,9 @@
         {{ userinfo.username }}
       </UFormGroup>
       <UFormGroup label="等级">
-        {{ userinfo.level }}级 - (<NuxtLink class="text-blue-500" :to="`/member/${userinfo.username}/point`">{{ userinfo.point }}分</NuxtLink>)
+        {{ userinfo.level }}级 - (<NuxtLink class="text-blue-500" :to="`/member/${userinfo.username}/point`">
+          {{ userinfo.point }}分
+        </NuxtLink>)
       </UFormGroup>
       <UFormGroup label="头像">
         <UAvatar :src="getAvatarUrl(userinfo.avatarUrl!)" size="lg" alt="Avatar" />
@@ -39,48 +84,5 @@
     </UForm>
   </UCard>
 </template>
-
-<script lang="ts" setup>
-import type { FormSubmitEvent } from '#ui/types';
-import { toast } from 'vue-sonner';
-import { z } from 'zod';
-import type { UserDTO } from '~/types';
-import { saveSettingsRequestSchema } from '~/types';
-
-
-const { data } = await useFetch(`/api/member/profile`, { method: 'POST' })
-const userinfo = data.value as UserDTO
-const config = useRuntimeConfig()
-useHead({
-  title: `${userinfo.username}的个人设置`,
-  meta: [
-    { name: "keywords", content: "极简论坛" },
-    { name: "description", content: "极简论坛" },
-  ],
-})
-type Schema = z.output<typeof saveSettingsRequestSchema>
-
-const state = reactive({
-  email: userinfo.email,
-  password: undefined,
-  css: userinfo.css,
-  js: userinfo.js,
-  signature: userinfo.signature,
-})
-
-async function onSubmit(event: FormSubmitEvent<Schema>) {
-  await $fetch('/api/member/saveSettings', {
-    method: "POST",
-    body: JSON.stringify(event.data)
-  })
-  if (event.data.password) {
-    toast.success('密码修改成功,请重新登录')
-    await refreshCookie(config.public.tokenKey)
-    await navigateTo('/member/login')
-  } else {
-    toast.success('修改成功')
-  }
-}
-</script>
 
 <style scoped></style>

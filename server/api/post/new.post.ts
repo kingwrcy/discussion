@@ -1,44 +1,45 @@
-import { PointReason, UserStatus } from "@prisma/client";
-import { z } from "zod";
-import { SysConfigDTO, createPostSchema } from "~/types";
+import { PointReason, UserStatus } from '@prisma/client'
+import type { z } from 'zod'
+import type { SysConfigDTO } from '~/types'
+import { createPostSchema } from '~/types'
 
-type createPostRequest = z.infer<typeof createPostSchema>;
+type createPostRequest = z.infer<typeof createPostSchema>
 
 export default defineEventHandler(async (event) => {
   if (!event.context.uid) {
-    throw createError("请先去登录");
+    throw createError('请先去登录')
   }
 
-  const request = (await readBody(event)) as createPostRequest;
-  const validateResult = createPostSchema.safeParse(request);
+  const request = (await readBody(event)) as createPostRequest
+  const validateResult = createPostSchema.safeParse(request)
   if (!validateResult.success) {
     return {
       success: false,
-      message: validateResult.error.issues.map((e) => e.message).join(","),
-    };
+      message: validateResult.error.issues.map(e => e.message).join(','),
+    }
   }
   if (request.pid) {
     const post = await prisma.post.findUnique({
       where: { pid: request.pid },
-    });
+    })
     if (!post) {
-      throw createError("帖子不存在");
+      throw createError('帖子不存在')
     }
     if (post.uid !== event.context.uid) {
-      throw createError("无权修改该帖子");
+      throw createError('无权修改该帖子')
     }
   }
 
   const user = await prisma.user.findUnique({
     where: { uid: event.context.uid },
-  });
+  })
   if (!user || user.status === UserStatus.BANNED) {
-    throw createError("用户不存在或已被封禁");
+    throw createError('用户不存在或已被封禁')
   }
   if (user.point <= 0) {
-    throw createError("用户积分小于或等于0分,不能发帖");
+    throw createError('用户积分小于或等于0分,不能发帖')
   }
-  const pid = `p${randomId()}`;
+  const pid = `p${randomId()}`
 
   try {
     await prisma.post.upsert({
@@ -56,9 +57,9 @@ export default defineEventHandler(async (event) => {
         content: request.content,
         uid: event.context.uid,
         tagId: request.tagId,
-        point: ((user.point * 2 - 1) / Math.pow(600, 1.8)) * 10000000,
+        point: ((user.point * 2 - 1) / 600 ** 1.8) * 10000000,
       },
-    });
+    })
     if (!request.pid) {
       await prisma.tag.update({
         where: {
@@ -69,10 +70,10 @@ export default defineEventHandler(async (event) => {
             increment: 1,
           },
         },
-      });
+      })
 
-      const sysConfig = await prisma.sysConfig.findFirst();
-      const sysConfigDTO = sysConfig?.content as SysConfigDTO;
+      const sysConfig = await prisma.sysConfig.findFirst()
+      const sysConfigDTO = sysConfig?.content as SysConfigDTO
       let {
         _sum: { point: totalToday },
       } = await prisma.pointHistory.aggregate({
@@ -83,9 +84,9 @@ export default defineEventHandler(async (event) => {
           uid: event.context.uid,
           reason: PointReason.POST,
         },
-      });
-      totalToday = totalToday ?? 0;
-      const limit = totalToday >= sysConfigDTO.pointPerPostByDay;
+      })
+      totalToday = totalToday ?? 0
+      const limit = totalToday >= sysConfigDTO.pointPerPostByDay
 
       await prisma.user.update({
         where: {
@@ -95,12 +96,12 @@ export default defineEventHandler(async (event) => {
           postCount: {
             increment: 1,
           },
-          lastActive:new Date(),
+          lastActive: new Date(),
           point: {
             increment: limit ? 0 : sysConfigDTO.pointPerPost,
           },
         },
-      });
+      })
 
       if (!limit) {
         await prisma.pointHistory.create({
@@ -110,15 +111,16 @@ export default defineEventHandler(async (event) => {
             point: sysConfigDTO.pointPerPost,
             reason: PointReason.POST,
           },
-        });
+        })
       }
     }
-  } catch (e) {
-    console.log("error", e);
-    throw createError("发表贴子失败");
+  }
+  catch (e) {
+    console.log('error', e)
+    throw createError('发表贴子失败')
   }
   return {
     success: true,
     pid: request.pid || pid,
-  };
-});
+  }
+})

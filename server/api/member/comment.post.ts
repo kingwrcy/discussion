@@ -1,31 +1,31 @@
-import { Prisma } from "@prisma/client";
+import type { Prisma } from '@prisma/client'
 
-type ListCommentRequest = {
-  page: number;
-  size: number;
-  username: string;
-};
+interface ListCommentRequest {
+  page: number
+  size: number
+  username: string
+}
 
 export default defineEventHandler(async (event) => {
-  const request = (await readBody(event)) as ListCommentRequest;
+  const request = (await readBody(event)) as ListCommentRequest
 
-  const where: Prisma.CommentWhereInput = {};
+  const where: Prisma.CommentWhereInput = {}
   const user = await prisma.user.findUnique({
     where: { username: request.username },
-  });
+  })
   if (!user) {
-    throw createError("用户不存在");
+    throw createError('用户不存在')
   }
 
   if (request.page <= 0 && !request.page) {
-    request.page = 1;
+    request.page = 1
   }
   if (request.size <= 0 && !request.size) {
-    request.size = 20;
+    request.size = 20
   }
-  where.uid = user.uid;
+  where.uid = user.uid
 
-  let comments = await prisma.comment.findMany({
+  const comments = await prisma.comment.findMany({
     where,
     include: {
       post: {
@@ -51,18 +51,18 @@ export default defineEventHandler(async (event) => {
       },
     },
     orderBy: {
-      createdAt: "desc",
+      createdAt: 'desc',
     },
     skip: (request.page - 1) * request.size,
     take: request.size,
-  });
+  })
   const total = await prisma.comment.count({
     where,
-  });
+  })
 
   return {
     success: true,
     comments,
     total,
-  };
-});
+  }
+})

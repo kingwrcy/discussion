@@ -1,38 +1,38 @@
-import { Prisma } from "@prisma/client";
+import type { Prisma } from '@prisma/client'
 
-type ListUserRequest = {
-  page: number;
-  size: number;
-  username?: string;
-  begin?: Date;
-  end?: Date;
-};
+interface ListUserRequest {
+  page: number
+  size: number
+  username?: string
+  begin?: Date
+  end?: Date
+}
 
 export default defineEventHandler(async (event) => {
-  const request = (await readBody(event)) as ListUserRequest;
-  const where: Prisma.UserWhereInput = {};
+  const request = (await readBody(event)) as ListUserRequest
+  const where: Prisma.UserWhereInput = {}
 
   if (request.page <= 0 && !request.page) {
-    request.page = 1;
+    request.page = 1
   }
   if (request.size <= 0 && !request.size) {
-    request.size = 20;
+    request.size = 20
   }
   if (request.username) {
-    where.username = request.username.trim();
+    where.username = request.username.trim()
   }
   if (request.begin) {
     where.createdAt = {
       gte: request.begin,
-    };
+    }
   }
   if (request.end) {
     where.createdAt = {
       lte: request.end,
-    };
+    }
   }
 
-  let users = await prisma.user.findMany({
+  const users = await prisma.user.findMany({
     where,
     include: {
       _count: {
@@ -43,19 +43,19 @@ export default defineEventHandler(async (event) => {
       },
     },
     orderBy: {
-      createdAt: "desc",
+      createdAt: 'desc',
     },
 
     skip: (request.page - 1) * request.size,
     take: request.size,
-  });
+  })
   const total = await prisma.user.count({
     where,
-  });
+  })
 
   return {
     success: true,
     users,
     total,
-  };
-});
+  }
+})
