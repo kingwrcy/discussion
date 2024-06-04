@@ -6,11 +6,11 @@ export const regRequestSchema = z
     username: z.string().min(4, "用户名最少4个字符"),
     password: z.string().min(6, "密码最少6个字符"),
     repeatPassword: z.string().min(6, "密码最少6个字符"),
-    email: z.string().email("请填写正确的邮箱地址"),
+    email: z.string().email("请填写正确的邮箱地址")
   })
   .refine((data) => data.password === data.repeatPassword, {
     message: "两次密码不一致",
-    path: ["repeatPassword"],
+    path: ["repeatPassword"]
   });
 
 export const saveSettingsRequestSchema = z.object({
@@ -18,22 +18,19 @@ export const saveSettingsRequestSchema = z.object({
   email: z.string().email("请填写正确邮箱地址"),
   css: z.string().optional().nullish(),
   js: z.string().optional().nullish(),
-  signature: z.string().max(300,"最大不超过300个字符").optional().nullish(),
+  signature: z.string().max(300, "最大不超过300个字符").optional().nullish()
 });
 
 export const loginRequestSchema = z.object({
   username: z.string().min(4, "用户名最少4个字符"),
-  password: z.string().min(6, "密码最少6个字符"),
+  password: z.string().min(6, "密码最少6个字符")
 });
 
 export const createPostSchema = z.object({
-  title: z
-    .string()
-    .min(4, "标题不少于6个字符")
-    .max(120, "标题不能超过120个字符"),
+  title: z.string().min(4, "标题不少于6个字符").max(120, "标题不能超过120个字符"),
   content: z.string().min(6, "内容最少6个字符"),
   tagId: z.number({ message: "标签是必选的" }),
-  pid: z.string().optional(),
+  pid: z.string().optional()
 });
 
 export type JwtPayload = {
@@ -78,6 +75,7 @@ export type CommentDTO = {
   content: string;
   cid: string;
   createdAt: string;
+  updatedAt: string;
   mentioned: Array<string>;
   author: UserDTO;
   likeCount?: number;
@@ -85,7 +83,7 @@ export type CommentDTO = {
   like?: boolean;
   dislike?: boolean;
   post?: PostDTO;
-  floor: number;  
+  floor: number;
 };
 
 export type PointHistoryDTO = {
