@@ -1,9 +1,24 @@
 import type { PointReason, UserRole, UserStatus } from '@prisma/client'
 import { z } from 'zod'
 
+const getLength = function (str: string) {
+  /// <summary>获得字符串实际长度，中文2，英文1</summary>
+  /// <param name="str">要获得长度的字符串</param>
+  let realLength = 0
+  const len = str.length
+  let charCode = -1
+  for (let i = 0; i < len; i++) {
+    charCode = str.charCodeAt(i)
+    if (charCode >= 0 && charCode <= 128)
+      realLength += 1
+    else realLength += 2
+  }
+  return realLength
+}
+
 export const regRequestSchema = z
   .object({
-    username: z.string().min(4, '用户名最少4个字符'),
+    username: z.string(),
     password: z.string().min(6, '密码最少6个字符'),
     repeatPassword: z.string().min(6, '密码最少6个字符'),
     email: z.string().email('请填写正确的邮箱地址'),
@@ -11,6 +26,9 @@ export const regRequestSchema = z
   .refine(data => data.password === data.repeatPassword, {
     message: '两次密码不一致',
     path: ['repeatPassword'],
+  }).refine(data => getLength(data.username) >= 4, {
+    message: '用户名最少4个字符,中文一个算2个字符',
+    path: ['username'],
   })
 
 export const saveSettingsRequestSchema = z.object({
