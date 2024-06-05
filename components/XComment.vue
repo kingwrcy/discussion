@@ -1,12 +1,14 @@
 <script lang="ts" setup>
 import { MdPreview } from 'md-editor-v3'
 import { UserRole } from '@prisma/client'
+import { useWindowScroll } from '@vueuse/core'
 import type { CommentDTO, UserDTO } from '~/types'
 
 const props = defineProps<CommentDTO>()
 const userinfo = useState<UserDTO | undefined>('userinfo')
 const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)
+const { y } = useWindowScroll({ behavior: 'auto' })
 
 const route = useRoute()
 const state = reactive({
@@ -16,22 +18,14 @@ const state = reactive({
   dislikeCount: props.dislikeCount,
 })
 
-function quoted() {
+function updateQo(create = true) {
+  y.value = 999999999999
   commentQuoted.emit({
     username: props.author.username,
     pid: props.post!.pid!,
     floor: props.floor,
-    content: '',
-    cid: '',
-  })
-}
-function editQo() {
-  commentQuoted.emit({
-    username: props.author.username,
-    pid: props.post!.pid!,
-    floor: props.floor,
-    content: props.content,
-    cid: props.cid,
+    content: create ? '' : props.content,
+    cid: create ? '' : props.cid,
   })
 }
 
@@ -95,12 +89,12 @@ async function doDisLike() {
         </div>
         <div
           v-if="token && userinfo && userinfo.uid !== props.author.uid"
-          class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer" @click="quoted"
+          class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer" @click="updateQo()"
         >
           <UIcon name="i-carbon-reply" />
           回复
         </div>
-        <div v-if="token && userinfo && userinfo.uid === props.author.uid" class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer" @click="editQo">
+        <div v-if="token && userinfo && userinfo.uid === props.author.uid" class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer" @click="updateQo(false)">
           <UIcon name="i-carbon-edit" />
           编辑
         </div>
