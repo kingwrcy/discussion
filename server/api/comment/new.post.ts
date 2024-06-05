@@ -4,6 +4,7 @@ import type { SysConfigDTO } from '~/types'
 interface commentRequest {
   content: string
   pid: string
+  cid: string
 }
 
 function extractMentions(text: string) {
@@ -25,7 +26,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const mentioned = extractMentions(request.content)
-  const cid = `c${randomId()}`
+  const cid = request.cid ? request.cid : `c${randomId()}`
 
   const user = await prisma.user.findUnique({
     where: { uid: event.context.uid },
@@ -61,8 +62,14 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  await prisma.comment.create({
-    data: {
+  await prisma.comment.upsert({
+    where: {
+      cid,
+    },
+    update: {
+      content: request.content,
+    },
+    create: {
       content: request.content,
       cid,
       pid: request.pid,
@@ -72,24 +79,8 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  mentioned.forEach(async (user) => {
-    const username = user.slice(1)
-    const target = await prisma.user.findUnique({ where: { username } })
-    if (target) {
-      await prisma.message.create({
-        data: {
-          content: `你在<a class="text-blue-500 mx-1" href='/post/${request.pid}#${cid}'>帖子</a>中被提到了`,
-          read: false,
-          toUid: target.uid,
-          type: MessageType.MENTIONED,
-          relationId: request.pid,
-        },
-      })
-    }
-  })
-
   const sysConfig = await prisma.sysConfig.findFirst()
-  const sysConfigDTO = sysConfig?.content as SysConfigDTO
+  const sysConfigDTO = sysConfig?.content as unknown as SysConfigDTO
   let {
     _sum: { point: totalToday },
   } = await prisma.pointHistory.aggregate({
@@ -104,40 +95,6 @@ export default defineEventHandler(async (event) => {
   totalToday = totalToday ?? 0
   const limit = totalToday >= sysConfigDTO.pointPerCommentByDay
 
-  await prisma.user.update({
-    where: {
-      uid: event.context.uid,
-    },
-    data: {
-      commentCount: {
-        increment: 1,
-      },
-    },
-  })
-
-  await prisma.post.update({
-    where: {
-      pid: request.pid,
-    },
-    data: {
-      replyCount: {
-        increment: 1,
-      },
-    },
-  })
-
-  await prisma.user.update({
-    where: {
-      uid: user.uid,
-    },
-    data: {
-      lastActive: new Date(),
-      point: {
-        increment: limit ? 0 : sysConfigDTO.pointPerComment,
-      },
-    },
-  })
-
   await prisma.post.update({
     where: {
       pid: request.pid,
@@ -147,29 +104,81 @@ export default defineEventHandler(async (event) => {
       lastCommentUid: event.context.uid,
     },
   })
+  // 编辑回复不需要
+  if (!request.cid) {
+    mentioned.forEach(async (user) => {
+      const username = user.slice(1)
+      const target = await prisma.user.findUnique({ where: { username } })
+      if (target) {
+        await prisma.message.create({
+          data: {
+            content: `你在<a class="text-blue-500 mx-1" href='/post/${request.pid}#${cid}'>帖子</a>中被提到了`,
+            read: false,
+            toUid: target.uid,
+            type: MessageType.MENTIONED,
+            relationId: request.pid,
+          },
+        })
+      }
+    })
 
-  if (!limit) {
-    await prisma.pointHistory.create({
+    await prisma.user.update({
+      where: {
+        uid: user.uid,
+      },
       data: {
+        lastActive: new Date(),
+        point: {
+          increment: limit ? 0 : sysConfigDTO.pointPerComment,
+        },
+      },
+    })
+
+    await prisma.user.update({
+      where: {
         uid: event.context.uid,
-        pid: request.pid,
-        cid,
-        point: sysConfigDTO.pointPerComment,
-        reason: PointReason.COMMENT,
       },
-    })
-  }
-
-  if (event.context.uid !== post.author.uid) {
-    await prisma.message.create({
       data: {
-        content: `你的<a class="mx-1 text-blue-500" href='/post/${request.pid}#${cid}'>帖子</a>有了新回复`,
-        read: false,
-        toUid: post.author.uid,
-        type: MessageType.COMMENT,
-        relationId: request.pid,
+        commentCount: {
+          increment: 1,
+        },
       },
     })
+
+    await prisma.post.update({
+      where: {
+        pid: request.pid,
+      },
+      data: {
+        replyCount: {
+          increment: 1,
+        },
+      },
+    })
+
+    if (!limit) {
+      await prisma.pointHistory.create({
+        data: {
+          uid: event.context.uid,
+          pid: request.pid,
+          cid,
+          point: sysConfigDTO.pointPerComment,
+          reason: PointReason.COMMENT,
+        },
+      })
+    }
+
+    if (event.context.uid !== post.author.uid) {
+      await prisma.message.create({
+        data: {
+          content: `你的<a class="mx-1 text-blue-500" href='/post/${request.pid}#${cid}'>帖子</a>有了新回复`,
+          read: false,
+          toUid: post.author.uid,
+          type: MessageType.COMMENT,
+          relationId: request.pid,
+        },
+      })
+    }
   }
 
   return { success: true }

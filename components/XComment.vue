@@ -21,6 +21,17 @@ function quoted() {
     username: props.author.username,
     pid: props.post!.pid!,
     floor: props.floor,
+    content: '',
+    cid: '',
+  })
+}
+function editQo() {
+  commentQuoted.emit({
+    username: props.author.username,
+    pid: props.post!.pid!,
+    floor: props.floor,
+    content: props.content,
+    cid: props.cid,
   })
 }
 
@@ -67,6 +78,10 @@ async function doDisLike() {
           <UIcon name="i-carbon-time" />
           <span>{{ dateFormatAgo(createdAt) }}</span>
         </div>
+        <div v-if="createdAt !== updatedAt" class="flex items-center space-x-1 text-primary/40 hidden md:block">
+          <UIcon name="i-carbon-time" />
+          <span>edited {{ dateFormatAgo(updatedAt) }}</span>
+        </div>
         <div title="支持" class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer" @click="doLike">
           <UIcon name="i-carbon-favorite" :class="[state.like ? 'text-red-500' : '']" />
           <span>{{ state.likeCount ?? 0 }}</span>
@@ -84,6 +99,10 @@ async function doDisLike() {
         >
           <UIcon name="i-carbon-reply" />
           回复
+        </div>
+        <div v-if="token && userinfo && userinfo.uid === props.author.uid" class="flex gap-.5 items-center space-x-1 hover:text-primary/80 cursor-pointer" @click="editQo">
+          <UIcon name="i-carbon-edit" />
+          编辑
         </div>
       </div>
       <div class="text-gray-600  text-sm  hover:text-primary/80">
