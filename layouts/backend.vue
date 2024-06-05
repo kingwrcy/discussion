@@ -3,10 +3,6 @@ import { Toaster } from 'vue-sonner'
 
 useHead({
   title: '管理后台',
-  meta: [
-    { name: 'keywords', content: '极简论坛' },
-    { name: 'description', content: '极简论坛' },
-  ],
 })
 const selectedMenu = ref('user')
 const route = useRoute()

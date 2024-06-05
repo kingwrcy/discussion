@@ -12,10 +12,6 @@ const selectedTab = ref('post')
 const currentUser = useState<UserDTO>('userinfo')
 useHead({
   title: `${username}的详情`,
-  meta: [
-    { name: 'keywords', content: '极简论坛' },
-    { name: 'description', content: '极简论坛' },
-  ],
 })
 
 watch(() => route.fullPath, () => {

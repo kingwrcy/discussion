@@ -6,10 +6,6 @@ import { loginRequestSchema } from '~/types'
 
 useHead({
   title: `登录`,
-  meta: [
-    { name: 'keywords', content: '极简论坛' },
-    { name: 'description', content: '极简论坛' },
-  ],
 })
 
 type Schema = z.output<typeof loginRequestSchema>
