@@ -7,8 +7,8 @@ const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)
 const route = useRoute()
 const state = reactive({
-  page: 1,
-  size: 20,
+  page: route.query.page ? Number.parseInt(route.query.page as any as string) : 1,
+  size: 100,
 })
 
 const url = `/api/post/${route.params.pid}`
@@ -96,7 +96,7 @@ useHead({
 </script>
 
 <template>
-  <div class="w-full   bg-white dark:bg-gray-900 shadow md:rounded-lg md:mt-2 rounded-none relative">
+  <div class="w-full bg-white dark:bg-gray-900 shadow md:rounded-lg md:mt-2 rounded-none relative">
     <div class="px-4 py-2 ">
       <XPost :show-avatar="true" v-bind="post" @support="doSupport" />
     </div>
@@ -119,7 +119,7 @@ useHead({
       </UBadge>
     </div>
 
-    <div class=" gap-2 divide-y divide-gray-300 dark:divide-gray-700">
+    <div class=" gap-2 divide-y divide-gray-300 dark:divide-gray-700 border-t dark:border-gray-700">
       <XComment v-for="(comment, index) in post.comments" :key="comment.cid" v-bind="comment" :index="index" />
       <UPagination
         v-if="totalComments > state.size" v-model="state.page" size="sm" class="p-4" :to="(page: number) => ({
