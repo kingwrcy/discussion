@@ -40,8 +40,11 @@ export const saveSettingsRequestSchema = z.object({
 })
 
 export const loginRequestSchema = z.object({
-  username: z.string().min(4, '用户名最少4个字符'),
+  username: z.string(),
   password: z.string().min(6, '密码最少6个字符'),
+}).refine(data => getLength(data.username) >= 4, {
+  message: '用户名最少4个字符,中文一个算2个字符',
+  path: ['username'],
 })
 
 export const createPostSchema = z.object({
@@ -49,9 +52,12 @@ export const createPostSchema = z.object({
     .string()
     .min(4, '标题不少于6个字符')
     .max(120, '标题不能超过120个字符'),
-  content: z.string().min(6, '内容最少6个字符'),
+  content: z.string(),
   tagId: z.number({ message: '标签是必选的' }),
   pid: z.string().optional(),
+}).refine(data => getLength(data.content) >= 6, {
+  message: '内容最少6个字符,中文一个算2个字符',
+  path: ['username'],
 })
 
 export interface JwtPayload {

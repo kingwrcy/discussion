@@ -13,6 +13,7 @@ const editorRef = ref()
 const newCid = ref()
 const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)
+const pending = ref(false)
 
 const state = reactive({
   content: '',
@@ -68,6 +69,11 @@ const toolbars: ToolbarNames[] = [
 ]
 
 async function reply() {
+  if (!state.content.trim())
+    return
+  if (pending.value)
+    return
+  pending.value = true
   const res = await $fetch('/api/comment/new', {
     method: 'POST',
     body: JSON.stringify({
@@ -82,14 +88,15 @@ async function reply() {
     emits('commented')
     userCardChanged.emit()
   }
+  pending.value = false
 }
 </script>
 
 <template>
   <div v-if="token" class="flex flex-col  py-2 w-full ">
     <MdEditor
-      ref="editorRef" v-model="state.content" :theme="mode as any" style="max-height:300px;"
-      :preview="false" :toolbars="toolbars" :editor-id="`post-${pid}`" @on-upload-img="onUploadImg"
+      ref="editorRef" v-model="state.content" :theme="mode as any" style="max-height:300px;" :preview="false"
+      :toolbars="toolbars" :editor-id="`post-${pid}`" @on-upload-img="onUploadImg"
     >
       <template #defToolbars>
         <XEmoji />
@@ -97,7 +104,7 @@ async function reply() {
       </template>
     </MdEditor>
     <div class="flex my-2">
-      <UButton @click="reply">
+      <UButton :disabled="pending" @click="reply">
         发表评论(Ctrl+Enter提交)
       </UButton>
     </div>

@@ -49,3 +49,17 @@ NUXT_PUBLIC_AVATAR_CDN=https://gravatar.cooluc.com/avatar/
 执行`pnpm i`安装依赖包
 执行`npx prisma migrate dev`同步数据库
 执行`pnpm dev`本地启动项目.
+
+## 本地开发时数据库变更
+
+### DML变更
+
+对数据库中的数据进行一些简单操作，如insert,delete,update,select等.
+
+执行`npx prisma migrate dev --create-only`,创建一个空的迁移脚本,然后自己填入DML变更脚本,完了之后执行`npx prisma migrate dev`会自动执行迁移脚本,已经执行过的迁移脚本不可手动修改!!!
+
+### DDL变更
+
+对数据库中的某些对象(例如，database,table)进行管理，如Create,Alter和Drop.
+
+直接修改`schema.prisma`文件,需要掌握一定的prisma知识,修改完后保存,然后执行`npx prisma migrate dev`会自动生成迁移脚本,生成的迁移脚本不可手动修改!!!
