@@ -26,6 +26,7 @@ const toolbars: ToolbarNames[] = [
   'link',
   'image',
   'table',
+  'pageFullscreen',
   'preview',
 ]
 
@@ -128,7 +129,7 @@ useHead({
         <UFormGroup label="正文" name="content">
           <client-only>
             <MdEditor
-              v-model="state.content" :theme="mode as any" style="max-height: 400px;" :preview="false"
+              v-model="state.content" :theme="mode as any" style="max-height: 600px;" :preview="false"
               :toolbars="toolbars" editor-id="newPost" @on-upload-img="onUploadImg"
             >
               <template #defToolbars>

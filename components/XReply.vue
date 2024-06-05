@@ -63,6 +63,7 @@ const toolbars: ToolbarNames[] = [
   'link',
   'image',
   'table',
+  'pageFullscreen',
   'preview',
 ]
 
@@ -87,7 +88,7 @@ async function reply() {
 <template>
   <div v-if="token" class="flex flex-col  py-2 w-full ">
     <MdEditor
-      ref="editorRef" v-model="state.content" :theme="mode as any" style="height:200px;"
+      ref="editorRef" v-model="state.content" :theme="mode as any" style="max-height:300px;"
       :preview="false" :toolbars="toolbars" :editor-id="`post-${pid}`" @on-upload-img="onUploadImg"
     >
       <template #defToolbars>

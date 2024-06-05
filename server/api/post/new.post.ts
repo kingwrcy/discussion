@@ -1,4 +1,5 @@
 import { PointReason, UserStatus } from '@prisma/client'
+import dayjs from 'dayjs'
 import type { z } from 'zod'
 import type { SysConfigDTO } from '~/types'
 import { createPostSchema } from '~/types'
@@ -73,7 +74,7 @@ export default defineEventHandler(async (event) => {
       })
 
       const sysConfig = await prisma.sysConfig.findFirst()
-      const sysConfigDTO = sysConfig?.content as SysConfigDTO
+      const sysConfigDTO = sysConfig?.content as unknown as SysConfigDTO
       let {
         _sum: { point: totalToday },
       } = await prisma.pointHistory.aggregate({
@@ -83,6 +84,10 @@ export default defineEventHandler(async (event) => {
         where: {
           uid: event.context.uid,
           reason: PointReason.POST,
+          createdAt: {
+            gte: dayjs().startOf('day').toDate(),
+            lte: dayjs().endOf('day').toDate(),
+          },
         },
       })
       totalToday = totalToday ?? 0

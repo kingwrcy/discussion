@@ -1,4 +1,5 @@
 import { MessageType, PointReason, UserStatus } from '@prisma/client'
+import dayjs from 'dayjs'
 import type { SysConfigDTO } from '~/types'
 
 interface commentRequest {
@@ -90,6 +91,10 @@ export default defineEventHandler(async (event) => {
     where: {
       uid: event.context.uid,
       reason: PointReason.COMMENT,
+      createdAt: {
+        gte: dayjs().startOf('day').toDate(),
+        lte: dayjs().endOf('day').toDate(),
+      },
     },
   })
   totalToday = totalToday ?? 0
@@ -105,81 +110,74 @@ export default defineEventHandler(async (event) => {
     },
   })
   // 编辑回复不需要
-  if (!request.cid) {
-    mentioned.forEach(async (user) => {
-      const username = user.slice(1)
-      const target = await prisma.user.findUnique({ where: { username } })
-      if (target) {
-        await prisma.message.create({
-          data: {
-            content: `你在<a class="text-blue-500 mx-1" href='/post/${request.pid}#${cid}'>帖子</a>中被提到了`,
-            read: false,
-            toUid: target.uid,
-            type: MessageType.MENTIONED,
-            relationId: request.pid,
-          },
-        })
-      }
-    })
+  if (request.cid) {
+    return { success: true }
+  }
 
-    await prisma.user.update({
-      where: {
-        uid: user.uid,
-      },
-      data: {
-        lastActive: new Date(),
-        point: {
-          increment: limit ? 0 : sysConfigDTO.pointPerComment,
-        },
-      },
-    })
-
-    await prisma.user.update({
-      where: {
-        uid: event.context.uid,
-      },
-      data: {
-        commentCount: {
-          increment: 1,
-        },
-      },
-    })
-
-    await prisma.post.update({
-      where: {
-        pid: request.pid,
-      },
-      data: {
-        replyCount: {
-          increment: 1,
-        },
-      },
-    })
-
-    if (!limit) {
-      await prisma.pointHistory.create({
-        data: {
-          uid: event.context.uid,
-          pid: request.pid,
-          cid,
-          point: sysConfigDTO.pointPerComment,
-          reason: PointReason.COMMENT,
-        },
-      })
-    }
-
-    if (event.context.uid !== post.author.uid) {
+  mentioned.forEach(async (user) => {
+    const username = user.slice(1)
+    const target = await prisma.user.findUnique({ where: { username } })
+    if (target) {
       await prisma.message.create({
         data: {
-          content: `你的<a class="mx-1 text-blue-500" href='/post/${request.pid}#${cid}'>帖子</a>有了新回复`,
+          content: `你在<a class="text-blue-500 mx-1" href='/post/${request.pid}#${cid}'>帖子</a>中被提到了`,
           read: false,
-          toUid: post.author.uid,
-          type: MessageType.COMMENT,
+          toUid: target.uid,
+          type: MessageType.MENTIONED,
           relationId: request.pid,
         },
       })
     }
+  })
+
+  await prisma.user.update({
+    where: {
+      uid: user.uid,
+    },
+    data: {
+      lastActive: new Date(),
+      point: {
+        increment: limit ? 0 : sysConfigDTO.pointPerComment,
+      },
+      commentCount: {
+        increment: 1,
+      },
+    },
+  })
+
+  await prisma.post.update({
+    where: {
+      pid: request.pid,
+    },
+    data: {
+      replyCount: {
+        increment: 1,
+      },
+    },
+  })
+
+  if (!limit) {
+    await prisma.pointHistory.create({
+      data: {
+        uid: event.context.uid,
+        pid: request.pid,
+        cid,
+        point: sysConfigDTO.pointPerComment,
+        reason: PointReason.COMMENT,
+      },
+    })
   }
 
+  if (event.context.uid !== post.author.uid) {
+    await prisma.message.create({
+      data: {
+        content: `你的<a class="mx-1 text-blue-500" href='/post/${request.pid}#${cid}'>帖子</a>有了新回复`,
+        read: false,
+        toUid: post.author.uid,
+        type: MessageType.COMMENT,
+        relationId: request.pid,
+      },
+    })
+  }
   return { success: true }
 })
