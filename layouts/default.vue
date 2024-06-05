@@ -149,7 +149,8 @@ watch(() => route.fullPath, async () => {
     </USlideover>
 
     <x-header :site-name="sysconfig.websiteName" />
-    <div class="main flex max-w-[1080px] mx-auto h-full gap-4">
+    <div :style="{ backgroundImage: `url(${sysconfig.webBgimage})` }" class="fixed w-screen h-screen bg-cover bg-no-repeat bg-[100%] z-0" />
+    <div class="main flex max-w-[1080px] mx-auto h-full gap-4 relative">
       <div class="flex-1 w-full">
         <slot />
       </div>
