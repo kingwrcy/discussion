@@ -130,6 +130,7 @@ export interface PostDTO {
 
 export interface SysConfigDTO {
   websiteName: string
+  webBgimage: string
   websiteKeywords: string
   websiteDescription: string
   pointPerPost: number

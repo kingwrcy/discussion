@@ -33,6 +33,7 @@ const toolbars: ToolbarNames[] = [
 
 const state = reactive({
   websiteName: '极简论坛',
+  webBgimage: '',
   websiteKeywords: '极简,论坛,极简论坛',
   websiteDescription: '极简论坛',
   pointPerPost: 5,
@@ -68,6 +69,8 @@ async function saveSettings() {
         <UFormGroup label="论坛名称" name="websiteName">
           <UInput v-model="state.websiteName" autocomplete="off" />
         </UFormGroup>
+        <UFormGroup label="论坛背景图" name="webBgimage">
+          <UInput v-model="state.webBgimage" autocomplete="off" />
         <UFormGroup label="论坛关键词" name="websiteKeywords">
           <UInput v-model="state.websiteKeywords" autocomplete="off" />
         </UFormGroup>
