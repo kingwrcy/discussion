@@ -26,7 +26,7 @@ export async function onUploadImg(files: File[], callback: any) {
     const res = await Promise.all(
       files.map(async (f) => {
         const form = new FormData()
-        form.append('file', f)
+        form.append('media', f)
         return (await $fetch(target, {
           method: 'POST',
           body: form,
@@ -35,7 +35,7 @@ export async function onUploadImg(files: File[], callback: any) {
     )
     callback(
       res.map(r => ({
-        url: `${r.data.uploadPath.replace(/http:/, 'https:')}`,
+        url: `${r.url}`,
         alt: 'alt',
         title: 'title',
       })),

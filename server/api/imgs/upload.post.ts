@@ -6,11 +6,10 @@ export default defineEventHandler(async (event) => {
   const formData = await readFormData(event)
   // https://openai.weixin.qq.com/weixinh5/webapp/h774yvzC2xlB4bIgGfX2stc4kvC85J/cos/upload
   // key : media
-  const res = await $fetch('https://kf.dianping.com/api/file/singleImage', {
+  const res = await $fetch('https://openai.weixin.qq.com/weixinh5/webapp/h774yvzC2xlB4bIgGfX2stc4kvC85J/cos/upload', {
     method: 'POST',
     body: formData,
     headers: {
-      'Referer': 'https://h5.dianping.com/',
       'User-Agent': ' Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
     },
   })
