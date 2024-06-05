@@ -4,5 +4,7 @@ export interface CommentQuotedPayload {
   username: string
   pid: string
   floor: number
+  content: string
+  cid: string
 }
 export const commentQuoted = useEventBus<CommentQuotedPayload>('comment-quoted')

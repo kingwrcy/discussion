@@ -10,6 +10,7 @@ const props = defineProps<{
 const emits = defineEmits(['commented'])
 const mode = useColorMode()
 const editorRef = ref()
+const newCid = ref()
 const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)
 
@@ -36,7 +37,8 @@ commentQuoted.on((param: CommentQuotedPayload) => {
   if (state.content.length > 0) {
     content = '\r\n'
   }
-  content = `${content}@${param.username} [#${param.floor}](/post/${param.pid}#${param.floor}) `
+  content = param.cid ? param.content : `${content}@${param.username} [#${param.floor}](/post/${param.pid}#${param.floor}) `
+  newCid.value = param.cid
   editorRef.value?.insert(() => {
     return {
       targetValue: content,
@@ -70,10 +72,12 @@ async function reply() {
     body: JSON.stringify({
       content: state.content.trim(),
       pid: props.pid,
+      cid: newCid.value,
     }),
   })
   if (res.success) {
     state.content = ''
+    newCid.value = ''
     emits('commented')
     userCardChanged.emit()
   }

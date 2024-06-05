@@ -78,6 +78,7 @@ export interface CommentDTO {
   content: string
   cid: string
   createdAt: string
+  updatedAt: string
   mentioned: Array<string>
   author: UserDTO
   likeCount?: number
