@@ -72,7 +72,7 @@ async function doDisLike() {
           <UIcon name="i-carbon-time" />
           <span>{{ dateFormatAgo(createdAt) }}</span>
         </div>
-        <div v-if="createdAt !== updatedAt" class="flex items-center space-x-1 text-primary/40 hidden md:block">
+        <div v-if="createdAt !== updatedAt" class="items-center space-x-1 text-primary/40 hidden md:flex">
           <UIcon name="i-carbon-time" />
           <span>edited {{ dateFormatAgo(updatedAt) }}</span>
         </div>

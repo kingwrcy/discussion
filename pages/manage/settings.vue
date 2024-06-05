@@ -71,6 +71,7 @@ async function saveSettings() {
         </UFormGroup>
         <UFormGroup label="论坛背景图" name="webBgimage">
           <UInput v-model="state.webBgimage" autocomplete="off" />
+        </UFormGroup>
         <UFormGroup label="论坛关键词" name="websiteKeywords">
           <UInput v-model="state.websiteKeywords" autocomplete="off" />
         </UFormGroup>
