@@ -101,10 +101,6 @@ onUnmounted(() => {
 
 useHead({
   title: `发表帖子`,
-  meta: [
-    { name: 'keywords', content: '极简论坛' },
-    { name: 'description', content: '极简论坛' },
-  ],
 })
 </script>
 

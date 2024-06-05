@@ -44,10 +44,6 @@ const { getAbsoluteUrl } = useAbsoluteUrl()
 
 useHead({
   title: `首页`,
-  meta: [
-    { name: 'keywords', content: '极简论坛' },
-    { name: 'description', content: '极简论坛' },
-  ],
   link: [
     {
       rel: 'canonical',

@@ -4,10 +4,6 @@ import type { PostDTO } from '~/types'
 
 useHead({
   title: '帖子管理',
-  meta: [
-    { name: 'keywords', content: '极简论坛' },
-    { name: 'description', content: '极简论坛' },
-  ],
 })
 const route = useRoute()
 definePageMeta({
