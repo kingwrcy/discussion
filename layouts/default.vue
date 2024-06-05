@@ -94,10 +94,6 @@ if (userinfo.value.js) {
 
 useHead({
   title: '首页',
-  meta: [
-    { name: 'keywords', content: '极简论坛' },
-    { name: 'description', content: '极简论坛' },
-  ],
 })
 
 const tag = ref<TagDTO>()

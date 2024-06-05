@@ -4,10 +4,6 @@ import type { CommentDTO } from '~/types'
 
 useHead({
   title: '评论管理',
-  meta: [
-    { name: 'keywords', content: '极简论坛' },
-    { name: 'description', content: '极简论坛' },
-  ],
 })
 
 const route = useRoute()

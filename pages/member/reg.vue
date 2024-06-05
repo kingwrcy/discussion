@@ -8,10 +8,6 @@ type Schema = z.output<typeof regRequestSchema>
 
 useHead({
   title: `注册用户`,
-  meta: [
-    { name: 'keywords', content: '极简论坛' },
-    { name: 'description', content: '极简论坛' },
-  ],
 })
 
 const state = reactive<Schema>({

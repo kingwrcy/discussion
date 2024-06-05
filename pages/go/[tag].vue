@@ -45,10 +45,6 @@ const totalPosts = computed(() => {
 })
 useHead({
   title: `${state.tag}相关的帖子`,
-  meta: [
-    { name: 'keywords', content: '极简论坛' },
-    { name: 'description', content: '极简论坛' },
-  ],
 })
 </script>
 

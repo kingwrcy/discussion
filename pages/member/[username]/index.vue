@@ -9,10 +9,6 @@ const route = useRoute()
 
 useHead({
   title: `${props.username}的帖子`,
-  meta: [
-    { name: 'keywords', content: '极简论坛' },
-    { name: 'description', content: '极简论坛' },
-  ],
 })
 
 const state = reactive({

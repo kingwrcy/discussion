@@ -6,7 +6,7 @@ const global = useState<{ sysConfig: SysConfigDTO, version: string | undefined }
 const { data: configData } = await useFetch('/api/config', {
   method: 'POST',
 })
-const sysConfig = configData.value?.data as SysConfigDTO
+const sysConfig = configData.value?.data as unknown as SysConfigDTO
 const version = configData.value?.version
 
 global.value = { sysConfig, version }
@@ -15,6 +15,10 @@ useHead({
   // as a string,
   // where `%s` is replaced with the title
   titleTemplate: `%s - ${global.value.sysConfig.websiteName}`,
+  meta: [
+    { name: 'keywords', content: global.value.sysConfig.websiteKeywords },
+    { name: 'description', content: global.value.sysConfig.websiteDescription },
+  ],
 })
 </script>
 
