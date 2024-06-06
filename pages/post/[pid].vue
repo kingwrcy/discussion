@@ -123,11 +123,9 @@ useHead({
         })" :page-count="state.size" :total="totalComments"
       />
     </div>
-    <ClientOnly>
-      <div v-if="userinfo.status === 'NORMAL' && userinfo.point > 0" class="px-0 md:px-4 border-t dark:border-slate-700">
-        <XReply :pid="post.pid" @commented="reload" />
-      </div>
-    </ClientOnly>
+    <div v-if="userinfo.status === 'NORMAL' && userinfo.point > 0" class="px-0 md:px-4 border-t dark:border-slate-700">
+      <XReply :pid="post.pid" @commented="reload" />
+    </div>
 
     <XScrollToolbar />
   </div>

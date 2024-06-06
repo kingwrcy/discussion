@@ -31,6 +31,7 @@ export default defineEventHandler(async () => {
       username: true,
       uid: true,
       avatarUrl: true,
+      headImg: true,
     },
   })
 

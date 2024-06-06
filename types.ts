@@ -1,21 +1,6 @@
 import type { PointReason, UserRole, UserStatus } from '@prisma/client'
 import { z } from 'zod'
 
-const getLength = function (str: string) {
-  /// <summary>获得字符串实际长度，中文2，英文1</summary>
-  /// <param name="str">要获得长度的字符串</param>
-  let realLength = 0
-  const len = str.length
-  let charCode = -1
-  for (let i = 0; i < len; i++) {
-    charCode = str.charCodeAt(i)
-    if (charCode >= 0 && charCode <= 128)
-      realLength += 1
-    else realLength += 2
-  }
-  return realLength
-}
-
 export const regRequestSchema = z
   .object({
     username: z.string(),
@@ -34,7 +19,7 @@ export const regRequestSchema = z
 export const saveSettingsRequestSchema = z.object({
   password: z.string().optional(),
   email: z.string().email('请填写正确邮箱地址'),
-  headImg: z.string().url('请填写正确的URL'),
+  headImg: z.union([z.string().url('请填写正确的URL'), z.string().nullish()]),
   css: z.string().optional().nullish(),
   js: z.string().optional().nullish(),
   signature: z.string().max(300, '最大不超过300个字符').optional().nullish(),
@@ -53,7 +38,7 @@ export const createPostSchema = z.object({
     .string()
     .min(4, '标题不少于6个字符')
     .max(120, '标题不能超过120个字符'),
-  content: z.string(),
+  content: z.string({ message: '内容是必填的' }),
   tagId: z.number({ message: '标签是必选的' }),
   pid: z.string().optional(),
 }).refine(data => getLength(data.content) >= 6, {

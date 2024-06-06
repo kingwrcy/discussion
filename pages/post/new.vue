@@ -4,7 +4,7 @@ import 'md-editor-v3/lib/style.css'
 import { toast } from 'vue-sonner'
 import type { z } from 'zod'
 import { useColorMode } from '@vueuse/core'
-import type { FormSubmitEvent } from '#ui/types'
+import type { FormError, FormSubmitEvent } from '#ui/types'
 import { type PostDTO, createPostSchema } from '~/types'
 
 type Schema = z.output<typeof createPostSchema>
@@ -98,7 +98,16 @@ async function handleKeyDown(event: KeyboardEvent) {
     form.value?.submit()
   }
 }
-
+function validate(state: any): FormError[] {
+  const errors = []
+  if (!state.title || getLength(state.title) < 6)
+    errors.push({ path: 'title', message: '标题最少6个字符,中文一个算2个字符' })
+  if (!state.content || getLength(state.content) < 6)
+    errors.push({ path: 'content', message: '内容最少6个字符,中文一个算2个字符' })
+  if (!state.tagId || state.tagId === 0)
+    errors.push({ path: 'tags', message: '需要选择一个合适的标签' })
+  return errors
+}
 useHead({
   title: `发表帖子`,
 })
@@ -113,27 +122,26 @@ useHead({
     </template>
     <div class="flex flex-col my-2 ">
       <UForm
-        ref="form" :schema="createPostSchema" :state="state" :validate-on="['submit']" class="space-y-4"
+        ref="form"
+        :validate="validate" :schema="createPostSchema" :state="state" :validate-on="['submit']" class="space-y-4"
         autocomplete="off" @submit="onSubmit"
       >
-        <UFormGroup label="标题" name="title">
+        <UFormGroup label="标题" name="title" required>
           <UInput v-model="state.title" autocomplete="off" />
         </UFormGroup>
-        <UFormGroup label="标签" name="tags">
+        <UFormGroup label="标签" name="tags" required>
           <USelectMenu v-model="state.tagId" value-attribute="id" option-attribute="desc" :options="tags" />
         </UFormGroup>
-        <UFormGroup label="正文" name="content">
-          <client-only>
-            <MdEditor
-              v-model="state.content" :theme="mode as any" style="max-height: 600px;" :preview="false"
-              :toolbars="toolbars" editor-id="newPost" @on-upload-img="onUploadImg"
-            >
-              <template #defToolbars>
-                <XEmoji />
-                <XYoutubeDialog />
-              </template>
-            </MdEditor>
-          </client-only>
+        <UFormGroup label="正文" name="content" required>
+          <MdEditor
+            v-model="state.content" :theme="mode as any" style="max-height: 600px;" :preview="false"
+            :toolbars="toolbars" editor-id="newPost" @on-upload-img="onUploadImg"
+          >
+            <template #defToolbars>
+              <XEmoji />
+              <XYoutubeDialog />
+            </template>
+          </MdEditor>
         </UFormGroup>
         <div>
           <UButton type="submit" :loading="pending">
