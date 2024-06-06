@@ -2,6 +2,8 @@
 import { MdPreview } from 'md-editor-v3'
 import { UserRole } from '@prisma/client'
 import { useWindowScroll } from '@vueuse/core'
+import { toast } from 'vue-sonner'
+import XTipModal from './XTipModal.vue'
 import type { CommentDTO, UserDTO } from '~/types'
 
 const props = defineProps<CommentDTO>()
@@ -31,6 +33,11 @@ function updateQo(create = true) {
 
 async function doLike() {
   if (token && userinfo && userinfo.value?.uid !== props.author.uid) {
+    if (state.like || state.dislike)
+      return toast.warning('你已经表过态了！')
+    const confirmed = await openModal('你确定要为他点赞吗？这将会扣除你1积分。')
+    if (!confirmed)
+      return
     const res = await $fetch(`/api/comment/like?cid=${props.cid}`, {
       method: 'POST',
     })
@@ -41,12 +48,34 @@ async function doLike() {
 
 async function doDisLike() {
   if (token && userinfo && userinfo.value?.uid !== props.author.uid) {
+    if (state.like || state.dislike)
+      return toast.warning('你已经表过态了！')
+    const confirmed = await openModal('你确定要为他点踩吗？这将会扣除你1积分。')
+    if (!confirmed)
+      return
     const res = await $fetch(`/api/comment/dislike?cid=${props.cid}`, {
       method: 'POST',
     })
     Object.assign(state, res)
     userCardChanged.emit()
   }
+}
+
+const modal = useModal()
+function openModal(message: string) {
+  return new Promise((resolve) => {
+    modal.open(XTipModal, {
+      message,
+      onSuccess() {
+        modal.close()
+        resolve(true)
+      },
+      onCancel() {
+        modal.close()
+        resolve(false)
+      },
+    })
+  })
 }
 </script>
 
