@@ -93,7 +93,7 @@ watch(() => route.fullPath, reload)
     <UTable :rows="postList" :columns="columns">
       <template #author.avatarUrl-data="{ row }">
         <NuxtLink :to="`/member/${row.author.username}`">
-          <UAvatar :src="getAvatarUrl(row.author.avatarUrl!)" size="lg" alt="Avatar" />
+          <UAvatar :src="getAvatarUrl(row.author.avatarUrl!, row.author.headImg)" size="lg" alt="Avatar" />
         </NuxtLink>
       </template>
       <template #title-data="{ row }">

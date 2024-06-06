@@ -14,6 +14,7 @@ useHead({
 type Schema = z.output<typeof saveSettingsRequestSchema>
 
 const state = reactive({
+  headImg: userinfo.headImg,
   email: userinfo.email,
   password: undefined,
   css: userinfo.css,
@@ -54,10 +55,13 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         </NuxtLink>)
       </UFormGroup>
       <UFormGroup label="头像">
-        <UAvatar :src="getAvatarUrl(userinfo.avatarUrl!)" size="lg" alt="Avatar" />
+        <UAvatar :src="getAvatarUrl(userinfo.avatarUrl!, userinfo.headImg)" size="lg" alt="Avatar" />
       </UFormGroup>
       <UFormGroup label="密码" name="password" hint="留空则不修改密码">
         <UInput v-model="state.password" type="password" />
+      </UFormGroup>
+      <UFormGroup label="自定义头像" name="headImg" hint="请填写头像地址，将会优先于gravatar显示">
+        <UInput v-model="state.headImg" type="text" />
       </UFormGroup>
       <UFormGroup label="邮箱" name="email" hint="请使用常用邮箱,会用来生成头像">
         <UInput v-model="state.email" type="text" />

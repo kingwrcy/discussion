@@ -129,7 +129,7 @@ watch(() => route.fullPath, reload)
     <UTable :rows="userList" :columns="columns" class="overflow-auto w-full" :ui="{ wrapper: 'w-[300px]', th: { base: 'text-nowrap' } }">
       <template #avatarUrl-data="{ row }">
         <NuxtLink :to="`/member/${row.username}`">
-          <UAvatar :src="getAvatarUrl(row.avatarUrl!)" size="lg" alt="Avatar" />
+          <UAvatar :src="getAvatarUrl(row.avatarUrl!, row.headImg)" size="lg" alt="Avatar" />
         </NuxtLink>
       </template>
       <template #username-data="{ row }">

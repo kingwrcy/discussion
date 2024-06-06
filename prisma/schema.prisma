@@ -18,6 +18,7 @@ model User {
   lastLogin      DateTime?
   email          String         @unique
   avatarUrl      String
+  headImg        String?
   point          Int            @default(0)
   postCount      Int            @default(0)
   commentCount   Int            @default(0)

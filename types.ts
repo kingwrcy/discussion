@@ -34,6 +34,7 @@ export const regRequestSchema = z
 export const saveSettingsRequestSchema = z.object({
   password: z.string().optional(),
   email: z.string().email('请填写正确邮箱地址'),
+  headImg: z.string().url('请填写正确的URL'),
   css: z.string().optional().nullish(),
   js: z.string().optional().nullish(),
   signature: z.string().max(300, '最大不超过300个字符').optional().nullish(),
@@ -71,6 +72,7 @@ export interface UserDTO {
   username: string
   email: string
   avatarUrl: string | null
+  headImg?: string
   point: number
   postCount: number
   commentCount: number

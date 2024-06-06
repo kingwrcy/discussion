@@ -82,7 +82,7 @@ function openModal(message: string) {
 <template>
   <div class="px-4 flex space-x-2  items-start py-2 ">
     <NuxtLink :to="`/member/${author.username}`">
-      <UAvatar v-if="author && author.avatarUrl" :src="getAvatarUrl(author.avatarUrl)" size="lg" alt="Avatar" />
+      <UAvatar v-if="author && author.avatarUrl" :src="getAvatarUrl(author.avatarUrl, author.headImg)" size="lg" alt="Avatar" />
     </NuxtLink>
     <div class="flex-1 space-y-2">
       <div class="flex space-x-4 text-xs mt-1 text-gray-500">

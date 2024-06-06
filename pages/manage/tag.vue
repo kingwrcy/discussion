@@ -118,7 +118,7 @@ async function reload(page: number) {
     <UTable :rows="tagList" :columns="columns">
       <template #avatarUrl-data="{ row }">
         <NuxtLink :to="`/member/${row.username}`">
-          <UAvatar :src="getAvatarUrl(row.avatarUrl!)" size="lg" alt="Avatar" />
+          <UAvatar :src="getAvatarUrl(row.avatarUrl!, row.headImg)" size="lg" alt="Avatar" />
         </NuxtLink>
       </template>
       <template #actions-data="{ row }">

@@ -6,7 +6,9 @@ import { toast } from 'vue-sonner'
 
 dayjs.extend(relativeTime).locale(zhCn)
 
-export function getAvatarUrl(hash: string) {
+export function getAvatarUrl(hash: string, url: string | undefined) {
+  if (url)
+    return url
   const config = useRuntimeConfig()
   return `${config.public.avatarCdn}${hash}?d=identicon`
 }

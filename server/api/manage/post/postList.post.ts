@@ -46,6 +46,7 @@ export default defineEventHandler(async (event) => {
           uid: true,
           username: true,
           avatarUrl: true,
+          headImg: true,
         },
       },
       _count: {
