@@ -7,7 +7,17 @@ import type { CommentQuotedPayload } from '~/utils/eventbus'
 const props = defineProps<{
   pid: string
 }>()
+
 const emits = defineEmits(['commented'])
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKeyDown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeyDown)
+})
+
 const mode = useColorMode()
 const editorRef = ref()
 const newCid = ref()
@@ -25,20 +35,12 @@ async function handleKeyDown(event: KeyboardEvent) {
   }
 }
 
-onMounted(() => {
-  window.addEventListener('keydown', handleKeyDown)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('keydown', handleKeyDown)
-})
-
 commentQuoted.on((param: CommentQuotedPayload) => {
   let content = ''
   if (state.content.length > 0) {
     content = '\r\n'
   }
-  content = param.cid ? param.content : `${content}@${param.username} [#${param.floor}](/post/${param.pid}#${param.floor}) `
+  content = param.cid ? param.content : `${content}[@${param.username}](/member/${param.username}) [#${param.floor}](/post/${param.pid}#${param.floor}) `
   newCid.value = param.cid
   editorRef.value?.insert(() => {
     return {

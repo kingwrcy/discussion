@@ -20,10 +20,6 @@ const { data } = await useFetch(url, {
   }),
 })
 
-if (userinfo.value) {
-  await userCardChanged.emit()
-}
-
 async function reload() {
   const res = await $fetch(url, {
     method: 'POST',

@@ -33,6 +33,7 @@ async function go2Home() {
   await router.replace('/')
   if (route.fullPath === '/') {
     await refreshNuxtData()
+    userCardChanged.emit()
   }
 }
 

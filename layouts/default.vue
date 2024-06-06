@@ -48,6 +48,12 @@ watch(token, async () => {
   }
 })
 
+watch(() => route.fullPath, async (n) => {
+  if (n.startsWith('/post/') || n === '/') {
+    userCardChanged.emit()
+  }
+})
+
 await loadProfile()
 
 if (sysconfig.css) {
@@ -145,7 +151,10 @@ watch(() => route.fullPath, async () => {
     </USlideover>
 
     <x-header :site-name="sysconfig.websiteName" />
-    <div v-if="sysconfig.webBgimage" :style="{ backgroundImage: `url(${sysconfig.webBgimage})` }" class="hidden md:block fixed w-screen h-screen bg-cover bg-no-repeat bg-[100%] z-0" />
+    <div
+      v-if="sysconfig.webBgimage" :style="{ backgroundImage: `url(${sysconfig.webBgimage})` }"
+      class="hidden md:block fixed w-screen h-screen bg-cover bg-no-repeat bg-[100%] z-0"
+    />
     <div class="main flex max-w-[1080px] mx-auto h-full gap-4 relative">
       <div class="flex-1 w-full">
         <slot />

@@ -8,6 +8,14 @@ import type { FormSubmitEvent } from '#ui/types'
 import { type PostDTO, createPostSchema } from '~/types'
 
 type Schema = z.output<typeof createPostSchema>
+
+onMounted(() => {
+  window.addEventListener('keydown', handleKeyDown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeyDown)
+})
 const mode = useColorMode()
 
 const route = useRoute()
@@ -90,14 +98,6 @@ async function handleKeyDown(event: KeyboardEvent) {
     form.value?.submit()
   }
 }
-
-onMounted(() => {
-  window.addEventListener('keydown', handleKeyDown)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('keydown', handleKeyDown)
-})
 
 useHead({
   title: `发表帖子`,
