@@ -7,6 +7,7 @@ export default defineEventHandler(async () => {
       createdAt: {
         gt: dayjs().subtract(3, 'day').toDate(),
       },
+
     },
     _sum: {
       point: true,
@@ -20,7 +21,7 @@ export default defineEventHandler(async () => {
     skip: 0,
   })
 
-  const uids = users.map(user => user.uid)
+  const uids = users.filter(user => (user._sum.point ?? 0) > 0).map(user => user.uid)
   const userInfos = await prisma.user.findMany({
     where: {
       uid: {
