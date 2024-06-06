@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useTitle } from '@vueuse/core'
+import { useColorMode, usePreferredColorScheme, useTitle } from '@vueuse/core'
 import { MdPreview } from 'md-editor-v3'
 import { Toaster } from 'vue-sonner'
 import type { SysConfigDTO, TagDTO, UserDTO } from '~/types'
@@ -11,6 +11,11 @@ const route = useRoute()
 const sliderOpen = useState('sliderOpen', () => {
   return false
 })
+const preferredColor = usePreferredColorScheme()
+const mode = useColorMode()
+
+mode.value = preferredColor.value === 'dark' ? 'dark' : 'light'
+
 const global = useState<{ sysConfig: SysConfigDTO, version: string | undefined }>('globalConfig')
 
 async function loadProfile() {

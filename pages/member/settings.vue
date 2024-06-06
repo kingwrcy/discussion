@@ -67,10 +67,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         <UInput v-model="state.email" type="text" />
       </UFormGroup>
       <UFormGroup label="自定义css" name="css" hint="修改了此项需要刷新页面">
-        <UTextarea v-model="state.css" />
+        <UTextarea v-model="state.css" :rows="10" />
       </UFormGroup>
       <UFormGroup label="自定义JS" name="css" hint="修改了此项需要刷新页面">
-        <UTextarea v-model="state.js" />
+        <UTextarea v-model="state.js" :rows="10" />
       </UFormGroup>
       <UFormGroup label="自定义签名" name="css">
         <template #hint>

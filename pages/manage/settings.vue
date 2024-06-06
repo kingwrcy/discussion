@@ -124,13 +124,13 @@ async function saveSettings() {
       <div class="flex flex-col space-y-2 ">
         <div class="flex flex-row space-x-2">
           <UFormGroup label="自定义css" name="css" class="w-[500px]" hint="刷新页面生效">
-            <UTextarea v-model="state.css" />
+            <UTextarea v-model="state.css" :rows="10" />
           </UFormGroup>
         </div>
 
         <div class="flex flex-row space-x-2">
           <UFormGroup label="自定义JS" name="css" class="w-[500px]" hint="刷新页面生效">
-            <UTextarea v-model="state.js" />
+            <UTextarea v-model="state.js" :rows="10" />
           </UFormGroup>
         </div>
       </div>
