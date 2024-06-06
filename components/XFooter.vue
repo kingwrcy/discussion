@@ -13,7 +13,7 @@ withDefaults(defineProps<{
     </span>
     <span>版本v{{ version }}</span>
     <span class="mx-1">•</span>
-    <a target="_blank" href="https://moments.mblog.club">极简朋友圈</a>
+    <a target="_blank" href="https://m.mblog.club">极简朋友圈</a>
     <span class="mx-1">•</span>
     <a target="_blank" href="https://dev.mblog.club">极简博客</a>
     <span class="mx-1">•</span>

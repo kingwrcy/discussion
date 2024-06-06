@@ -41,7 +41,7 @@ function doSupport() {
           <span class="mr-4">{{ title }}</span>
           <span
             :to="`/post/${props.pid}`"
-            class="inline-flex  md:hidden text-xs text-primary/80 items-center space-x-1  cursor-pointer "
+            class="inline-flex md:hidden text-xs text-primary/80 items-center space-x-1  cursor-pointer "
           >
             <UIcon name="i-carbon-book" />
             <span>{{ replyCount }}</span>

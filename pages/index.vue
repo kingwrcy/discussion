@@ -4,7 +4,7 @@ import type { PostDTO } from '~/types'
 const route = useRoute()
 const state = reactive({
   page: 1,
-  size: 20,
+  size: 100,
 })
 
 state.page = Number.parseInt(route.query.page as any as string) || 1

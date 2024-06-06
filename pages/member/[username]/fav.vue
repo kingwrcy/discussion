@@ -15,7 +15,7 @@ const state = reactive({
   posts: Array<PostDTO>(),
   total: 0,
   page: 1,
-  size: 10,
+  size: 50,
 })
 const { data: postRes } = await useFetch<{ total: number, posts: Array<PostDTO> }>('/api/member/fav', {
   method: 'POST',

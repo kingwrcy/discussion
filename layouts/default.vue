@@ -122,7 +122,7 @@ watch(() => route.fullPath, async () => {
 
 <template>
   <div class="dark:bg-slate-800 min-h-screen">
-    <USlideover v-model="sliderOpen" class="md:hidden" side="left">
+    <USlideover v-model="sliderOpen" class="md:hidden overflow-y-auto" side="left">
       <div class="p-4 flex-1 space-y-4 bg-slate-700">
         <UIcon name="i-carbon-close-large" class="size-5 text-white" @click="sliderOpen = false" />
         <XUserCard v-if="userinfo && userinfo.username" />
@@ -156,7 +156,7 @@ watch(() => route.fullPath, async () => {
       </div>
     </USlideover>
 
-    <x-header :site-name="sysconfig.websiteName" />
+    <x-header :site-name="sysconfig?.websiteName" />
     <div
       v-if="sysconfig.webBgimage" :style="{ backgroundImage: `url(${sysconfig.webBgimage})` }"
       class="hidden md:block fixed w-screen h-screen bg-cover bg-no-repeat bg-[100%] z-0"

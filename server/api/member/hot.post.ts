@@ -20,7 +20,6 @@ export default defineEventHandler(async () => {
     take: 10,
     skip: 0,
   })
-
   const uids = users.filter(user => (user._sum.point ?? 0) > 0).map(user => user.uid)
   const userInfos = await prisma.user.findMany({
     where: {
@@ -35,7 +34,6 @@ export default defineEventHandler(async () => {
       headImg: true,
     },
   })
-
   return users.map((user) => {
     const target = userInfos.find(userInfo => userInfo.uid === user.uid)
     return { points: user._sum.point, ...target }

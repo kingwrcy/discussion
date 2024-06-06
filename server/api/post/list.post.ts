@@ -14,10 +14,10 @@ export default defineEventHandler(async (event) => {
   const where: Prisma.PostWhereInput = {}
   const uid = event.context.uid
 
-  if (request.page <= 0 && !request.page) {
+  if (request.page <= 0 || !request.page) {
     request.page = 1
   }
-  if (request.size <= 0 && !request.size) {
+  if (request.size <= 0 || !request.size) {
     request.size = 20
   }
   if (request.uid) {

@@ -30,6 +30,7 @@ const toolbars: ToolbarNames[] = [
   '=',
   'preview',
 ]
+const { data: configData, refresh } = await useFetch('/api/manage/config/get', { method: 'POST' })
 
 const state = reactive({
   websiteName: '极简论坛',
@@ -48,9 +49,7 @@ const state = reactive({
   js: '',
 })
 
-const { data: configData, refresh } = await useFetch('/api/manage/config/get', { method: 'POST' })
-
-Object.assign(state, configData.value?.config)
+Object.assign(state, JSON.parse(configData.value?.config as string))
 
 async function saveSettings() {
   await $fetch('/api/manage/config/save', {

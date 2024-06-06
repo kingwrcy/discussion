@@ -81,7 +81,7 @@ export default defineEventHandler(async (event) => {
   })
 
   const sysConfig = await prisma.sysConfig.findFirst()
-  const sysConfigDTO = sysConfig?.content as unknown as SysConfigDTO
+  const sysConfigDTO = JSON.parse(sysConfig?.content as string) as unknown as SysConfigDTO
   let {
     _sum: { point: totalToday },
   } = await prisma.pointHistory.aggregate({
@@ -120,7 +120,7 @@ export default defineEventHandler(async (event) => {
     if (target) {
       await prisma.message.create({
         data: {
-          content: `你在<a class="text-blue-500 mx-1" href='/post/${request.pid}#${cid}'>帖子</a>中被提到了`,
+          content: `你在帖子<a class="text-blue-500 mx-1" href='/post/${request.pid}#${cid}'>${post.title}</a>中被提到了`,
           read: false,
           toUid: target.uid,
           type: MessageType.MENTIONED,
@@ -171,7 +171,7 @@ export default defineEventHandler(async (event) => {
   if (event.context.uid !== post.author.uid) {
     await prisma.message.create({
       data: {
-        content: `你的<a class="mx-1 text-blue-500" href='/post/${request.pid}#${cid}'>帖子</a>有了新回复`,
+        content: `你的帖子<a class="mx-1 text-blue-500" href='/post/${request.pid}#${cid}'>${post.title}</a>有了新回复`,
         read: false,
         toUid: post.author.uid,
         type: MessageType.COMMENT,

@@ -15,7 +15,7 @@ const state = reactive({
   comments: Array<CommentDTO>(),
   total: 0,
   page: 1,
-  size: 10,
+  size: 50,
 })
 const { data: postRes } = await useFetch<{ total: number, comments: Array<CommentDTO> }>('/api/member/comment', {
   method: 'POST',

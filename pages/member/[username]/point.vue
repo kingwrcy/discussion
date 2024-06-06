@@ -43,7 +43,7 @@ function getReason(reason: PointReason) {
 
 const state = reactive({
   page: Number.parseInt(route.query.page as any as string) || 1,
-  size: 10,
+  size: 50,
 })
 
 const { data: pointListRes } = await useFetch('/api/member/point', {

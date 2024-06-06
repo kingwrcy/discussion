@@ -7,6 +7,7 @@ defineProps({
   siteName: {
     type: String,
     required: true,
+    default: 'Discussion',
   },
 })
 const router = useRouter()

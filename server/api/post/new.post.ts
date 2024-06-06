@@ -74,7 +74,7 @@ export default defineEventHandler(async (event) => {
       })
 
       const sysConfig = await prisma.sysConfig.findFirst()
-      const sysConfigDTO = sysConfig?.content as unknown as SysConfigDTO
+      const sysConfigDTO = JSON.parse(sysConfig?.content as string) as unknown as SysConfigDTO
       let {
         _sum: { point: totalToday },
       } = await prisma.pointHistory.aggregate({
