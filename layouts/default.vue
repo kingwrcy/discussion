@@ -147,6 +147,7 @@ watch(() => route.fullPath, async () => {
             />
           </div>
         </UCard>
+        <XHotUser />
       </div>
     </USlideover>
 

@@ -13,7 +13,7 @@ const { data: hotUsers } = await useFetch('/api/member/hot', { method: 'post' })
       </div>
     </template>
     <div class="py-1  rounded-t sm:px-6 text-primary ">
-      <div class="flex flex-col border rounded">
+      <div class="flex flex-col border rounded dark:border-slate-700">
         <NuxtLink v-for="(user, index) in hotUsers" :key="user.uid" :to="`/member/${user.username}`" class="cursor-pointer hover:bg-slate-50 border-b p-2 flex gap-x-4 text-sm items-center">
           <div class="flex items-center gap-x-2 font-bold">
             <UAvatar :src="getAvatarUrl(user.avatarUrl!)" size="xs" alt="Avatar" />
