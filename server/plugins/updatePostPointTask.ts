@@ -73,7 +73,7 @@ export default defineNitroPlugin((_) => {
         })
         const point
           = ((post.author.point * 2 + post._count.PostSupport * 2 + count - 1)
-          / (second + 600) ** 1.8)
+          / (second + 600) ** 1.1)
           * 10000000
         await prisma.post.update({
           where: {

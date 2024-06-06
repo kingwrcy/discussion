@@ -85,7 +85,7 @@ watch(() => route.fullPath, () => {
         </UBadge>
       </NuxtLink>
 
-      <NuxtLink v-if="currentUser.username === userinfo.username && token" class="flex flex-row gap-1 items-center" :to="`/member/${userinfo.username}/point`">
+      <NuxtLink class="flex flex-row gap-1 items-center" :to="`/member/${userinfo.username}/point`">
         <UBadge size="lg" :color="selectedTab === 'point' ? 'primary' : 'white'" variant="solid" class="space-x-1">
           <UIcon name="i-carbon-favorite" />
           <span>积分({{ userinfo.point }})</span>

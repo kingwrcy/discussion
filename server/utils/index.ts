@@ -10,7 +10,7 @@ const { Pool } = pg
 const connectionString = `${process.env.DATABASE_URL}`
 const pool = new Pool({ connectionString })
 const adapter = new PrismaPg(pool)
-export const prisma = new PrismaClient({ adapter })
+export const prisma = new PrismaClient({ adapter, log: ['warn', 'error'] })
 
 const config = useRuntimeConfig()
 

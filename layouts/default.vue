@@ -187,6 +187,7 @@ watch(() => route.fullPath, async () => {
             />
           </div>
         </UCard>
+        <XHotUser />
       </div>
     </div>
     <XFooter :version="version" />

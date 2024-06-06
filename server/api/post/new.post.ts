@@ -58,7 +58,7 @@ export default defineEventHandler(async (event) => {
         content: request.content,
         uid: event.context.uid,
         tagId: request.tagId,
-        point: ((user.point * 2 - 1) / 600 ** 1.8) * 10000000,
+        point: ((user.point * 2 - 1) / 600 ** 1.1) * 10000000,
       },
     })
     if (!request.pid) {
