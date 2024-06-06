@@ -22,7 +22,7 @@ function doSupport() {
     :class="{ 'sm:px-4 px-2': route.fullPath === '/' || route.fullPath.startsWith('/?page=') || route.fullPath.startsWith('/go/') }"
   >
     <NuxtLink v-if="showAvatar" :to="`/member/${author.username}`">
-      <UAvatar v-if="author && author.avatarUrl" :src="getAvatarUrl(author.avatarUrl)" size="lg" alt="Avatar" />
+      <UAvatar v-if="author && author.avatarUrl" :src="getAvatarUrl(author.avatarUrl, author.headImg)" size="lg" alt="Avatar" />
     </NuxtLink>
     <div class="flex-1">
       <div

@@ -44,6 +44,7 @@ export default defineEventHandler(async (event) => {
         select: {
           username: true,
           avatarUrl: true,
+          headImg: true,
           uid: true,
           role: true,
           signature: true,
@@ -62,6 +63,7 @@ export default defineEventHandler(async (event) => {
               uid: true,
               username: true,
               avatarUrl: true,
+              headImg: true,
               role: true,
               signature: true,
             },

@@ -37,7 +37,7 @@ watch(() => route.fullPath, () => {
   <UCard class="w-full mt-2">
     <template #header>
       <div class="flex flex-row gap-2 py-2">
-        <UAvatar v-if="userinfo" :src="getAvatarUrl(userinfo.avatarUrl!)" size="lg" alt="Avatar" />
+        <UAvatar v-if="userinfo" :src="getAvatarUrl(userinfo.avatarUrl!, userinfo.headImg)" size="lg" alt="Avatar" />
         <div class="flex flex-col text-sm gap-1">
           <div class="flex">
             <NuxtLink :to="`/member/${userinfo.username}`">
