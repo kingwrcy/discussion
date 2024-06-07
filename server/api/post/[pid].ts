@@ -56,6 +56,7 @@ export default defineEventHandler(async (event) => {
           post: {
             select: {
               pid: true,
+              uid: true,
             },
           },
           author: {

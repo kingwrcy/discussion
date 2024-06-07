@@ -9,12 +9,8 @@ interface commentRequest {
 }
 
 function extractMentions(text: string) {
-  // 使用正则表达式匹配前后为空格或行首行尾的@用户
-  const mentionPattern = /(^|\s)@\w+(\s|$)/g
-  const matches = text.match(mentionPattern)
-  // 去除前后的空格
-  const mentions = matches ? matches.map(mention => mention.trim()) : []
-  return mentions
+  const regex = /\[@([^\]]+)\]/g
+  return (text.match(regex) || []).map(match => match.slice(1, -1))
 }
 
 export default defineEventHandler(async (event) => {
@@ -45,6 +41,7 @@ export default defineEventHandler(async (event) => {
       author: {
         select: {
           uid: true,
+          username: true,
         },
       },
     },
@@ -62,6 +59,12 @@ export default defineEventHandler(async (event) => {
       pid: request.pid,
     },
   })
+
+  // 如果提及的是楼主,则从提及的列表里删除楼主
+  const index = mentioned.indexOf(`@${post.author.username}`)
+  if (index >= 0) {
+    mentioned.splice(index, 1)
+  }
 
   await prisma.comment.upsert({
     where: {
