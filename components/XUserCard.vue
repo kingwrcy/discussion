@@ -24,7 +24,15 @@ async function signIn() {
     <template #header>
       <div class="flex gap-4 items-center">
         <NuxtLink :to="`/member/${userinfo.username}`">
-          <UAvatar :src="getAvatarUrl(userinfo.avatarUrl!, userinfo.headImg)" size="lg" alt="Avatar" />
+          <UAvatar
+            v-if="userinfo.unRead > 0"
+            chip-color="rose"
+            :chip-text="userinfo.unRead"
+            chip-position="top-right" :src="getAvatarUrl(userinfo.avatarUrl!, userinfo.headImg)" size="lg" alt="Avatar"
+          />
+          <UAvatar
+            v-else :src="getAvatarUrl(userinfo.avatarUrl!, userinfo.headImg)" size="lg" alt="Avatar"
+          />
         </NuxtLink>
         <div class="flex flex-col text-sm gap-1">
           <div class="flex justify-between">

@@ -52,7 +52,16 @@ export default defineEventHandler(async (event) => {
       },
       tag: true,
       comments: {
-        include: {
+        select: {
+          id: false,
+          createdAt: true,
+          floor: true,
+          content: true,
+          pid: true,
+          uid: true,
+          cid: true,
+          updatedAt: true,
+          mentioned: true,
           post: {
             select: {
               pid: true,

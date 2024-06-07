@@ -97,7 +97,7 @@ useHead({
       <XPost :show-avatar="true" v-bind="post" @support="doSupport" />
     </div>
     <div class="px-4 pt-2 leading-5 border-t space-y-2 dark:border-slate-700">
-      <MdPreview v-model="post.content" :editor-id="post.pid" no-mermaid no-katex />
+      <MdPreview v-model="post.content" :editor-id="`pv-${post.pid}`" no-mermaid no-katex />
     </div>
 
     <div class="px-4 flex justify-end pb-2  items-center space-x-2 my-2">
@@ -116,7 +116,7 @@ useHead({
     </div>
 
     <div class=" gap-2 divide-y divide-gray-300 dark:divide-gray-700 border-t dark:border-gray-700">
-      <XComment v-for="(comment, index) in post.comments" :key="comment.cid" v-bind="comment" :index="index" />
+      <XComment v-for="(comment, index) in post.comments" :id="comment.floor" :key="comment.cid" v-bind="comment" :index="index" />
       <UPagination
         v-if="totalComments > state.size" v-model="state.page" size="sm" class="p-4" :to="(page: number) => ({
           query: { page },

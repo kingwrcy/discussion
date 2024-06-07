@@ -53,12 +53,6 @@ watch(token, async () => {
   }
 })
 
-watch(() => route.fullPath, async (n) => {
-  if (n.startsWith('/post/') || n === '/') {
-    userCardChanged.emit()
-  }
-})
-
 await loadProfile()
 
 if (sysconfig.css) {
@@ -108,7 +102,11 @@ useHead({
 })
 
 const tag = ref<TagDTO>()
-
+watch(() => route.fullPath, async (n) => {
+  if (n.startsWith('/post/') || n === '/') {
+    userCardChanged.emit()
+  }
+})
 watch(() => route.fullPath, async () => {
   if (route.fullPath.startsWith('/go/')) {
     const name = route.fullPath.replaceAll('/go/', '')
@@ -126,19 +124,7 @@ watch(() => route.fullPath, async () => {
       <div class="p-4 flex-1 space-y-4 bg-slate-700">
         <UIcon name="i-carbon-close-large" class="size-5 text-white" @click="sliderOpen = false" />
         <XUserCard v-if="userinfo && userinfo.username" />
-        <UCard
-          v-if="route.fullPath.startsWith('/go/') && tag" class="w-full mt-2"
-          :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }"
-        >
-          <template #header>
-            <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100 dark:bg-slate-500">
-              {{ tag.name }}
-            </div>
-          </template>
-          <div class="text-sm">
-            {{ tag.desc }}
-          </div>
-        </UCard>
+
         <UCard v-if="sysconfig" class="w-full mt-2" :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
           <template #header>
             <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100 dark:bg-slate-500">
@@ -150,6 +136,19 @@ watch(() => route.fullPath, async () => {
               :model-value="sysconfig.websiteAnnouncement" editor-id="websiteAnnouncement" no-mermaid no-katex
               no-highlight
             />
+          </div>
+        </UCard>
+        <UCard
+          v-if="route.fullPath.startsWith('/go/') && tag" class="w-full mt-2"
+          :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }"
+        >
+          <template #header>
+            <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100 dark:bg-slate-500">
+              {{ tag.name }}
+            </div>
+          </template>
+          <div class="text-sm">
+            {{ tag.desc }}
           </div>
         </UCard>
         <XHotUser />

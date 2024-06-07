@@ -168,6 +168,11 @@ export interface SysConfigDTO {
   websiteAnnouncement: string
   css: string
   js: string
+  postUrlFormat: {
+    type: 'UUID' | 'Date' | 'Number'
+    minNumber: number
+    dateFormat: string
+  }
 }
 
 export interface MessageDTO {

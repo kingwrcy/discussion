@@ -83,3 +83,7 @@
 .dark .md-editor-preview img{
   border-color: rgb(51 65 85) !important;
 }
+
+.comment:target,.comment:target .md-editor-preview{
+  background-color: rgb(241,245,249);
+}

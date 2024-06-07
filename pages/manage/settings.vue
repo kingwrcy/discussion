@@ -47,6 +47,11 @@ const state = reactive({
   websiteAnnouncement: ``,
   css: '',
   js: '',
+  postUrlFormat: {
+    type: 'UUID',
+    minNumber: 10000,
+    dateFormat: 'YYYYMMDDHHmmssSSS',
+  },
 })
 
 Object.assign(state, JSON.parse(configData.value?.config as string))
@@ -59,6 +64,8 @@ async function saveSettings() {
   await refresh()
   toast.success('保存成功')
 }
+
+const postUrlFormatOptions = [{ value: 'UUID', label: 'UUID' }, { value: 'Number', label: '数字' }, { value: 'Date', label: '日期' }]
 </script>
 
 <template>
@@ -85,6 +92,23 @@ async function saveSettings() {
             v-model="state.websiteAnnouncement" style="height:200px;" :preview="false" :toolbars="toolbars"
             editor-id="sysSettings" @on-upload-img="onUploadImg"
           />
+        </UFormGroup>
+      </div>
+
+      <div class="flex flex-row space-x-2">
+        <UFormGroup label="帖子链接定义" name="type">
+          <USelectMenu v-model="state.postUrlFormat.type" :options="postUrlFormatOptions" value-attribute="value" option-attribute="label" />
+        </UFormGroup>
+        <UFormGroup v-if="state.postUrlFormat.type === 'Number'" label="起始数字" name="minNumber">
+          <UInput v-model="state.postUrlFormat.minNumber" />
+        </UFormGroup>
+        <UFormGroup v-if="state.postUrlFormat.type === 'Date'" label="日期格式" name="dateFormat">
+          <template #hint>
+            <ULink class="text-green-600 underline" to="https://day.js.org/docs/zh-CN/display/format" target="_blank">
+              支持的格式
+            </ULink>
+          </template>
+          <UInput v-model="state.postUrlFormat.dateFormat" />
         </UFormGroup>
       </div>
 

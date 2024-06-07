@@ -87,14 +87,14 @@ watch(() => route.fullPath, () => {
 
       <NuxtLink class="flex flex-row gap-1 items-center" :to="`/member/${userinfo.username}/point`">
         <UBadge size="lg" :color="selectedTab === 'point' ? 'primary' : 'white'" variant="solid" class="space-x-1">
-          <UIcon name="i-carbon-favorite" />
+          <UIcon name="i-carbon-model" />
           <span>积分({{ userinfo.point }})</span>
         </UBadge>
       </NuxtLink>
 
       <NuxtLink v-if="currentUser.username === userinfo.username && token" class="flex flex-row gap-1 items-center" :to="`/member/${userinfo.username}/message`">
         <UBadge size="lg" :color="selectedTab === 'message' ? 'primary' : 'white'" variant="solid" class="space-x-1">
-          <UIcon name="i-carbon-favorite" />
+          <UIcon name="i-carbon-notification" />
           <span>消息({{ userinfo._count.ReceiveMessage }})</span>
         </UBadge>
       </NuxtLink>

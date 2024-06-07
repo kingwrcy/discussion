@@ -80,7 +80,7 @@ function openModal(message: string) {
 </script>
 
 <template>
-  <div class="px-4 flex space-x-2  items-start py-2 ">
+  <div :id="`${props.floor}`" class="px-4 flex space-x-2  items-start py-2 comment">
     <NuxtLink :to="`/member/${author.username}`">
       <UAvatar v-if="author && author.avatarUrl" :src="getAvatarUrl(author.avatarUrl, author.headImg)" size="lg" alt="Avatar" />
     </NuxtLink>

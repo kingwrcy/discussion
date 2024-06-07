@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     where.hot = true
   }
   if (name) {
-    where.name = name
+    where.enName = name
   }
   const tags = await prisma.tag.findMany({
     where,

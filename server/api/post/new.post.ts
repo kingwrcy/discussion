@@ -40,7 +40,24 @@ export default defineEventHandler(async (event) => {
   if (user.point <= 0) {
     throw createError('用户积分小于或等于0分,不能发帖')
   }
-  const pid = `p${randomId()}`
+  let pid = `p${randomId()}`
+  const sysConfig = await prisma.sysConfig.findFirst()
+  const sysConfigDTO = JSON.parse(sysConfig?.content as string) as unknown as SysConfigDTO
+
+  if (sysConfigDTO.postUrlFormat) {
+    const { type, minNumber, dateFormat } = sysConfigDTO.postUrlFormat
+    if (type === 'Number') {
+      const res = await prisma.post.aggregate({
+        _max: {
+          id: true,
+        },
+      })
+      pid = `${(res._max.id ?? 0) + 1 + (minNumber ?? 0)}`
+    }
+    else if (sysConfigDTO.postUrlFormat?.type === 'Date') {
+      pid = `${dayjs().format(dateFormat)}`
+    }
+  }
 
   try {
     await prisma.post.upsert({
@@ -73,8 +90,6 @@ export default defineEventHandler(async (event) => {
         },
       })
 
-      const sysConfig = await prisma.sysConfig.findFirst()
-      const sysConfigDTO = JSON.parse(sysConfig?.content as string) as unknown as SysConfigDTO
       let {
         _sum: { point: totalToday },
       } = await prisma.pointHistory.aggregate({
