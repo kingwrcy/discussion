@@ -2,6 +2,7 @@
 import type { ToolbarNames } from 'md-editor-v3'
 import { MdEditor } from 'md-editor-v3'
 import { toast } from 'vue-sonner'
+import { useColorMode } from '@vueuse/core'
 
 useHead({
   title: '系统设置',
@@ -9,6 +10,7 @@ useHead({
 definePageMeta({
   layout: 'backend',
 })
+const mode = useColorMode()
 
 const toolbars: ToolbarNames[] = [
   'bold',
@@ -89,7 +91,7 @@ const postUrlFormatOptions = [{ value: 'UUID', label: 'UUID' }, { value: 'Number
       <div class="flex flex-row space-x-2">
         <UFormGroup label="站点公告" name="websiteAnnouncement">
           <MdEditor
-            v-model="state.websiteAnnouncement" style="height:200px;" :preview="false" :toolbars="toolbars"
+            v-model="state.websiteAnnouncement" style="height:200px;" :theme="mode as any" :preview="false" :toolbars="toolbars"
             editor-id="sysSettings" @on-upload-img="onUploadImg"
           />
         </UFormGroup>

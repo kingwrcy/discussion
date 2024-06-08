@@ -7,6 +7,9 @@ export default <Partial<Config>>{
       colors: {
 
       },
+      boxShadow: {
+        '10px': '0 0 10px rgba(0, 0, 0, .3)',
+      },
     },
   },
 }

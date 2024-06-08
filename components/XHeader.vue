@@ -47,7 +47,7 @@ function showSlider() {
 </script>
 
 <template>
-  <div class="header w-full bg-white dark:bg-slate-600 shadow sticky top-0 z-10 px-2 md:px-0">
+  <div class="header w-full bg-white dark:bg-gray-900 shadow sticky top-0 z-10 px-2 md:px-0">
     <div class="max-w-[1080px] mx-auto flex text-[15px] py-1 items-center">
       <div class="cursor-pointer flex gap-1 items-center p-2 hover:text-primary/80 md:hidden" @click="showSlider">
         <UIcon name="i-carbon-bare-metal-server" class="size-5" />
