@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { TagDTO } from '~/types'
 
-const props = defineProps<{
+defineProps<{
   selected?: string
 }>()
 
@@ -9,8 +9,6 @@ const tagRes = await useFetch('/api/go/list?hot=true', {
   method: 'POST',
   key: 'tagLists',
 })
-
-console.log('selected', props.selected)
 
 const tagList = computed(() => {
   return tagRes.data.value?.tags as any as TagDTO[]

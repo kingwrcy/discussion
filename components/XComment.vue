@@ -80,12 +80,12 @@ function openModal(message: string) {
 </script>
 
 <template>
-  <div :id="`${props.floor}`" class="px-4 flex space-x-2  items-start py-2 comment">
+  <div :id="`${props.floor}`" class="relative px-4 flex space-x-2  items-start py-2 comment">
     <NuxtLink :to="`/member/${author.username}`">
       <UAvatar v-if="author && author.avatarUrl" :src="getAvatarUrl(author.avatarUrl, author.headImg)" size="lg" alt="Avatar" />
     </NuxtLink>
-    <div class="flex-1 space-y-2">
-      <div class="flex space-x-4 text-xs mt-1 text-gray-500">
+    <div class="flex-1 space-y-2 ">
+      <div class="flex text-xs mt-1 text-gray-500 flex-wrap gap-2 max-w-[90%]">
         <div class="flex  items-center space-x-1 cursor-pointer hover:text-primary/80 font-semibold">
           <UIcon name="i-carbon-user" />
           <NuxtLink :to="`/member/${author.username}`">
@@ -137,9 +137,11 @@ function openModal(message: string) {
       </div>
     </div>
 
-    <div class="flex md:gap-x-2 items-center">
-      <XUserSig v-if="author.signature" :signature="author.signature" />
-      <a v-if="route.fullPath.startsWith('/post')" :id="`${props.floor}`" class="md:ml-4 text-sm text-primary/40 select-none cursor-pointer" :href="`#${props.floor}`">#{{ props.floor }}</a>
+    <div class="absolute right-2 top-2">
+      <div class="flex md:gap-x-2 items-center">
+        <XUserSig v-if="author.signature" :signature="author.signature" />
+        <a v-if="route.fullPath.startsWith('/post')" :id="`${props.floor}`" class="md:ml-4 text-sm text-primary/40 select-none cursor-pointer" :href="`#${props.floor}`">#{{ props.floor }}</a>
+      </div>
     </div>
   </div>
 </template>

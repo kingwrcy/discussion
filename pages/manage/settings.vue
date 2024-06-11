@@ -56,7 +56,7 @@ const state = reactive({
   },
 })
 
-Object.assign(state, JSON.parse(configData.value?.config as string))
+Object.assign(state, configData.value?.config)
 
 async function saveSettings() {
   await $fetch('/api/manage/config/save', {

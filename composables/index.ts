@@ -1,3 +1,5 @@
+import type { SysConfigDTO } from '~/types'
+
 export function useAbsoluteUrl() {
   const url = useRequestURL()
   const getAbsoluteUrl = (path: string) => {
@@ -5,4 +7,10 @@ export function useAbsoluteUrl() {
     return baseUrl + path
   }
   return { getAbsoluteUrl }
+}
+
+export function useGlobalConfig() {
+  return useState('globalConfig', () => {
+    return { sysConfig: {} as SysConfigDTO, version: '' }
+  })
 }

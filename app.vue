@@ -2,15 +2,16 @@
 import 'md-editor-v3/lib/style.css'
 import type { SysConfigDTO } from './types'
 
-const global = useState<{ sysConfig: SysConfigDTO, version: string | undefined }>('globalConfig')
+const global = useGlobalConfig()
 const { data: configData } = await useFetch('/api/config', {
   method: 'POST',
 })
-const sysConfig = JSON.parse(configData.value?.data as string) as unknown as SysConfigDTO
+
+const sysConfig = configData.value?.data as unknown as SysConfigDTO
 
 const version = configData.value?.version
 
-global.value = { sysConfig, version }
+global.value = { sysConfig, version: version! }
 
 useHead({
   // as a string,

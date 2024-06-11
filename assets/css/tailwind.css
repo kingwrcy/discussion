@@ -18,7 +18,7 @@
   font-size: 14px !important;
   line-height: 1.8rem !important;
   overflow-wrap: normal !important;
-  word-break: normal !important;
+  word-break: break-word !important;
 }
 
 .md-editor-preview ul{

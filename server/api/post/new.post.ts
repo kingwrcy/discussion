@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
   }
   let pid = `p${randomId()}`
   const sysConfig = await prisma.sysConfig.findFirst()
-  const sysConfigDTO = JSON.parse(sysConfig?.content as string) as unknown as SysConfigDTO
+  const sysConfigDTO = sysConfig?.content as unknown as SysConfigDTO
 
   if (sysConfigDTO.postUrlFormat) {
     const { type, minNumber, dateFormat } = sysConfigDTO.postUrlFormat

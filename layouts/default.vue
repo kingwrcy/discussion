@@ -12,7 +12,7 @@ const sliderOpen = useState('sliderOpen', () => {
   return false
 })
 
-const global = useState<{ sysConfig: SysConfigDTO, version: string | undefined }>('globalConfig')
+const global = useGlobalConfig()
 
 async function loadProfile() {
   const userinfoRes = await useFetch('/api/member/profile', {
