@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
   const data = {
     email: request.email.trim(),
     avatarUrl: sha256(request.email.trim()),
-    headImg: request.headImg.trim(),
+    headImg: request.headImg?.trim(),
     css: request.css,
     js: request.js,
     signature: request.signature,
