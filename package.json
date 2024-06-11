@@ -19,7 +19,7 @@
     "@iconify-json/carbon": "^1.1.35",
     "@nuxt/ui": "^2.16.0",
     "@prisma/adapter-pg": "^5.15.0",
-    "@prisma/client": "5.14.0",
+    "@prisma/client": "5.15.0",
     "@vueuse/components": "^10.10.0",
     "@vueuse/core": "^10.10.0",
     "@vueuse/nuxt": "^10.10.0",
