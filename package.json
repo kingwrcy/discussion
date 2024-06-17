@@ -21,7 +21,7 @@
     "@prisma/adapter-pg": "^5.15.0",
     "@prisma/client": "5.15.0",
     "@vueuse/components": "^10.10.0",
-    "@vueuse/core": "^10.10.0",
+    "@vueuse/core": "^10.11.0",
     "@vueuse/nuxt": "^10.10.0",
     "bcryptjs": "^2.4.3",
     "dayjs": "^1.11.11",
