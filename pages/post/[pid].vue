@@ -12,7 +12,7 @@ const state = reactive({
 })
 
 const url = `/api/post/${route.params.pid}`
-const { data } = await useFetch(url, {
+const { data }: any = await useFetch(url, {
   method: 'POST',
   body: JSON.stringify({
     ...state,
@@ -75,9 +75,9 @@ const totalComments = computed(() => {
 })
 
 useSeoMeta({
-  title: post.value.title,
-  description: post.value.content.substring(0, 100),
-  keywords: post.value.title,
+  title: data.value.success ? post.value.title : data.value.message,
+  description: data.value.success ? post.value.content.substring(0, 100) : data.value.message,
+  keywords: data.value.success ? post.value.title : data.value.message,
 })
 const { getAbsoluteUrl } = useAbsoluteUrl()
 
@@ -92,7 +92,12 @@ useHead({
 </script>
 
 <template>
-  <div class="w-full bg-white dark:bg-gray-900 shadow md:rounded-lg md:mt-2 rounded-none relative">
+  <div v-if="!data.success" class="w-full bg-white dark:bg-gray-900 shadow md:rounded-lg md:mt-2 rounded-none relative flex justify-center h-80vh">
+    <div class="text-4xl pt-56">
+      {{ data.message }}
+    </div>
+  </div>
+  <div v-else class="w-full bg-white dark:bg-gray-900 shadow md:rounded-lg md:mt-2 rounded-none relative">
     <div class="px-4 py-2 ">
       <XPost :show-avatar="true" v-bind="post" @support="doSupport" />
     </div>

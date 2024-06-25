@@ -63,7 +63,9 @@ export default defineEventHandler(async (event) => {
     ],
   })
   let posts = await prisma.post.findMany({
-    where: { ...where, pinned: false },
+    where: { ...where, pinned: false, readRole: {
+      not: 999,
+    } },
     include,
     orderBy: {
       point: 'desc',
