@@ -5,9 +5,11 @@ import { toast } from 'vue-sonner'
 import type { z } from 'zod'
 import { useColorMode } from '@vueuse/core'
 import type { FormError, FormSubmitEvent } from '#ui/types'
-import { type PostDTO, createPostSchema, getLength } from '~/types'
+import type { PostDTO, UserDTO, createPostSchema, getLength } from '~/types'
 
 type Schema = z.output<typeof createPostSchema>
+
+const userinfo = useState<UserDTO>('userinfo')
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeyDown)
@@ -48,12 +50,22 @@ const tags = computed(() => {
   })
   return items
 })
+const readRoleList = computed(() => {
+  const result = []
+  for (let i = 1; i <= userinfo.value.level; i++) {
+    result.push({ id: i, desc: `LV ${i}` })
+  }
+  result.push({ id: 999, desc: '私有' })
+  result.unshift({ id: 0, desc: '公开' })
+  return result
+})
 
 const state = reactive<Schema>({
   pid: '',
   title: '',
   content: '',
   tagId: 0,
+  readRole: 0,
 })
 
 async function loadPost() {
@@ -131,6 +143,9 @@ useHead({
         </UFormGroup>
         <UFormGroup label="标签" name="tags" required>
           <USelectMenu v-model="state.tagId" value-attribute="id" option-attribute="desc" :options="tags" />
+        </UFormGroup>
+        <UFormGroup label="阅读限制" name="tags" required>
+          <USelectMenu v-model="state.readRole" value-attribute="id" option-attribute="desc" :options="readRoleList" />
         </UFormGroup>
         <UFormGroup label="正文" name="content" required>
           <MdEditor

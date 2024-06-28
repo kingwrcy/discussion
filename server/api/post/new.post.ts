@@ -68,6 +68,7 @@ export default defineEventHandler(async (event) => {
         title: request.title,
         content: request.content,
         tagId: request.tagId,
+        readRole: request.readRole,
       },
       create: {
         pid,
@@ -75,6 +76,7 @@ export default defineEventHandler(async (event) => {
         content: request.content,
         uid: event.context.uid,
         tagId: request.tagId,
+        readRole: request.readRole,
         point: ((user.point * 2 - 1) / 600 ** 1.1) * 10000000,
       },
     })

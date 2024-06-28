@@ -15,6 +15,55 @@ export default defineEventHandler(async (event) => {
   const size = (body.size as number) || 20
   const uid = event.context.uid
 
+  if (!uid) {
+    return {
+      success: false,
+      message: '本帖需要注册用户才能查看',
+    }
+  }
+
+  // 查询当前uid的level
+  const { level, role }: any = await prisma.user.findFirst({
+    where: {
+      uid,
+    },
+    select: {
+      level: true,
+      role: true,
+    },
+  })
+  const { readRole, uid: postUid }: any = await prisma.post.findFirst({
+    where: {
+      pid,
+    },
+    select: {
+      readRole: true,
+      uid: true,
+    },
+  })
+  let canContinue = false
+  // 如果用户是 ADMIN，跳过所有检查
+  if (role === 'ADMIN') {
+    canContinue = true
+  }
+  // 如果用户是 USER，检查 uid 是否匹配
+  if (!canContinue && role === 'USER') {
+    if (uid === postUid) {
+      canContinue = true
+    }
+  }
+  // 检查用户的 level 是否大于等于帖子的 readRole
+  if (!canContinue && level >= readRole) {
+    canContinue = true
+  }
+
+  if (!canContinue) {
+    return {
+      success: false,
+      message: `查看本帖需要Lv${readRole}，您的权限不足`,
+    }
+  }
+
   if (body.count) {
     await prisma.post.update({
       where: {

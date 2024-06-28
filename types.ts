@@ -55,6 +55,7 @@ export const createPostSchema = z.object({
   content: z.string({ message: '内容是必填的' }),
   tagId: z.number({ message: '标签是必选的' }),
   pid: z.string().optional(),
+  readRole: z.number({ message: '阅读范围是必选的' }),
 }).refine(data => getLength(data.content) >= 6, {
   message: '内容最少6个字符,中文一个算2个字符',
   path: ['username'],
@@ -137,6 +138,7 @@ export interface PostDTO {
   author: UserDTO
   comments?: Array<CommentDTO>
   tagId: number
+  readRole: number
   tag: TagDTO
   support?: boolean
   _count: {
