@@ -181,6 +181,15 @@ model Message {
   to         User         @relation("receiveMessage", fields: [toUid], references: [uid])
 }
 
+model inviteCode {
+  id         Int          @id @default(autoincrement())
+  createdAt  DateTime     @default(now())
+  endAt      DateTime     @default(now())
+  fromUid    String?
+  toUid      String
+  content    String
+}
+
 enum UserStatus {
   NORMAL
   BANNED
@@ -198,6 +207,7 @@ enum PointReason {
   DISLIKE
   SIGNIN
   PUNISH
+  INVITE
 }
 
 enum MessageType {

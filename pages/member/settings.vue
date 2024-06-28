@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { toast } from 'vue-sonner'
 import type { z } from 'zod'
+import copy from 'clipboard-copy'
+import XTipModal from '../../components/XTipModal.vue'
 import type { FormSubmitEvent } from '#ui/types'
 import type { UserDTO } from '~/types'
 import { saveSettingsRequestSchema } from '~/types'
@@ -8,6 +10,8 @@ import { saveSettingsRequestSchema } from '~/types'
 const { data } = await useFetch(`/api/member/profile`, { method: 'POST' })
 const userinfo = data.value as UserDTO
 const config = useRuntimeConfig()
+const globalConfig = useGlobalConfig()
+const { sysConfig } = globalConfig.value
 useHead({
   title: `${userinfo.username}的个人设置`,
 })
@@ -35,6 +39,28 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   else {
     toast.success('修改成功')
   }
+}
+
+const inviteCode = ref<string>('')
+const modal = useModal()
+async function createInviteCode() {
+  modal.open(XTipModal, {
+    message: `生成邀请码将会扣除${sysConfig.createInviteCodePoint}积分，是否继续`,
+    async onSuccess() {
+      const result = await $fetch<{ success: boolean, message: string, data: string }>('/api/member/createInviteCode', {
+        method: 'POST',
+      })
+      inviteCode.value = result.data
+      modal.close()
+    },
+    onCancel() {
+      modal.close()
+    },
+  })
+}
+async function copyCode() {
+  copy(inviteCode.value)
+  toast.success('复制成功')
 }
 </script>
 
@@ -65,6 +91,15 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       </UFormGroup>
       <UFormGroup label="邮箱" name="email" hint="请使用常用邮箱,会用来生成头像">
         <UInput v-model="state.email" type="text" />
+      </UFormGroup>
+      <UFormGroup v-if="sysConfig.invite" label="邀请码" name="email" hint="24小时内单次有效">
+        <UButtonGroup size="sm" orientation="horizontal">
+          <UButton @click="createInviteCode">
+            生成邀请码
+          </UButton>
+          <UInput v-model="inviteCode" disabled />
+          <UButton icon="i-heroicons-clipboard-document" color="gray" @click="copyCode" />
+        </UButtonGroup>
       </UFormGroup>
       <UFormGroup label="自定义css" name="css" hint="修改了此项需要刷新页面">
         <UTextarea v-model="state.css" :rows="10" />

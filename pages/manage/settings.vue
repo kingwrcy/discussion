@@ -54,6 +54,8 @@ const state = reactive({
     minNumber: 10000,
     dateFormat: 'YYYYMMDDHHmmssSSS',
   },
+  invite: false,
+  createInviteCodePoint: 100,
 })
 
 Object.assign(state, configData.value?.config)
@@ -145,7 +147,16 @@ const postUrlFormatOptions = [{ value: 'UUID', label: 'UUID' }, { value: 'Number
           <UInput v-model.number="state.pointPerDaySignInMax" autocomplete="off" />
         </UFormGroup>
       </div>
-
+      <div class="flex flex-row space-x-2">
+        <UFormGroup label="注册限制" name="pointPerDaySignInMin">
+          <UToggle v-model="state.invite" />
+        </UFormGroup>
+      </div>
+      <div class="flex flex-row space-x-2">
+        <UFormGroup label="每次生成邀请码需要积分" name="createInviteCodePoint">
+          <UInput v-model.number="state.createInviteCodePoint" autocomplete="off" />
+        </UFormGroup>
+      </div>
       <div class="flex flex-col space-y-2 ">
         <div class="flex flex-row space-x-2">
           <UFormGroup label="自定义css" name="css" class="w-[500px]" hint="刷新页面生效">
