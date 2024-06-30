@@ -9,12 +9,14 @@ type Schema = z.output<typeof regRequestSchema>
 useHead({
   title: `注册用户`,
 })
-
+const config = useGlobalConfig()
+const { sysConfig } = config.value
 const state = reactive<Schema>({
   email: '',
   password: '',
   username: '',
   repeatPassword: '',
+  inviteCode: '',
 })
 const pending = ref(false)
 
@@ -58,6 +60,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         </UFormGroup>
         <UFormGroup label="重复密码" name="repeatPassword">
           <UInput v-model="state.repeatPassword" type="password" autocomplete="on" />
+        </UFormGroup>
+        <UFormGroup v-if="sysConfig.invite" label="邀请码" name="inviteCode">
+          <UInput v-model="state.inviteCode" autocomplete="on" />
         </UFormGroup>
         <div>
           <UButton type="submit" :loading="pending">

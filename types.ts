@@ -21,6 +21,7 @@ export const regRequestSchema = z
     password: z.string().min(6, '密码最少6个字符'),
     repeatPassword: z.string().min(6, '密码最少6个字符'),
     email: z.string().email('请填写正确的邮箱地址'),
+    inviteCode: z.string().optional(),
   })
   .refine(data => data.password === data.repeatPassword, {
     message: '两次密码不一致',
@@ -28,6 +29,9 @@ export const regRequestSchema = z
   }).refine(data => getLength(data.username) >= 4, {
     message: '用户名最少4个字符,中文一个算2个字符',
     path: ['username'],
+  }).refine(data => !data.inviteCode || getLength(data.inviteCode) > 0, {
+    message: '请填写邀请码',
+    path: ['inviteCode'],
   })
 
 export const saveSettingsRequestSchema = z.object({
@@ -175,6 +179,8 @@ export interface SysConfigDTO {
     minNumber: number
     dateFormat: string
   }
+  invite: string
+  createInviteCodePoint: number
 }
 
 export interface MessageDTO {
@@ -184,4 +190,12 @@ export interface MessageDTO {
   content: string
   read: boolean
   createdAt: string
+}
+export interface inviteInfo {
+  id: number
+  createdAt: string
+  endAt: string
+  fromUid: string
+  toUid: string
+  content: string
 }
