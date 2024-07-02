@@ -47,7 +47,7 @@
     "@types/markdown-it-link-attributes": "^3.0.5",
     "@types/pg": "^8.11.6",
     "@types/shortid": "^0.0.32",
-    "eslint": "9.4.0",
+    "eslint": "9.6.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.7",
     "prisma": "^5.16.1",
