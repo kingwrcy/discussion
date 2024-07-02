@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { toast } from 'vue-sonner'
 import type { z } from 'zod'
-import copy from 'clipboard-copy'
+import { useClipboard } from '@vueuse/core'
 import XTipModal from '../../components/XTipModal.vue'
 import type { FormSubmitEvent } from '#ui/types'
 import type { UserDTO } from '~/types'
@@ -9,6 +9,7 @@ import { saveSettingsRequestSchema } from '~/types'
 
 const { data } = await useFetch(`/api/member/profile`, { method: 'POST' })
 const userinfo = data.value as UserDTO
+const { copy } = useClipboard({})
 const config = useRuntimeConfig()
 const globalConfig = useGlobalConfig()
 const { sysConfig } = globalConfig.value
