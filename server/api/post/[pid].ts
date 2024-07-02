@@ -15,13 +15,6 @@ export default defineEventHandler(async (event) => {
   const size = (body.size as number) || 20
   const uid = event.context.uid
 
-  if (!uid) {
-    return {
-      success: false,
-      message: '本帖需要注册用户才能查看',
-    }
-  }
-
   // 查询当前uid的level
   const { level, role }: any = await prisma.user.findFirst({
     where: {
@@ -41,6 +34,14 @@ export default defineEventHandler(async (event) => {
       uid: true,
     },
   })
+
+  if (!uid && readRole > 0) {
+    return {
+      success: false,
+      message: '本帖需要注册用户才能查看',
+    }
+  }
+
   let canContinue = false
   // 如果用户是 ADMIN，跳过所有检查
   if (role === 'ADMIN') {
