@@ -4,113 +4,109 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-importers:
 
-  .:
-    dependencies:
-      '@iconify-json/carbon':
-        specifier: ^1.1.36
-        version: 1.1.36
-      '@nuxt/ui':
-        specifier: ^2.17.0
-        version: 2.17.0(magicast@0.3.4)(rollup@4.18.0)(vite@5.3.2(@types/node@20.14.9)(terser@5.31.1))(vue@3.4.31(typescript@5.5.2))
-      '@prisma/adapter-pg':
-        specifier: ^5.16.1
-        version: 5.16.1(pg@8.12.0)
-      '@prisma/client':
-        specifier: 5.16.1
-        version: 5.16.1(prisma@5.16.1)
-      '@vueuse/components':
-        specifier: ^10.11.0
-        version: 10.11.0(vue@3.4.31(typescript@5.5.2))
-      '@vueuse/core':
-        specifier: ^10.11.0
-        version: 10.11.0(vue@3.4.31(typescript@5.5.2))
-      '@vueuse/nuxt':
-        specifier: ^10.11.0
-        version: 10.11.0(magicast@0.3.4)(nuxt@3.12.2(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(encoding@0.1.13)(eslint@9.4.0)(ioredis@5.4.1)(magicast@0.3.4)(optionator@0.9.4)(rollup@4.18.0)(terser@5.31.1)(typescript@5.5.2)(vite@5.3.2(@types/node@20.14.9)(terser@5.31.1)))(rollup@4.18.0)(vue@3.4.31(typescript@5.5.2))
-      bcryptjs:
-        specifier: ^2.4.3
-        version: 2.4.3
-      clipboard-copy:
-        specifier: ^4.0.1
-        version: 4.0.1
-      dayjs:
-        specifier: ^1.11.11
-        version: 1.11.11
-      js-sha256:
-        specifier: ^0.11.0
-        version: 0.11.0
-      jsonwebtoken:
-        specifier: ^9.0.2
-        version: 9.0.2
-      markdown-it-link-attributes:
-        specifier: ^4.0.1
-        version: 4.0.1
-      md-editor-v3:
-        specifier: ^4.17.0
-        version: 4.17.0(@codemirror/view@6.28.2)(@lezer/common@1.2.1)(vue@3.4.31(typescript@5.5.2))
-      nuxt:
-        specifier: ^3.12.2
-        version: 3.12.2(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.9)(encoding@0.1.13)(eslint@9.4.0)(ioredis@5.4.1)(magicast@0.3.4)(optionator@0.9.4)(rollup@4.18.0)(terser@5.31.1)(typescript@5.5.2)(vite@5.3.2(@types/node@20.14.9)(terser@5.31.1))
-      nuxt-scheduler:
-        specifier: ^0.1.9
-        version: 0.1.9(magicast@0.3.4)(rollup@4.18.0)
-      pg:
-        specifier: ^8.12.0
-        version: 8.12.0
-      short-uuid:
-        specifier: ^5.2.0
-        version: 5.2.0
-      tailwindcss:
-        specifier: ^3.4.4
-        version: 3.4.4
-      vue:
-        specifier: ^3.4.31
-        version: 3.4.31(typescript@5.5.2)
-      vue-router:
-        specifier: ^4.4.0
-        version: 4.4.0(vue@3.4.31(typescript@5.5.2))
-      vue-sonner:
-        specifier: ^1.1.3
-        version: 1.1.3
-      zod:
-        specifier: ^3.23.8
-        version: 3.23.8
-    devDependencies:
-      '@antfu/eslint-config':
-        specifier: ^2.21.2
-        version: 2.21.2(@vue/compiler-sfc@3.4.31)(eslint@9.4.0)(typescript@5.5.2)
-      '@types/bcryptjs':
-        specifier: ^2.4.6
-        version: 2.4.6
-      '@types/jsonwebtoken':
-        specifier: ^9.0.6
-        version: 9.0.6
-      '@types/markdown-it-link-attributes':
-        specifier: ^3.0.5
-        version: 3.0.5
-      '@types/pg':
-        specifier: ^8.11.6
-        version: 8.11.6
-      '@types/shortid':
-        specifier: ^0.0.32
-        version: 0.0.32
-      eslint:
-        specifier: 9.4.0
-        version: 9.4.0
-      husky:
-        specifier: ^9.0.11
-        version: 9.0.11
-      lint-staged:
-        specifier: ^15.2.7
-        version: 15.2.7
-      prisma:
-        specifier: ^5.16.1
-        version: 5.16.1
-      typescript:
-        specifier: ^5.5.2
-        version: 5.5.2
+dependencies:
+  '@iconify-json/carbon':
+    specifier: ^1.1.35
+    version: 1.1.36
+  '@nuxt/ui':
+    specifier: ^2.17.0
+    version: 2.17.0(vite@5.3.2)(vue@3.4.31)
+  '@prisma/adapter-pg':
+    specifier: ^5.15.0
+    version: 5.16.1(pg@8.12.0)
+  '@prisma/client':
+    specifier: 5.16.1
+    version: 5.16.1(prisma@5.16.1)
+  '@vueuse/components':
+    specifier: ^10.10.0
+    version: 10.11.0(vue@3.4.31)
+  '@vueuse/core':
+    specifier: ^10.10.0
+    version: 10.11.0(vue@3.4.31)
+  '@vueuse/nuxt':
+    specifier: ^10.10.0
+    version: 10.11.0(nuxt@3.12.2)(vue@3.4.31)
+  bcryptjs:
+    specifier: ^2.4.3
+    version: 2.4.3
+  dayjs:
+    specifier: ^1.11.11
+    version: 1.11.11
+  js-sha256:
+    specifier: ^0.11.0
+    version: 0.11.0
+  jsonwebtoken:
+    specifier: ^9.0.2
+    version: 9.0.2
+  markdown-it-link-attributes:
+    specifier: ^4.0.1
+    version: 4.0.1
+  md-editor-v3:
+    specifier: ^4.16.3
+    version: 4.17.0(@codemirror/view@6.28.3)(@lezer/common@1.2.1)(vue@3.4.31)
+  nuxt:
+    specifier: ^3.11.2
+    version: 3.12.2(@opentelemetry/api@1.9.0)(eslint@9.4.0)(typescript@5.5.2)(vite@5.3.2)
+  nuxt-scheduler:
+    specifier: ^0.1.9
+    version: 0.1.9
+  pg:
+    specifier: ^8.12.0
+    version: 8.12.0
+  short-uuid:
+    specifier: ^5.2.0
+    version: 5.2.0
+  tailwindcss:
+    specifier: ^3.4.4
+    version: 3.4.4
+  vue:
+    specifier: ^3.4.27
+    version: 3.4.31(typescript@5.5.2)
+  vue-router:
+    specifier: ^4.3.2
+    version: 4.4.0(vue@3.4.31)
+  vue-sonner:
+    specifier: ^1.1.2
+    version: 1.1.3
+  zod:
+    specifier: ^3.23.8
+    version: 3.23.8
+
+devDependencies:
+  '@antfu/eslint-config':
+    specifier: ^2.20.0
+    version: 2.21.1(@vue/compiler-sfc@3.4.31)(eslint@9.4.0)(typescript@5.5.2)
+  '@types/bcryptjs':
+    specifier: ^2.4.6
+    version: 2.4.6
+  '@types/jsonwebtoken':
+    specifier: ^9.0.6
+    version: 9.0.6
+  '@types/markdown-it-link-attributes':
+    specifier: ^3.0.5
+    version: 3.0.5
+  '@types/pg':
+    specifier: ^8.11.6
+    version: 8.11.6
+  '@types/shortid':
+    specifier: ^0.0.32
+    version: 0.0.32
+  eslint:
+    specifier: 9.4.0
+    version: 9.4.0
+  husky:
+    specifier: ^9.0.11
+    version: 9.0.11
+  lint-staged:
+    specifier: ^15.2.5
+    version: 15.2.7
+  prisma:
+    specifier: ^5.16.1
+    version: 5.16.1
+  typescript:
+    specifier: ^5.4.5
+    version: 5.5.
 
 packages:
 
@@ -558,95 +554,7 @@ packages:
     cpu: [arm64]
     os: [freebsd]
 
-  '@esbuild/freebsd-x64@0.20.2':
-    resolution: {integrity: sha512-d+DipyvHRuqEeM5zDivKV1KuXn9WeRX6vqSqIDgwIfPQtwMP4jaDsQsDncjTDDsExT4lR/91OLjRo8bmC1e+Cw==}
-    engines: {node: '>=12'}
-    cpu: [x64]
-    os: [freebsd]
-
-  '@esbuild/freebsd-x64@0.21.5':
-    resolution: {integrity: sha512-J95kNBj1zkbMXtHVH29bBriQygMXqoVQOQYA+ISs0/2l3T9/kj42ow2mpqerRBxDJnmkUDCaQT/dfNXWX/ZZCQ==}
-    engines: {node: '>=12'}
-    cpu: [x64]
-    os: [freebsd]
-
-  '@esbuild/linux-arm64@0.20.2':
-    resolution: {integrity: sha512-9pb6rBjGvTFNira2FLIWqDk/uaf42sSyLE8j1rnUpuzsODBq7FvpwHYZxQ/It/8b+QOS1RYfqgGFNLRI+qlq2A==}
-    engines: {node: '>=12'}
-    cpu: [arm64]
-    os: [linux]
-
-  '@esbuild/linux-arm64@0.21.5':
-    resolution: {integrity: sha512-ibKvmyYzKsBeX8d8I7MH/TMfWDXBF3db4qM6sy+7re0YXya+K1cem3on9XgdT2EQGMu4hQyZhan7TeQ8XkGp4Q==}
-    engines: {node: '>=12'}
-    cpu: [arm64]
-    os: [linux]
-
-  '@esbuild/linux-arm@0.20.2':
-    resolution: {integrity: sha512-VhLPeR8HTMPccbuWWcEUD1Az68TqaTYyj6nfE4QByZIQEQVWBB8vup8PpR7y1QHL3CpcF6xd5WVBU/+SBEvGTg==}
-    engines: {node: '>=12'}
-    cpu: [arm]
-    os: [linux]
-
-  '@esbuild/linux-arm@0.21.5':
-    resolution: {integrity: sha512-bPb5AHZtbeNGjCKVZ9UGqGwo8EUu4cLq68E95A53KlxAPRmUyYv2D6F0uUI65XisGOL1hBP5mTronbgo+0bFcA==}
-    engines: {node: '>=12'}
-    cpu: [arm]
-    os: [linux]
-
-  '@esbuild/linux-ia32@0.20.2':
-    resolution: {integrity: sha512-o10utieEkNPFDZFQm9CoP7Tvb33UutoJqg3qKf1PWVeeJhJw0Q347PxMvBgVVFgouYLGIhFYG0UGdBumROyiig==}
-    engines: {node: '>=12'}
-    cpu: [ia32]
-    os: [linux]
-
-  '@esbuild/linux-ia32@0.21.5':
-    resolution: {integrity: sha512-YvjXDqLRqPDl2dvRODYmmhz4rPeVKYvppfGYKSNGdyZkA01046pLWyRKKI3ax8fbJoK5QbxblURkwK/MWY18Tg==}
-    engines: {node: '>=12'}
-    cpu: [ia32]
-    os: [linux]
-
-  '@esbuild/linux-loong64@0.20.2':
-    resolution: {integrity: sha512-PR7sp6R/UC4CFVomVINKJ80pMFlfDfMQMYynX7t1tNTeivQ6XdX5r2XovMmha/VjR1YN/HgHWsVcTRIMkymrgQ==}
-    engines: {node: '>=12'}
-    cpu: [loong64]
-    os: [linux]
-
-  '@esbuild/linux-loong64@0.21.5':
-    resolution: {integrity: sha512-uHf1BmMG8qEvzdrzAqg2SIG/02+4/DHB6a9Kbya0XDvwDEKCoC8ZRWI5JJvNdUjtciBGFQ5PuBlpEOXQj+JQSg==}
-    engines: {node: '>=12'}
-    cpu: [loong64]
-    os: [linux]
-
-  '@esbuild/linux-mips64el@0.20.2':
-    resolution: {integrity: sha512-4BlTqeutE/KnOiTG5Y6Sb/Hw6hsBOZapOVF6njAESHInhlQAghVVZL1ZpIctBOoTFbQyGW+LsVYZ8lSSB3wkjA==}
-    engines: {node: '>=12'}
-    cpu: [mips64el]
-    os: [linux]
-
-  '@esbuild/linux-mips64el@0.21.5':
-    resolution: {integrity: sha512-IajOmO+KJK23bj52dFSNCMsz1QP1DqM6cwLUv3W1QwyxkyIWecfafnI555fvSGqEKwjMXVLokcV5ygHW5b3Jbg==}
-    engines: {node: '>=12'}
-    cpu: [mips64el]
-    os: [linux]
-
-  '@esbuild/linux-ppc64@0.20.2':
-    resolution: {integrity: sha512-rD3KsaDprDcfajSKdn25ooz5J5/fWBylaaXkuotBDGnMnDP1Uv5DLAN/45qfnf3JDYyJv/ytGHQaziHUdyzaAg==}
-    engines: {node: '>=12'}
-    cpu: [ppc64]
-    os: [linux]
-
-  '@esbuild/linux-ppc64@0.21.5':
-    resolution: {integrity: sha512-1hHV/Z4OEfMwpLO8rp7CvlhBDnjsC3CttJXIhBi+5Aj5r+MBvy4egg7wCbe//hSsT+RvDAG7s81tAvpL2XAE4w==}
-    engines: {node: '>=12'}
-    cpu: [ppc64]
-    os: [linux]
-
-  '@esbuild/linux-riscv64@0.20.2':
-    resolution: {integrity: sha512-snwmBKacKmwTMmhLlz/3aH1Q9T8v45bKYGE3j26TsaOVtjIag4wLfWSiZykXzXuE1kbCE+zJRmwp+ZbIHinnVg==}
-    engines: {node: '>=12'}
-    cpu: [riscv64]
-    os: [linux]
+  
 
   '@esbuild/linux-riscv64@0.21.5':
     resolution: {integrity: sha512-2HdXDMd9GMgTGrPWnJzP2ALSokE/0O5HhTUvWIbD3YdjME8JwvSCnNGBnTThKGEB91OZhzrJ4qIIxk/SBmyDDA==}
@@ -5672,7 +5580,22 @@ snapshots:
       '@codemirror/view': 6.28.2
       '@lezer/common': 1.2.1
 
-  '@codemirror/commands@6.6.0':
+  /@codemirror/autocomplete@6.16.3(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.3)(@lezer/common@1.2.1):
+    resolution: {integrity: sha512-Vl/tIeRVVUCRDuOG48lttBasNQu8usGgXQawBXI7WJAiUDSFOfzflmEsZFZo48mAvAaa4FZ/4/yLLxFtdJaKYA==}
+    peerDependencies:
+      '@codemirror/language': ^6.0.0
+      '@codemirror/state': ^6.0.0
+      '@codemirror/view': ^6.0.0
+      '@lezer/common': ^1.0.0
+    dependencies:
+      '@codemirror/language': 6.10.2
+      '@codemirror/state': 6.4.1
+      '@codemirror/view': 6.28.3
+      '@lezer/common': 1.2.1
+    dev: false
+
+  @codemirror/commands@6.6.0:
+    resolution: {integrity: sha512-qnY+b7j1UNcTS31Eenuc/5YJB6gQOzkUoNmJQc0rznwqSRpeaWWpjkWy2C/MPTcePpsKJEM26hXrOXl1+nceXg==}
     dependencies:
       '@codemirror/language': 6.10.2
       '@codemirror/state': 6.4.1
@@ -5703,9 +5626,8 @@ snapshots:
     transitivePeerDependencies:
       - '@codemirror/view'
 
-  '@codemirror/lang-go@6.0.1(@codemirror/view@6.28.2)':
     dependencies:
-      '@codemirror/autocomplete': 6.16.3(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.2)(@lezer/common@1.2.1)
+      '@codemirror/autocomplete': 6.16.3(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.3)(@lezer/common@1.2.1)
       '@codemirror/language': 6.10.2
       '@codemirror/state': 6.4.1
       '@lezer/common': 1.2.1
@@ -5745,9 +5667,9 @@ snapshots:
       '@codemirror/language': 6.10.2
       '@lezer/json': 1.0.2
 
-  '@codemirror/lang-less@6.0.2(@codemirror/view@6.28.2)':
+
     dependencies:
-      '@codemirror/lang-css': 6.2.1(@codemirror/view@6.28.2)
+      '@codemirror/lang-css': 6.2.1(@codemirror/view@6.28.3)
       '@codemirror/language': 6.10.2
       '@lezer/common': 1.2.1
       '@lezer/highlight': 1.2.0
@@ -5784,9 +5706,8 @@ snapshots:
       '@lezer/common': 1.2.1
       '@lezer/php': 1.0.2
 
-  '@codemirror/lang-python@6.1.6(@codemirror/view@6.28.2)':
     dependencies:
-      '@codemirror/autocomplete': 6.16.3(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.2)(@lezer/common@1.2.1)
+      '@codemirror/autocomplete': 6.16.3(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.3)(@lezer/common@1.2.1)
       '@codemirror/language': 6.10.2
       '@codemirror/state': 6.4.1
       '@lezer/common': 1.2.1
@@ -5799,9 +5720,9 @@ snapshots:
       '@codemirror/language': 6.10.2
       '@lezer/rust': 1.0.2
 
-  '@codemirror/lang-sass@6.0.2(@codemirror/view@6.28.2)':
+
     dependencies:
-      '@codemirror/lang-css': 6.2.1(@codemirror/view@6.28.2)
+      '@codemirror/lang-css': 6.2.1(@codemirror/view@6.28.3)
       '@codemirror/language': 6.10.2
       '@codemirror/state': 6.4.1
       '@lezer/common': 1.2.1
@@ -5809,9 +5730,8 @@ snapshots:
     transitivePeerDependencies:
       - '@codemirror/view'
 
-  '@codemirror/lang-sql@6.7.0(@codemirror/view@6.28.2)':
     dependencies:
-      '@codemirror/autocomplete': 6.16.3(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.2)(@lezer/common@1.2.1)
+      '@codemirror/autocomplete': 6.16.3(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.3)(@lezer/common@1.2.1)
       '@codemirror/language': 6.10.2
       '@codemirror/state': 6.4.1
       '@lezer/common': 1.2.1
@@ -5845,9 +5765,9 @@ snapshots:
       '@lezer/common': 1.2.1
       '@lezer/xml': 1.0.5
 
-  '@codemirror/lang-yaml@6.1.1(@codemirror/view@6.28.2)':
+
     dependencies:
-      '@codemirror/autocomplete': 6.16.3(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.2)(@lezer/common@1.2.1)
+      '@codemirror/autocomplete': 6.16.3(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.3)(@lezer/common@1.2.1)
       '@codemirror/language': 6.10.2
       '@codemirror/state': 6.4.1
       '@lezer/common': 1.2.1
@@ -5856,28 +5776,28 @@ snapshots:
     transitivePeerDependencies:
       - '@codemirror/view'
 
-  '@codemirror/language-data@6.5.1(@codemirror/view@6.28.2)':
+
     dependencies:
       '@codemirror/lang-angular': 0.1.3
       '@codemirror/lang-cpp': 6.0.2
-      '@codemirror/lang-css': 6.2.1(@codemirror/view@6.28.2)
-      '@codemirror/lang-go': 6.0.1(@codemirror/view@6.28.2)
+      '@codemirror/lang-css': 6.2.1(@codemirror/view@6.28.3)
+      '@codemirror/lang-go': 6.0.1(@codemirror/view@6.28.3)
       '@codemirror/lang-html': 6.4.9
       '@codemirror/lang-java': 6.0.1
       '@codemirror/lang-javascript': 6.2.2
       '@codemirror/lang-json': 6.0.1
-      '@codemirror/lang-less': 6.0.2(@codemirror/view@6.28.2)
+      '@codemirror/lang-less': 6.0.2(@codemirror/view@6.28.3)
       '@codemirror/lang-liquid': 6.2.1
       '@codemirror/lang-markdown': 6.2.5
       '@codemirror/lang-php': 6.0.1
-      '@codemirror/lang-python': 6.1.6(@codemirror/view@6.28.2)
+      '@codemirror/lang-python': 6.1.6(@codemirror/view@6.28.3)
       '@codemirror/lang-rust': 6.0.1
-      '@codemirror/lang-sass': 6.0.2(@codemirror/view@6.28.2)
-      '@codemirror/lang-sql': 6.7.0(@codemirror/view@6.28.2)
+      '@codemirror/lang-sass': 6.0.2(@codemirror/view@6.28.3)
+      '@codemirror/lang-sql': 6.7.0(@codemirror/view@6.28.3)
       '@codemirror/lang-vue': 0.1.3
       '@codemirror/lang-wast': 6.0.2
       '@codemirror/lang-xml': 6.1.0
-      '@codemirror/lang-yaml': 6.1.1(@codemirror/view@6.28.2)
+      '@codemirror/lang-yaml': 6.1.1(@codemirror/view@6.28.3)
       '@codemirror/language': 6.10.2
       '@codemirror/legacy-modes': 6.4.0
     transitivePeerDependencies:
@@ -5916,7 +5836,6 @@ snapshots:
       style-mod: 4.1.2
       w3c-keyname: 2.2.8
 
-  '@csstools/selector-resolve-nested@1.1.0(postcss-selector-parser@6.1.0)':
     dependencies:
       postcss-selector-parser: 6.1.0
 
@@ -7854,9 +7773,6 @@ snapshots:
       slice-ansi: 5.0.0
       string-width: 7.1.0
 
-  clipboard-copy@4.0.1: {}
-
-  clipboardy@4.0.0:
     dependencies:
       execa: 8.0.1
       is-wsl: 3.1.0
@@ -9422,11 +9338,9 @@ snapshots:
       mdurl: 2.0.0
       punycode.js: 2.3.1
       uc.micro: 2.1.0
-
-  md-editor-v3@4.17.0(@codemirror/view@6.28.2)(@lezer/common@1.2.1)(vue@3.4.31(typescript@5.5.2)):
     dependencies:
       '@codemirror/lang-markdown': 6.2.5
-      '@codemirror/language-data': 6.5.1(@codemirror/view@6.28.2)
+      '@codemirror/language-data': 6.5.1(@codemirror/view@6.28.3)
       '@types/markdown-it': 14.1.1
       '@vavt/util': 1.7.0
       codemirror: 6.0.1(@lezer/common@1.2.1)

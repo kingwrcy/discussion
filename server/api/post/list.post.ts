@@ -6,6 +6,7 @@ interface ListPostRequest {
   uid?: string
   tag?: string
   query?: string
+  key?: string
 }
 
 export default defineEventHandler(async (event) => {
@@ -65,7 +66,14 @@ export default defineEventHandler(async (event) => {
   let posts = await prisma.post.findMany({
     where: { ...where, pinned: false, readRole: {
       not: 999,
-    } },
+    }, OR: [
+      {
+        title: {
+          mode: 'insensitive',
+          contains: request.key || '',
+        },
+      },
+    ] },
     include,
     orderBy: {
       point: 'desc',
@@ -76,7 +84,16 @@ export default defineEventHandler(async (event) => {
 
   posts = [...pinnedPost, ...posts]
   const total = await prisma.post.count({
-    where,
+    where: { ...where, readRole: {
+      not: 999,
+    }, OR: [
+      {
+        title: {
+          mode: 'insensitive',
+          contains: request.key || '',
+        },
+      },
+    ] },
   })
 
   const postsWithExtraInfo = posts.map((post) => {

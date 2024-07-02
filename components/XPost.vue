@@ -18,8 +18,7 @@ function doSupport() {
 
 <template>
   <div
-    class="flex space-x-3  items-start py-2"
-    :class="{ 'sm:px-4 px-2': route.fullPath === '/' || route.fullPath.startsWith('/?page=') || route.fullPath.startsWith('/go/') }"
+    class="flex space-x-3 items-start py-2 sm:px-4 px-2"
   >
     <NuxtLink v-if="showAvatar" :to="`/member/${author.username}`">
       <UAvatar v-if="author && author.avatarUrl" :src="getAvatarUrl(author.avatarUrl, author.headImg)" size="lg" alt="Avatar" />

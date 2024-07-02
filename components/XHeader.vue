@@ -33,7 +33,7 @@ function toggleMode() {
 async function go2Home() {
   await router.replace('/')
   if (route.fullPath === '/') {
-    await refreshNuxtData()
+    await refreshNuxtData(['hotUsers', 'tagLists'])
     userCardChanged.emit()
   }
 }
@@ -52,11 +52,11 @@ function showSlider() {
       <div class="cursor-pointer flex gap-1 items-center p-2 hover:text-primary/80 md:hidden" @click="showSlider">
         <UIcon name="i-carbon-bare-metal-server" class="size-5" />
       </div>
-      <div to="/" class="cursor-pointer hover:text-primary/80" @click="go2Home">
+      <a href="/" class="cursor-pointer hover:text-primary/80">
         <div class="font-semibold text-xl">
           {{ siteName || "Discussion" }}
         </div>
-      </div>
+      </a>
       <div class="flex items-center gap-1 ml-auto ">
         <UIcon
           v-if="mode === 'light'" dynamic name="i-line-md-moon-rising-loop"

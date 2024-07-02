@@ -21,7 +21,7 @@ watch(y, () => {
     >
       <UIcon name="i-carbon-arrow-up" class="size-6 text-primary/80  group-hover:text-primary/30" title="到顶部" />
     </div>
-    <div v-if="route.fullPath !== '/'" class="group bg-white dark:bg-gray-900 rounded px-2 py-1 cursor-pointer shadow-10px" title="返回首页" @click="navigateTo('/')">
+    <div v-if="route.path !== '/'" class="group bg-white dark:bg-gray-900 rounded px-2 py-1 cursor-pointer shadow-10px" title="返回首页" @click="navigateTo('/')">
       <UIcon name="i-carbon-reply" class="size-6 text-primary/80 group-hover:text-primary/30" />
     </div>
     <div

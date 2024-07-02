@@ -98,7 +98,7 @@ useHead({
     </div>
   </div>
   <div v-else class="w-full bg-white dark:bg-gray-900 shadow md:rounded-lg md:mt-2 rounded-none relative">
-    <div class="px-4 py-2 ">
+    <div class="py-2">
       <XPost :show-avatar="true" v-bind="post" @support="doSupport" />
     </div>
     <div class="px-4 pt-2 leading-5 border-t space-y-2 dark:border-slate-700">

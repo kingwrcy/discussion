@@ -24,7 +24,6 @@
     "@vueuse/core": "^10.11.0",
     "@vueuse/nuxt": "^10.11.0",
     "bcryptjs": "^2.4.3",
-    "clipboard-copy": "^4.0.1",
     "dayjs": "^1.11.11",
     "js-sha256": "^0.11.0",
     "jsonwebtoken": "^9.0.2",
