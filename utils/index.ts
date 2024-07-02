@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime.js'
 
-import zhCn from 'dayjs/locale/zh-cn'
+import zhCn from 'dayjs/locale/zh-cn.js'
 import { toast } from 'vue-sonner'
 
 dayjs.extend(relativeTime).locale(zhCn)
