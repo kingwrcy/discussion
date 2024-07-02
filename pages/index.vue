@@ -5,6 +5,7 @@ const route = useRoute()
 const state = reactive({
   page: 1,
   size: 100,
+  key: route.query.key,
 })
 
 state.page = Number.parseInt(route.query.page as any as string) || 1
@@ -14,23 +15,13 @@ const { data } = await useFetch('/api/post/list', {
 })
 
 watch(() => route.fullPath, async () => {
-  const page = Number.parseInt(route.query.page as any as string)
+  state.page = Number.parseInt(route.query.page as any as string) || 1
+  state.key = route.query.key as any as string
   const res = await $fetch('/api/post/list', {
     method: 'POST',
-    body: JSON.stringify({
-      page,
-      size: state.size,
-    }),
+    body: JSON.stringify(state),
   })
   data.value = res
-})
-
-watch(() => state.page, async () => {
-  if (state.page === 1) {
-    navigateTo('/')
-    return
-  }
-  navigateTo(`/?page=${state.page}`)
 })
 
 const postList = computed(() => {
@@ -40,8 +31,13 @@ const postList = computed(() => {
 const totalPosts = computed(() => {
   return data.value?.total || 0
 })
-const { getAbsoluteUrl } = useAbsoluteUrl()
 
+const { getAbsoluteUrl } = useAbsoluteUrl()
+function getQuery(page: number) {
+  return {
+    query: { ...route.query, page },
+  }
+}
 useHead({
   title: `首页`,
   link: [
@@ -65,9 +61,8 @@ useHead({
       </div>
     </div>
     <UPagination
-      v-if="totalPosts > state.size" v-model="state.page" size="sm" :to="(page: number) => ({
-        query: { page },
-      })" class="m-2 p-2" :page-count="state.size"
+      v-if="totalPosts > state.size"
+      v-model="state.page" size="sm" class="m-2 p-2" :to="getQuery" :page-count="state.size"
       :total="totalPosts"
     />
   </UCard>

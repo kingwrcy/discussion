@@ -5,9 +5,11 @@ import { Toaster } from 'vue-sonner'
 import type { SysConfigDTO, TagDTO, UserDTO } from '~/types'
 
 const userinfo = useState<UserDTO>('userinfo')
+const keyWords = ref('')
 const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)
 const route = useRoute()
+const router = useRouter()
 const sliderOpen = useState('sliderOpen', () => {
   return false
 })
@@ -92,6 +94,12 @@ if (userinfo.value.js) {
     ],
   })
 }
+function search() {
+  if (!keyWords.value)
+    return
+  router.push({ path: '/', query: { key: keyWords.value.trim() } })
+  keyWords.value = ''
+}
 
 useHead({
   title: '首页',
@@ -119,6 +127,17 @@ watch(() => route.fullPath, async () => {
     <USlideover v-model="sliderOpen" class="md:hidden overflow-y-auto" side="left">
       <div class="p-4 flex-1 space-y-4 bg-slate-700">
         <UIcon name="i-carbon-close-large" class="size-5 text-white" @click="sliderOpen = false" />
+        <UCard class="w-full mt-2" :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
+          <UInput
+            v-model="keyWords"
+            icon="i-heroicons-magnifying-glass-20-solid"
+            size="sm"
+            color="white"
+            :trailing="false"
+            placeholder="Search..."
+            @keydown.enter="search"
+          />
+        </UCard>
         <XUserCard v-if="userinfo && userinfo.username" />
 
         <UCard v-if="sysconfig" class="w-full mt-2" :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
@@ -161,6 +180,17 @@ watch(() => route.fullPath, async () => {
         <slot />
       </div>
       <div class="right-bar space-y-4 w-[300px] hidden md:block">
+        <UCard class="w-full mt-2" :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
+          <UInput
+            v-model="keyWords"
+            icon="i-heroicons-magnifying-glass-20-solid"
+            size="sm"
+            color="white"
+            :trailing="false"
+            placeholder="Search..."
+            @keydown.enter="search"
+          />
+        </UCard>
         <XUserCard v-if="userinfo && userinfo.username && !route.fullPath.startsWith('/member')" />
         <UCard
           v-if="route.fullPath.startsWith('/go/') && tag" class="profile w-full mt-2"
