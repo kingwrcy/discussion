@@ -5,7 +5,9 @@ import { toast } from 'vue-sonner'
 import type { z } from 'zod'
 import { useColorMode } from '@vueuse/core'
 import type { FormError, FormSubmitEvent } from '#ui/types'
-import { type PostDTO, type UserDTO, createPostSchema, getLength } from '~/types'
+import type { PostDTO, UserDTO } from '~/types'
+import { createPostSchema } from '~/types'
+import { getLength } from '~/utils'
 
 type Schema = z.output<typeof createPostSchema>
 

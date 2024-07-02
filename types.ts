@@ -1,20 +1,7 @@
 import type { PointReason, UserRole, UserStatus } from '@prisma/client'
 import { z } from 'zod'
+import { getLength } from '~/utils'
 
-export const getLength = function (str: string) {
-  /// <summary>获得字符串实际长度，中文2，英文1</summary>
-  /// <param name="str">要获得长度的字符串</param>
-  let realLength = 0
-  const len = str.length
-  let charCode = -1
-  for (let i = 0; i < len; i++) {
-    charCode = str.charCodeAt(i)
-    if (charCode >= 0 && charCode <= 128)
-      realLength += 1
-    else realLength += 2
-  }
-  return realLength
-}
 export const regRequestSchema = z
   .object({
     username: z.string(),

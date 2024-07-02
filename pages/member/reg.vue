@@ -10,7 +10,6 @@ useHead({
   title: `注册用户`,
 })
 const config = useGlobalConfig()
-const { sysConfig } = config.value
 const state = reactive<Schema>({
   email: '',
   password: '',
@@ -61,7 +60,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         <UFormGroup label="重复密码" name="repeatPassword">
           <UInput v-model="state.repeatPassword" type="password" autocomplete="on" />
         </UFormGroup>
-        <UFormGroup v-if="sysConfig.invite" label="邀请码" name="inviteCode">
+        <UFormGroup v-if="config.sysConfig.invite" label="邀请码" name="inviteCode">
           <UInput v-model="state.inviteCode" autocomplete="on" />
         </UFormGroup>
         <div>

@@ -23,8 +23,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     body: JSON.stringify(event.data),
   })
   if (result.success && 'tokenKey' in result) {
-    refreshCookie(result.tokenKey)
-    navigateTo('/', { replace: true })
+    location.href = '/'
+    // refreshCookie(result.tokenKey)
+    // navigateTo('/', { replace: true })
   }
   else if ('message' in result) {
     toast.error(`登录失败,${result.message}`)
