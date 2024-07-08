@@ -28,7 +28,7 @@
     "js-sha256": "^0.11.0",
     "jsonwebtoken": "^9.0.2",
     "markdown-it-link-attributes": "^4.0.1",
-    "md-editor-v3": "^4.17.1",
+    "md-editor-v3": "^4.17.3",
     "nuxt": "^3.12.2",
     "nuxt-scheduler": "^0.1.9",
     "pg": "^8.12.0",
