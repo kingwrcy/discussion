@@ -83,6 +83,7 @@ export interface UserDTO {
     posts: number
     ReceiveMessage: number
   }
+  titles: TitleDTO[]
 }
 export interface TagDTO {
   id: number
@@ -90,6 +91,12 @@ export interface TagDTO {
   desc: string
   enName: string
   count: number
+}
+export interface TitleDTO {
+  id: number
+  style: string
+  status: boolean
+  title: string
 }
 export interface CommentDTO {
   content: string

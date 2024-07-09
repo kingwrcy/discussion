@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { UserStatus } from '@prisma/client'
-import type { UserDTO } from '~/types'
+import { toast } from 'vue-sonner'
+import type { TagDTO, UserDTO } from '~/types'
 
 const route = useRoute()
 definePageMeta({
@@ -60,6 +61,9 @@ const columns = [{
   key: 'role',
   label: '角色',
 }, {
+  key: 'titles',
+  label: '头衔',
+}, {
   key: 'email',
   label: '邮箱',
 }, {
@@ -110,6 +114,54 @@ async function reload() {
 }
 
 watch(() => route.fullPath, reload)
+const titleList = await useFetch('/api/manage/title/titleList', {
+  method: 'POST',
+  body: JSON.stringify({
+    onlyEnabled: true,
+  }),
+})
+const titles = computed(() => {
+  return titleList.data.value?.titles.map((x) => {
+    return [{
+      label: x.title,
+      click: () => {
+        assignTitle(x.title)
+      },
+    }]
+  })
+})
+
+async function assignTitle(title: string) {
+  const res = await $fetch('/api/manage/title/assign', {
+    method: 'POST',
+    body: JSON.stringify({
+      title,
+      uid: selectedUid.value,
+    }),
+  })
+
+  if (res.message) {
+    toast.error(res.message)
+    return
+  }
+  await reload()
+}
+
+async function removeTitle(userId: number, titleId: number) {
+  const res = await $fetch('/api/manage/title/remove', {
+    method: 'POST',
+    body: JSON.stringify({
+      userId,
+      titleId,
+    }),
+  })
+
+  if (res.message) {
+    toast.error(res.message)
+    return
+  }
+  await reload()
+}
 </script>
 
 <template>
@@ -126,7 +178,10 @@ watch(() => route.fullPath, reload)
         </div>
       </div>
     </template>
-    <UTable :rows="userList" :columns="columns" class="overflow-auto w-full" :ui="{ wrapper: 'w-[300px]', th: { base: 'text-nowrap' } }">
+    <UTable
+      :rows="userList" :columns="columns" class="overflow-auto w-full"
+      :ui="{ wrapper: 'w-[300px]', th: { base: 'text-nowrap' } }"
+    >
       <template #avatarUrl-data="{ row }">
         <NuxtLink :to="`/member/${row.username}`">
           <UAvatar :src="getAvatarUrl(row.avatarUrl!, row.headImg)" size="lg" alt="Avatar" />
@@ -137,11 +192,21 @@ watch(() => route.fullPath, reload)
           {{ row.username }}
         </UButton>
       </template>
+      <template #titles-data="{ row }">
+        <div class="flex flex-col gap-1 w-fit">
+          <UChip
+            v-for="(t, index) in row.titles" :key="index" class="cursor-pointer"
+            text="X" @click="removeTitle(row.id, t.title.id)"
+          >
+            <UBadge>{{ t.title.title }}</UBadge>
+          </UChip>
+        </div>
+      </template>
       <template #createdAt-data="{ row }">
         {{ dateFormat(row.createdAt) }}
       </template>
       <template #lastLogin-data="{ row }">
-        {{ dateFormat(row.lastLogin) }}
+        {{ row.lastLogin && dateFormat(row.lastLogin) }}
       </template>
       <template #bannedEnd-data="{ row }">
         {{ row.bannedEnd && dateFormat(row.bannedEnd) }}
@@ -158,6 +223,12 @@ watch(() => route.fullPath, reload)
             />
           </UDropdown>
           <UButton v-else color="white" label="撤销禁言" @click="revokeBanned(row)" />
+          <UDropdown :items="titles" :popper="{ placement: 'bottom-start' }" :ui="{ width: 'w-20' }">
+            <UButton
+              color="white" label="分配头衔" trailing-icon="i-heroicons-chevron-down-20-solid"
+              @click="selectedUid = row.uid"
+            />
+          </UDropdown>
         </div>
       </template>
     </UTable>

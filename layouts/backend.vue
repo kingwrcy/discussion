@@ -21,6 +21,9 @@ watch(() => route.path, () => {
   else if (path.startsWith('/manage/settings')) {
     selectedMenu.value = 'settings'
   }
+  else if (path.startsWith('/manage/title')) {
+    selectedMenu.value = 'title'
+  }
   else {
     selectedMenu.value = 'user'
   }
@@ -28,8 +31,8 @@ watch(() => route.path, () => {
 </script>
 
 <template>
-  <div class="dark:bg-slate-800 min-h-screen">
-    <div class="flex flex-row gap-2 lg:container lg:mx-auto w-full">
+  <div class="dark:bg-slate-800 w-[90%] mx-auto min-h-screen">
+    <div class="flex flex-row gap-2 ">
       <UCard class="flex flex-col space-y-1 max-w-[150px]" :ui="{ body: { padding: 'px-1 py-5 sm:p-1 xl:p-4' } }">
         <NuxtLink to="/manage" :class="{ active: selectedMenu === 'user' }" class="flex items-center space-x-1 p-2 cursor-pointer hover:text-primary/80">
           <UIcon name="i-carbon-user" class="text-primary/80" />
@@ -49,6 +52,11 @@ watch(() => route.path, () => {
         <NuxtLink to="/manage/comment" :class="{ active: selectedMenu === 'comment' }" class="flex items-center space-x-1 p-2 cursor-pointer hover:text-primary/80">
           <UIcon name="i-carbon-book" class="text-primary/80" />
           <span class="hidden xl:block">评论管理</span>
+        </NuxtLink>
+
+        <NuxtLink to="/manage/title" :class="{ active: selectedMenu === 'title' }" class="flex items-center space-x-1 p-2 cursor-pointer hover:text-primary/80">
+          <UIcon name="i-carbon-book" class="text-primary/80" />
+          <span class="hidden xl:block">头衔管理</span>
         </NuxtLink>
 
         <NuxtLink to="/manage/settings" :class="{ active: selectedMenu === 'settings' }" class="flex items-center space-x-1 p-2 cursor-pointer hover:text-primary/80">

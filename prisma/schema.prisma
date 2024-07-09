@@ -40,6 +40,26 @@ model User {
   js             String?
   signature      String?
   lastActive     DateTime?
+  titles         UserTitle[]
+}
+
+model Title {
+  id     Int         @id @default(autoincrement())
+  title  String      @unique
+  count  Int         @default(0)
+  style  String
+  status Boolean     @default(true)
+  users  UserTitle[]
+}
+
+model UserTitle {
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  title     Title    @relation(fields: [titleId], references: [id])
+  titleId   Int
+  createdAt DateTime @default(now())
+
+  @@id([userId, titleId])
 }
 
 model Post {
@@ -183,12 +203,12 @@ model Message {
 }
 
 model inviteCode {
-  id         Int          @id @default(autoincrement())
-  createdAt  DateTime     @default(now())
-  endAt      DateTime     @default(now())
-  fromUid    String?
-  toUid      String
-  content    String
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  endAt     DateTime @default(now())
+  fromUid   String?
+  toUid     String
+  content   String
 }
 
 enum UserStatus {
