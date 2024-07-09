@@ -77,6 +77,11 @@ function openModal(message: string) {
     })
   })
 }
+const color = useColorMode()
+const theme = ref<'light' | 'dark'>(color.value === 'dark' ? 'dark' : 'light')
+themeChanged.on((val) => {
+  theme.value = val === 'dark' ? 'dark' : 'light'
+})
 </script>
 
 <template>
@@ -133,7 +138,7 @@ function openModal(message: string) {
         </div>
       </div>
       <div class="text-gray-600  text-sm  hover:text-primary/80">
-        <MdPreview :model-value="content" :editor-id="cid" no-mermaid no-katex />
+        <MdPreview :model-value="content" :editor-id="cid" no-mermaid no-katex :theme="theme" />
       </div>
     </div>
 

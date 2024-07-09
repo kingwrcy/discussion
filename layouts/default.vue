@@ -120,6 +120,12 @@ watch(() => route.fullPath, async () => {
     tag.value = res.tags[0] as TagDTO
   }
 }, { immediate: true })
+
+const color = useColorMode()
+const theme = ref<'light' | 'dark'>(color.value === 'dark' ? 'dark' : 'light')
+themeChanged.on((val) => {
+  theme.value = val === 'dark' ? 'dark' : 'light'
+})
 </script>
 
 <template>
@@ -213,6 +219,7 @@ watch(() => route.fullPath, async () => {
           </template>
           <div class="text-sm">
             <MdPreview
+              :theme="theme"
               :model-value="sysconfig.websiteAnnouncement" editor-id="websiteAnnouncement" no-mermaid no-katex
               no-highlight
             />

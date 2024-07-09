@@ -49,7 +49,6 @@ export default defineEventHandler(async (event) => {
         },
       },
     })
-    console.log(44, inviteCodes)
 
     if (!inviteCodes) {
       return {
@@ -72,12 +71,14 @@ export default defineEventHandler(async (event) => {
         point: 100,
       },
     })
-    await prisma.inviteCode.update({
-      where: { id: inviteCodes.id }, // 使用 inviteCode 的唯一标识符进行更新
-      data: {
-        toUid: uid,
-      },
-    })
+    if (invite && inviteCodes) {
+      await prisma.inviteCode.update({
+        where: { id: inviteCodes.id }, // 使用 inviteCode 的唯一标识符进行更新
+        data: {
+          toUid: uid,
+        },
+      })
+    }
   }
   catch (e) {
     console.log('uid', uid, e)

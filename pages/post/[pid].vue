@@ -89,10 +89,19 @@ useHead({
     },
   ],
 })
+
+const color = useColorMode()
+const theme = ref<'light' | 'dark'>(color.value === 'dark' ? 'dark' : 'light')
+themeChanged.on((val) => {
+  theme.value = val === 'dark' ? 'dark' : 'light'
+})
 </script>
 
 <template>
-  <div v-if="!data.success" class="w-full bg-white dark:bg-gray-900 shadow md:rounded-lg md:mt-2 rounded-none relative flex justify-center h-80vh">
+  <div
+    v-if="!data.success"
+    class="w-full bg-white dark:bg-gray-900 shadow md:rounded-lg md:mt-2 rounded-none relative flex justify-center h-80vh"
+  >
     <div class="text-4xl pt-56">
       {{ data.message }}
     </div>
@@ -102,7 +111,7 @@ useHead({
       <XPost :show-avatar="true" v-bind="post" @support="doSupport" />
     </div>
     <div class="px-4 pt-2 leading-5 border-t space-y-2 dark:border-slate-700">
-      <MdPreview v-model="post.content" :editor-id="`pv-${post.pid}`" no-mermaid no-katex />
+      <MdPreview v-model="post.content" :editor-id="`pv-${post.pid}`" no-mermaid no-katex :theme="theme" />
     </div>
 
     <div class="px-4 flex justify-end pb-2  items-center space-x-2 my-2">
@@ -121,7 +130,10 @@ useHead({
     </div>
 
     <div class=" gap-2 divide-y divide-gray-300 dark:divide-gray-700 border-t dark:border-gray-700">
-      <XComment v-for="(comment, index) in post.comments" :id="comment.floor" :key="comment.cid" v-bind="comment" :index="index" />
+      <XComment
+        v-for="(comment, index) in post.comments" :id="comment.floor" :key="comment.cid" v-bind="comment"
+        :index="index"
+      />
       <UPagination
         v-if="totalComments > state.size" v-model="state.page" size="sm" class="p-4" :to="(page: number) => ({
           query: { page },

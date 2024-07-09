@@ -16,9 +16,10 @@ const mode = useColorMode()
 const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)
 const userinfo = useState<UserDTO | undefined>('userinfo')
-function logout() {
+async function logout() {
   token.value = ''
   userinfo.value = undefined
+  await navigateTo('/')
 }
 
 function toggleMode() {
@@ -28,6 +29,7 @@ function toggleMode() {
   else {
     mode.value = 'dark'
   }
+  themeChanged.emit(mode.value)
 }
 
 async function go2Home() {
@@ -92,7 +94,7 @@ function showSlider() {
           <span class="hidden md:block">登录</span>
         </NuxtLink>
         <div
-          v-if="token" class="flex gap-1 items-center p-2 hover:text-primary/80 cursor-pointer" to="/login"
+          v-if="token" class="flex gap-1 items-center p-2 hover:text-primary/80 cursor-pointer"
           @click="logout"
         >
           <UIcon name="i-carbon-logout" class="size-6 md:size-4" />

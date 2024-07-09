@@ -8,3 +8,4 @@ export interface CommentQuotedPayload {
   cid: string
 }
 export const commentQuoted = useEventBus<CommentQuotedPayload>('comment-quoted')
+export const themeChanged = useEventBus<string>('theme-changed')

@@ -17,6 +17,10 @@ export default defineEventHandler(async (event) => {
       role: true,
     },
   })
+  if (!user) {
+    await sendRedirect(event, '/login')
+    return
+  }
 
   const count = await prisma.user.count({
     where: {
@@ -36,7 +40,7 @@ export default defineEventHandler(async (event) => {
   await prisma.pointHistory.create({
     data: {
       uid: event.context.uid,
-      point: user.role === 'ADMIN' ? 1 : point,
+      point: user.role === 'ADMIN' ? -1 : -point,
       reason: PointReason.INVITE,
     },
   })

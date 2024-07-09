@@ -16,13 +16,14 @@ export default defineEventHandler(async (event) => {
   const uid = event.context.uid
 
   // 查询当前uid的level
-  const { level, role }: any = await prisma.user.findFirst({
+  const { level, role, id }: any = await prisma.user.findFirst({
     where: {
       uid,
     },
     select: {
       level: true,
       role: true,
+      id: true,
     },
   })
   const { readRole, uid: postUid }: any = await prisma.post.findFirst({
@@ -169,7 +170,17 @@ export default defineEventHandler(async (event) => {
     },
   })
 
+  let fav = false
   if (uid) {
+    const existsFav = await prisma.fav.findFirst({
+      where: {
+        userId: id,
+        pid,
+      },
+    })
+    if (existsFav) {
+      fav = true
+    }
     const unReadCount = await prisma.message.count({
       where: {
         toUid: uid,
@@ -196,7 +207,7 @@ export default defineEventHandler(async (event) => {
     post: {
       ...post,
       support: uid ? post!.PostSupport.length! > 0 : false,
-      fav: uid ? post!.fav.length! > 0 : false,
+      fav,
       comments: post?.comments.map(comment => ({
         ...comment,
         like: uid ? comment.likes.length > 0 : false,

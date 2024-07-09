@@ -112,7 +112,10 @@ async function copyCode() {
         <template #hint>
           2级以上用户可以添加,只支持markdown语法的链接写法,不支持其它格式,比如图片等
         </template>
-        <UTextarea v-model="state.signature" placeholder="[Moments](https://m.mblog.club)" :disabled="userinfo.level < 2" />
+        <UTextarea
+          v-model="state.signature" placeholder="[Moments](https://m.mblog.club)"
+          :disabled="userinfo.level < 2"
+        />
       </UFormGroup>
       <UButton type="submit">
         保存

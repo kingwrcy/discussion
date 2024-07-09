@@ -36,6 +36,8 @@ function getReason(reason: PointReason) {
       return '签到'
     case 'PUNISH':
       return '惩罚'
+    case 'INVITE':
+      return '生成邀请码'
     default:
       return reason
   }
