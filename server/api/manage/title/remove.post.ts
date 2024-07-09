@@ -5,10 +5,16 @@ interface AssignTitleRequest {
 
 export default defineEventHandler(async (event) => {
   const request = (await readBody(event)) as AssignTitleRequest
-  await prisma.userTitle.deleteMany({
+  await prisma.user.update({
     where: {
-      userId: request.userId,
-      titleId: request.titleId,
+      id: request.userId,
+    },
+    data: {
+      titles: {
+        disconnect: {
+          id: request.titleId,
+        },
+      },
     },
   })
   return {

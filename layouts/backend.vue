@@ -31,7 +31,7 @@ watch(() => route.path, () => {
 </script>
 
 <template>
-  <div class="dark:bg-slate-800 w-[90%] mx-auto min-h-screen">
+  <div class="dark:bg-slate-800 w-full min-h-screen">
     <div class="flex flex-row gap-2 ">
       <UCard class="flex flex-col space-y-1 max-w-[150px]" :ui="{ body: { padding: 'px-1 py-5 sm:p-1 xl:p-4' } }">
         <NuxtLink to="/manage" :class="{ active: selectedMenu === 'user' }" class="flex items-center space-x-1 p-2 cursor-pointer hover:text-primary/80">

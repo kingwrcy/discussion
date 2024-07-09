@@ -77,8 +77,8 @@ function doSupport() {
             <NuxtLink :to="`/member/${author.username}`">
               <span class="inline-block">{{ author.username }}</span>
             </NuxtLink>
-            <UBadge v-for="(t, index) in author.titles" :key="index">
-              {{ t.title.title }}
+            <UBadge v-for="(t, index) in author.titles" :key="index" size="xs" :color="t.style">
+              {{ t.title }}
             </UBadge>
           </div>
           <!-- <span v-if="author.role === UserRole.ADMIN"

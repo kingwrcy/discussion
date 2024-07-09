@@ -41,11 +41,7 @@ export default defineEventHandler(async (event) => {
           posts: true,
         },
       },
-      titles: {
-        include: {
-          title: true,
-        },
-      },
+      titles: true,
     },
     orderBy: {
       createdAt: 'desc',

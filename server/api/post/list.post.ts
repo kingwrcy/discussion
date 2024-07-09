@@ -43,11 +43,7 @@ export default defineEventHandler(async (event) => {
         headImg: true,
         username: true,
         role: true,
-        titles: {
-          include: {
-            title: true,
-          },
-        },
+        titles: true,
       },
     },
 

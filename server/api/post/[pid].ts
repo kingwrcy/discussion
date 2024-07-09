@@ -84,6 +84,7 @@ export default defineEventHandler(async (event) => {
       pid,
     },
     include: {
+
       lastCommentUser: {
         select: {
           uid: true,
@@ -93,6 +94,7 @@ export default defineEventHandler(async (event) => {
       PostSupport: true,
       author: {
         select: {
+          titles: true,
           username: true,
           avatarUrl: true,
           headImg: true,

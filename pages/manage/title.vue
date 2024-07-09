@@ -53,6 +53,62 @@ const columns = [{
   key: 'actions',
 }]
 
+const styles = [{
+  key: 'red',
+  label: 'red',
+}, {
+  key: 'orange',
+  label: 'orange',
+}, {
+  key: 'amber',
+  label: 'amber',
+}, {
+  key: 'yellow',
+  label: 'yellow',
+}, {
+  key: 'lime',
+  label: 'lime',
+}, {
+  key: 'green',
+  label: 'green',
+}, {
+  key: 'emerald',
+  label: 'emerald',
+}, {
+  key: 'teal',
+  label: 'teal',
+}, {
+  key: 'cyan',
+  label: 'cyan',
+}, {
+  key: 'sky',
+  label: 'sky',
+}, {
+  key: 'blue',
+  label: 'blue',
+}, {
+  key: 'indigo',
+  label: 'indigo',
+}, {
+  key: 'violet',
+  label: 'violet',
+}, {
+  key: 'purple',
+  label: 'purple',
+}, {
+  key: 'fuchsia',
+  label: 'fuchsia',
+}, {
+  key: 'pink',
+  label: 'pink',
+}, {
+  key: 'rose',
+  label: 'rose',
+}, {
+  key: 'primary',
+  label: 'primary',
+}]
+
 page.value = Number.parseInt(route.query.page as any as string) || 1
 const { data: titleListRes } = await useFetch('/api/manage/title/titleList', {
   method: 'POST',
@@ -113,6 +169,12 @@ const statusList = ref([
       <template #status-data="{ row }">
         {{ row.status ? '启用' : '禁用' }}
       </template>
+      <template #title-data="{ row }">
+        <UBadge :color="row.style ?? 'primary'" size="xs">
+          {{ row.title }}
+        </UBadge>
+      </template>
+
       <template #actions-data="{ row }">
         <div class="space-x-2">
           <UButton color="white" @click="doEdit(row)">
@@ -136,7 +198,7 @@ const statusList = ref([
         <USelectMenu v-model="saveState.status" value-attribute="value" option-attribute="desc" :options="statusList" />
       </UFormGroup>
       <UFormGroup label="样式" name="style">
-        <UTextarea v-model="saveState.style" />
+        <USelectMenu v-model="saveState.style" value-attribute="key" option-attribute="label" :options="styles" />
       </UFormGroup>
       <UButton @click="saveTitle">
         提交

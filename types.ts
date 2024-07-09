@@ -13,8 +13,8 @@ export const regRequestSchema = z
   .refine(data => data.password === data.repeatPassword, {
     message: '两次密码不一致',
     path: ['repeatPassword'],
-  }).refine(data => getLength(data.username) >= 4, {
-    message: '用户名最少4个字符,中文一个算2个字符',
+  }).refine(data => getLength(data.username) >= 3, {
+    message: '用户名最少3个字符,中文一个算2个字符',
     path: ['username'],
   }).refine(data => !data.inviteCode || getLength(data.inviteCode) > 0, {
     message: '请填写邀请码',

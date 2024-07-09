@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { UserStatus } from '@prisma/client'
 import { toast } from 'vue-sonner'
-import type { TagDTO, UserDTO } from '~/types'
+import type { UserDTO } from '~/types'
 
 const route = useRoute()
 definePageMeta({
@@ -195,10 +195,12 @@ async function removeTitle(userId: number, titleId: number) {
       <template #titles-data="{ row }">
         <div class="flex flex-col gap-1 w-fit">
           <UChip
-            v-for="(t, index) in row.titles" :key="index" class="cursor-pointer"
-            text="X" @click="removeTitle(row.id, t.title.id)"
+            v-for="(t, index) in row.titles" :key="index" class="cursor-pointer" text="X"
+            @click="removeTitle(row.id, t.id)"
           >
-            <UBadge>{{ t.title.title }}</UBadge>
+            <UBadge :color="t.style ?? 'primary'" size="xs">
+              {{ t.title }}
+            </UBadge>
           </UChip>
         </div>
       </template>

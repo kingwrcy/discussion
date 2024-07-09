@@ -146,17 +146,20 @@ themeChanged.on((val) => {
         </UCard>
         <XUserCard v-if="userinfo && userinfo.username" />
 
-        <UCard v-if="sysconfig" class="w-full mt-2" :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
+        <UCard v-if="sysconfig && sysconfig.websiteAnnouncement" class="w-full mt-2" :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
           <template #header>
             <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100 dark:bg-slate-500">
               关于本站
             </div>
           </template>
           <div class="text-sm">
-            <MdPreview
-              :model-value="sysconfig.websiteAnnouncement" editor-id="websiteAnnouncement" no-mermaid no-katex
-              no-highlight
-            />
+            <ColorScheme placeholder="..." tag="span">
+              <MdPreview
+                :theme="theme"
+                :model-value="sysconfig.websiteAnnouncement" editor-id="websiteAnnouncement" no-mermaid no-katex
+                no-highlight
+              />
+            </ColorScheme>
           </div>
         </UCard>
         <UCard
@@ -211,18 +214,20 @@ themeChanged.on((val) => {
             {{ tag.desc }}
           </div>
         </UCard>
-        <UCard v-if="sysconfig" class="ann w-full mt-2" :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
+        <UCard v-if="sysconfig && sysconfig.websiteAnnouncement" class="ann w-full mt-2" :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
           <template #header>
             <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100 dark:bg-slate-500">
               关于本站
             </div>
           </template>
           <div class="text-sm">
-            <MdPreview
-              :theme="theme"
-              :model-value="sysconfig.websiteAnnouncement" editor-id="websiteAnnouncement" no-mermaid no-katex
-              no-highlight
-            />
+            <ColorScheme placeholder="..." tag="span">
+              <MdPreview
+                :theme="theme"
+                :model-value="sysconfig.websiteAnnouncement" editor-id="websiteAnnouncement" no-mermaid no-katex
+                no-highlight
+              />
+            </ColorScheme>
           </div>
         </UCard>
         <XHotUser />
