@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
     inviteCodes = await prisma.inviteCode.findFirst({
       where: {
         content: request.inviteCode,
-        toUid: '',
+        toUid: null,
         endAt: {
           gte: new Date(),
         },
@@ -105,6 +105,17 @@ export default defineEventHandler(async (event) => {
   }
 
   const exist = await prisma.user.count({})
+  const inviteUser = await prisma.user.findFirst({
+    where: {
+      uid: inviteCodes?.fromUid,
+    },
+  })
+  if (!inviteUser) {
+    return {
+      success: false,
+      message: '邀请人不存在',
+    }
+  }
   try {
     await prisma.user.create({
       data: {
@@ -115,6 +126,7 @@ export default defineEventHandler(async (event) => {
         avatarUrl: sha256(request.email.trim()),
         role: exist ? UserRole.USER : UserRole.ADMIN,
         point: 100,
+        invitedById: inviteUser.id,
       },
     })
     if (invite && inviteCodes) {

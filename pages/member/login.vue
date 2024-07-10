@@ -52,10 +52,14 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         <UFormGroup label="密码" name="password">
           <UInput v-model="state.password" type="password" autocomplete="off" />
         </UFormGroup>
-        <div>
+        <div class="flex gap-2 items-center">
           <UButton type="submit" :loading="pending">
             登录
           </UButton>
+          <UButton color="gray" variant="solid" class="button" @click="navigateTo('/member/forgotPassword')">
+            忘记密码了
+          </UButton>
+
           <NuxtLink to="/member/reg" class="text-primary text-sm ml-2 underline underline-offset-4">
             没有账户?去注册
           </NuxtLink>
