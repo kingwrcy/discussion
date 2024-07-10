@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
     if (!request.inviteCode) {
       return {
         success: false,
-        message: '当前已开启注册限制',
+        message: '当前已开启邀请码注册',
       }
     }
     inviteCodes = await prisma.inviteCode.findFirst({
@@ -56,6 +56,52 @@ export default defineEventHandler(async (event) => {
         message: '邀请码已失效',
       }
     }
+  }
+
+  if (sysConfigDTO.regWithEmailCodeVerify && (!request.emailCode || !request.emailCodeKey)) {
+    return {
+      success: false,
+      message: '请输入邮箱验证码',
+    }
+  }
+  if (sysConfigDTO.regWithEmailCodeVerify) {
+    const emailCode = await prisma.emailCode.findFirst({
+      where: {
+        key: request.emailCodeKey,
+      },
+    })
+    if (!emailCode) {
+      return {
+        success: false,
+        message: '邮箱验证码错误',
+      }
+    }
+    if (emailCode.code.toUpperCase() !== request.emailCode?.toUpperCase()) {
+      return {
+        success: false,
+        message: '邮箱验证码错误',
+      }
+    }
+    if (emailCode.used) {
+      return {
+        success: false,
+        message: '邮箱验证码已使用了',
+      }
+    }
+    if (emailCode.validAt < new Date()) {
+      return {
+        success: false,
+        message: '邮箱验证码已过期',
+      }
+    }
+    await prisma.emailCode.update({
+      where: {
+        id: emailCode.id,
+      },
+      data: {
+        used: true,
+      },
+    })
   }
 
   const exist = await prisma.user.count({})

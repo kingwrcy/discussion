@@ -237,3 +237,21 @@ enum MessageType {
   LIKE
   DISLIKE
 }
+
+enum EmailReason {
+  REGISTER
+  RESET_PASSWORD
+  CHANGE_EMAIL
+}
+
+model EmailCode {
+  id          Int         @id @default(autoincrement())
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now()) @updatedAt
+  key         String
+  code        String
+  validAt     DateTime
+  used        Boolean     @default(false)
+  reason      EmailReason
+  targetEmail String
+}

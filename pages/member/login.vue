@@ -50,7 +50,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           <UInput v-model="state.username" autocomplete="off" />
         </UFormGroup>
         <UFormGroup label="密码" name="password">
-          <UInput v-model="state.password" type="password" autocomplete="on" />
+          <UInput v-model="state.password" type="password" autocomplete="off" />
         </UFormGroup>
         <div>
           <UButton type="submit" :loading="pending">

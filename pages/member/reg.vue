@@ -16,8 +16,11 @@ const state = reactive<Schema>({
   username: '',
   repeatPassword: '',
   inviteCode: '',
+  emailCode: '',
+  emailCodeKey: '',
 })
 const pending = ref(false)
+const emailSending = ref(false)
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   pending.value = true
@@ -33,6 +36,21 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     toast.error(`注册失败,${result.message}`)
   }
   pending.value = false
+}
+async function sendEmail() {
+  emailSending.value = true
+  const { success, emailCodeKey, message } = await $fetch('/api/member/sendEmail', {
+    method: 'POST',
+    body: JSON.stringify({ email: state.email, sence: 'REGISTER' }),
+  })
+  if (success) {
+    state.emailCodeKey = emailCodeKey
+    toast.success(message)
+  }
+  else {
+    toast.error(message)
+  }
+  emailSending.value = false
 }
 </script>
 
@@ -52,16 +70,25 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           <UInput v-model="state.username" autocomplete="off" />
         </UFormGroup>
         <UFormGroup label="邮箱" name="email" hint="请使用常用邮箱,会用来生成头像">
-          <UInput v-model="state.email" autocomplete="off" />
+          <UButtonGroup v-if="config.sysConfig.regWithEmailCodeVerify">
+            <UInput v-model="state.email" autocomplete="off" />
+            <UButton type="button" :loading="emailSending" @click="sendEmail">
+              发送邮件
+            </UButton>
+          </UButtonGroup>
+          <UInput v-else v-model="state.email" autocomplete="off" />
+        </UFormGroup>
+        <UFormGroup v-if="config.sysConfig.regWithEmailCodeVerify" label="邮箱验证码" name="emailCode">
+          <UInput v-model="state.emailCode" autocomplete="off" />
         </UFormGroup>
         <UFormGroup label="密码" name="password">
-          <UInput v-model="state.password" type="password" autocomplete="on" />
+          <UInput v-model="state.password" type="password" autocomplete="off" />
         </UFormGroup>
         <UFormGroup label="重复密码" name="repeatPassword">
-          <UInput v-model="state.repeatPassword" type="password" autocomplete="on" />
+          <UInput v-model="state.repeatPassword" type="password" autocomplete="off" />
         </UFormGroup>
         <UFormGroup v-if="config.sysConfig.invite" label="邀请码" name="inviteCode">
-          <UInput v-model="state.inviteCode" autocomplete="on" />
+          <UInput v-model="state.inviteCode" autocomplete="off" />
         </UFormGroup>
         <div>
           <UButton type="submit" :loading="pending">

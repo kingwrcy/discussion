@@ -9,6 +9,8 @@ export const regRequestSchema = z
     repeatPassword: z.string().min(6, '密码最少6个字符'),
     email: z.string().email('请填写正确的邮箱地址'),
     inviteCode: z.string().optional(),
+    emailCode: z.string().optional(),
+    emailCodeKey: z.string().optional(),
   })
   .refine(data => data.password === data.repeatPassword, {
     message: '两次密码不一致',
@@ -155,6 +157,7 @@ export interface PostDTO {
 
 export interface SysConfigDTO {
   websiteName: string
+  websiteUrl: string
   webBgimage: string
   websiteKeywords: string
   websiteDescription: string
@@ -175,6 +178,15 @@ export interface SysConfigDTO {
   }
   invite: string
   createInviteCodePoint: number
+  email: {
+    host: string
+    port: number
+    secure: boolean
+    username: string
+    password: string
+    senderName: string
+  }
+  regWithEmailCodeVerify: boolean
 }
 
 export interface MessageDTO {

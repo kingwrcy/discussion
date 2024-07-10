@@ -32,10 +32,11 @@ const toolbars: ToolbarNames[] = [
   '=',
   'preview',
 ]
-const { data: configData, refresh } = await useFetch('/api/manage/config/get', { method: 'POST' })
+const { data: configData } = await useFetch('/api/manage/config/get', { method: 'POST' })
 
 const state = reactive({
   websiteName: '极简论坛',
+  websiteUrl: '',
   webBgimage: '',
   websiteKeywords: '极简,论坛,极简论坛',
   websiteDescription: '极简论坛',
@@ -56,6 +57,16 @@ const state = reactive({
   },
   invite: false,
   createInviteCodePoint: 100,
+  regWithEmailCodeVerify: false,
+  email: {
+    host: '',
+    port: 465,
+    username: '',
+    password: '',
+    secure: true,
+    to: '',
+    senderName: '',
+  },
 })
 
 Object.assign(state, configData.value?.config)
@@ -65,11 +76,40 @@ async function saveSettings() {
     method: 'POST',
     body: JSON.stringify(state),
   })
-  await refresh()
   toast.success('保存成功')
+  window.location.reload()
 }
 
 const postUrlFormatOptions = [{ value: 'UUID', label: 'UUID' }, { value: 'Number', label: '数字' }, { value: 'Date', label: '日期' }]
+
+const items = [{
+  label: '邮件设置',
+  icon: 'i-heroicons-information-circle',
+  defaultOpen: false,
+  slot: 'email-settings',
+}, {
+  label: '外观设置',
+  icon: 'i-heroicons-information-circle',
+  defaultOpen: false,
+  slot: 'appearance-settings',
+}]
+
+const emailSending = ref(false)
+
+async function testEmail() {
+  emailSending.value = true
+  const { success, message } = await $fetch('/api/manage/testEmail', {
+    method: 'POST',
+    body: JSON.stringify(state.email),
+  })
+  if (success) {
+    toast.success('发送成功')
+  }
+  else {
+    toast.error(message)
+  }
+  emailSending.value = false
+}
 </script>
 
 <template>
@@ -78,6 +118,9 @@ const postUrlFormatOptions = [{ value: 'UUID', label: 'UUID' }, { value: 'Number
       <div class="flex flex-row space-x-2">
         <UFormGroup label="论坛名称" name="websiteName">
           <UInput v-model="state.websiteName" autocomplete="off" />
+        </UFormGroup>
+        <UFormGroup label="论坛地址" name="websiteUrl">
+          <UInput v-model="state.websiteUrl" autocomplete="off" />
         </UFormGroup>
         <UFormGroup label="论坛背景图" name="webBgimage">
           <UInput v-model="state.webBgimage" autocomplete="off" />
@@ -153,8 +196,14 @@ const postUrlFormatOptions = [{ value: 'UUID', label: 'UUID' }, { value: 'Number
         </UFormGroup>
       </div>
       <div class="flex flex-row space-x-2">
-        <UFormGroup label="注册限制" name="pointPerDaySignInMin">
+        <UFormGroup label="是否启用邀请注册" name="pointPerDaySignInMin">
           <UToggle v-model="state.invite" />
+        </UFormGroup>
+      </div>
+
+      <div class="flex flex-row space-x-2">
+        <UFormGroup label="每次生成邀请码需要积分" name="createInviteCodePoint">
+          <UInput v-model.number="state.createInviteCodePoint" autocomplete="off" />
         </UFormGroup>
       </div>
       <div class="flex flex-row space-x-2">
@@ -162,19 +211,60 @@ const postUrlFormatOptions = [{ value: 'UUID', label: 'UUID' }, { value: 'Number
           <UInput v-model.number="state.createInviteCodePoint" autocomplete="off" />
         </UFormGroup>
       </div>
-      <div class="flex flex-col space-y-2 ">
-        <div class="flex flex-row space-x-2">
-          <UFormGroup label="自定义css" name="css" class="w-[500px]" hint="刷新页面生效">
-            <UTextarea v-model="state.css" :rows="10" />
-          </UFormGroup>
-        </div>
 
-        <div class="flex flex-row space-x-2">
-          <UFormGroup label="自定义JS" name="css" class="w-[500px]" hint="刷新页面生效">
-            <UTextarea v-model="state.js" :rows="10" />
+      <UAccordion :items="items" :ui="{ container: 'max-w-[500px]' }">
+        <template #email-settings>
+          <UFormGroup label="开启邮件验证注册用户" name="regWithEmailCodeVerify">
+            <USelectMenu
+              v-model="state.regWithEmailCodeVerify" value-attribute="value" option-attribute="label"
+              :options="[{ value: true, label: '是' }, { value: false, label: '否' }]"
+            />
           </UFormGroup>
-        </div>
-      </div>
+          <UFormGroup label="邮件服务器" name="host">
+            <UInput v-model="state.email.host" autocomplete="off" />
+          </UFormGroup>
+          <UFormGroup label="端口" name="port">
+            <UInput v-model.number="state.email.port" autocomplete="off" />
+          </UFormGroup>
+          <UFormGroup label="用户名" name="username">
+            <UInput v-model="state.email.username" autocomplete="off" />
+          </UFormGroup>
+          <UFormGroup label="密码" name="password">
+            <UInput v-model="state.email.password" autocomplete="off" />
+          </UFormGroup>
+          <UFormGroup label="是否安全连接" name="secure">
+            <USelectMenu
+              v-model="state.email.secure" value-attribute="value" option-attribute="label"
+              :options="[{ value: true, label: '是' }, { value: false, label: '否' }]"
+            />
+          </UFormGroup>
+          <UFormGroup label="发件人名称" name="senderName">
+            <UInput v-model="state.email.senderName" autocomplete="off" />
+          </UFormGroup>
+          <UButtonGroup size="sm" orientation="horizontal" class="my-2">
+            <UInput v-model="state.email.to" disabled placeholder="测试邮件接收地址" />
+            <UButton class="w-fit " size="xs" :loading="emailSending" @click="testEmail">
+              测试发送邮件
+            </UButton>
+          </UButtonGroup>
+        </template>
+
+        <template #appearance-settings>
+          <div class="flex flex-col space-y-2 ">
+            <div class="flex flex-row space-x-2">
+              <UFormGroup label="自定义css" name="css" class="w-[500px]" hint="刷新页面生效">
+                <UTextarea v-model="state.css" :rows="10" />
+              </UFormGroup>
+            </div>
+
+            <div class="flex flex-row space-x-2">
+              <UFormGroup label="自定义JS" name="css" class="w-[500px]" hint="刷新页面生效">
+                <UTextarea v-model="state.js" :rows="10" />
+              </UFormGroup>
+            </div>
+          </div>
+        </template>
+      </UAccordion>
 
       <UButton class="w-fit" @click="saveSettings">
         保存
