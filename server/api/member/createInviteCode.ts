@@ -59,7 +59,7 @@ export default defineEventHandler(async (event) => {
       createdAt: new Date(),
       endAt: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
       content: iCode,
-      toUid: '',
+      toUid: null,
     },
   })
   return {

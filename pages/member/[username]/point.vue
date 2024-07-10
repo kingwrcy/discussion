@@ -81,7 +81,7 @@ watch(() => route.fullPath, reload)
         </div>
       </template>
       <template #post.title-data="{ row }">
-        <div v-if="row.post" class="max-w-[300px] text-wrap line-clamp-3">
+        <div v-if="row.post" class="max-w-[100px] text-wrap line-clamp-2">
           <NuxtLink class="text-blue-500 whitespace-pre-wrap" :to="`/post/${row.post.pid}`">
             {{ row.post.title }}
           </NuxtLink>

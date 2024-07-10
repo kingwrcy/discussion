@@ -41,7 +41,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     toast.success('修改成功')
   }
 }
-
+const openInviteCodeList = ref(false)
+function toggleInviteCodelist() {
+  openInviteCodeList.value = !openInviteCodeList.value
+}
 const inviteCode = ref<string>('')
 const modal = useModal()
 async function createInviteCode() {
@@ -53,6 +56,7 @@ async function createInviteCode() {
       })
       inviteCode.value = result.data
       modal.close()
+      openInviteCodeList.value = true
     },
     onCancel() {
       modal.close()
@@ -100,8 +104,13 @@ async function copyCode() {
           </UButton>
           <UInput v-model="inviteCode" disabled />
           <UButton icon="i-heroicons-clipboard-document" color="gray" @click="copyCode" />
+          <UButton color="gray" @click="toggleInviteCodelist">
+            历史邀请码列表
+          </UButton>
         </UButtonGroup>
       </UFormGroup>
+      <XInviteCodeList v-if="openInviteCodeList" />
+
       <UFormGroup label="自定义css" name="css" hint="修改了此项需要刷新页面">
         <UTextarea v-model="state.css" :rows="10" />
       </UFormGroup>

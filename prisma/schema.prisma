@@ -9,38 +9,43 @@ datasource db {
 }
 
 model User {
-  id             Int            @id @default(autoincrement())
-  uid            String         @unique
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @default(now()) @updatedAt
-  username       String         @unique
-  password       String
-  lastLogin      DateTime?
-  email          String         @unique
-  avatarUrl      String
-  headImg        String?
-  point          Int            @default(0)
-  postCount      Int            @default(0)
-  commentCount   Int            @default(0)
-  role           UserRole       @default(USER)
-  level          Int            @default(1)
-  status         UserStatus     @default(NORMAL)
-  bannedEnd      DateTime?
-  comments       Comment[]
-  commentDisLike DisLike[]
-  fav            Fav[]
-  commentLike    Like[]
-  SendMessage    Message[]      @relation("sendMessage")
-  ReceiveMessage Message[]      @relation("receiveMessage")
-  PointHistory   PointHistory[]
-  LastComment    Post[]         @relation("lastComment")
-  posts          Post[]
-  PostSupport    PostSupport[]
-  css            String?
-  js             String?
-  signature      String?
-  lastActive     DateTime?
-  titles         Title[]
+  id              Int            @id @default(autoincrement())
+  uid             String         @unique
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @default(now()) @updatedAt
+  username        String         @unique
+  password        String
+  lastLogin       DateTime?
+  email           String         @unique
+  avatarUrl       String
+  headImg         String?
+  point           Int            @default(0)
+  postCount       Int            @default(0)
+  commentCount    Int            @default(0)
+  role            UserRole       @default(USER)
+  level           Int            @default(1)
+  status          UserStatus     @default(NORMAL)
+  bannedEnd       DateTime?
+  comments        Comment[]
+  commentDisLike  DisLike[]
+  fav             Fav[]
+  commentLike     Like[]
+  SendMessage     Message[]      @relation("sendMessage")
+  ReceiveMessage  Message[]      @relation("receiveMessage")
+  PointHistory    PointHistory[]
+  LastComment     Post[]         @relation("lastComment")
+  posts           Post[]
+  PostSupport     PostSupport[]
+  css             String?
+  js              String?
+  signature       String?
+  lastActive      DateTime?
+  titles          Title[]
+  invitedBy       User?          @relation("UserInvitations", fields: [invitedById], references: [id])
+  invitedById     Int?
+  invitedUsers    User[]         @relation("UserInvitations")
+  sentInvites     inviteCode[]   @relation("SentInvites")
+  receivedInvites inviteCode[]   @relation("ReceivedInvites")
 }
 
 model Title {
@@ -197,9 +202,11 @@ model inviteCode {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   endAt     DateTime @default(now())
-  fromUid   String?
-  toUid     String
+  fromUid   String
+  toUid     String?
   content   String
+  fromUser  User     @relation("SentInvites", fields: [fromUid], references: [uid])
+  toUser    User?    @relation("ReceivedInvites", fields: [toUid], references: [uid])
 }
 
 enum UserStatus {
