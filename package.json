@@ -42,7 +42,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.21.2",
+    "@antfu/eslint-config": "^2.22.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/cache-manager": "^4.0.6",
     "@types/grecaptcha": "^3.0.9",
