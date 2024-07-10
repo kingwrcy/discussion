@@ -135,31 +135,26 @@ themeChanged.on((val) => {
         <UIcon name="i-carbon-close-large" class="size-5 text-white" @click="sliderOpen = false" />
         <UCard class="w-full mt-2" :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
           <UInput
-            v-model="keyWords"
-            icon="i-heroicons-magnifying-glass-20-solid"
-            size="sm"
-            color="white"
-            :trailing="false"
-            placeholder="Search..."
-            @keydown.enter="search"
+            v-model="keyWords" icon="i-heroicons-magnifying-glass-20-solid" size="sm" color="white"
+            :trailing="false" placeholder="Search..." @keydown.enter="search"
           />
         </UCard>
         <XUserCard v-if="userinfo && userinfo.username" />
 
-        <UCard v-if="sysconfig && sysconfig.websiteAnnouncement" class="w-full mt-2" :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
+        <UCard
+          v-if="sysconfig && sysconfig.websiteAnnouncement" class="w-full mt-2"
+          :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }"
+        >
           <template #header>
             <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100 dark:bg-slate-500">
               关于本站
             </div>
           </template>
           <div class="text-sm">
-            <ColorScheme placeholder="..." tag="span">
-              <MdPreview
-                :theme="theme"
-                :model-value="sysconfig.websiteAnnouncement" editor-id="websiteAnnouncement" no-mermaid no-katex
-                no-highlight
-              />
-            </ColorScheme>
+            <MdPreview
+              :model-value="sysconfig.websiteAnnouncement" editor-id="websiteAnnouncement" no-mermaid no-katex
+              no-highlight
+            />
           </div>
         </UCard>
         <UCard
@@ -191,13 +186,8 @@ themeChanged.on((val) => {
       <div class="right-bar space-y-4 w-[300px] hidden md:block">
         <UCard class="w-full mt-2" :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
           <UInput
-            v-model="keyWords"
-            icon="i-heroicons-magnifying-glass-20-solid"
-            size="sm"
-            color="white"
-            :trailing="false"
-            placeholder="Search..."
-            @keydown.enter="search"
+            v-model="keyWords" icon="i-heroicons-magnifying-glass-20-solid" size="sm" color="white"
+            :trailing="false" placeholder="Search..." @keydown.enter="search"
           />
         </UCard>
         <XUserCard v-if="userinfo && userinfo.username && !route.fullPath.startsWith('/member')" />
@@ -214,20 +204,20 @@ themeChanged.on((val) => {
             {{ tag.desc }}
           </div>
         </UCard>
-        <UCard v-if="sysconfig && sysconfig.websiteAnnouncement" class="ann w-full mt-2" :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
+        <UCard
+          v-if="sysconfig && sysconfig.websiteAnnouncement" class="ann w-full mt-2"
+          :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }"
+        >
           <template #header>
             <div class="px-4 py-1 rounded-t sm:px-6 text-primary bg-gray-100 dark:bg-slate-500">
               关于本站
             </div>
           </template>
           <div class="text-sm">
-            <ColorScheme placeholder="..." tag="span">
-              <MdPreview
-                :theme="theme"
-                :model-value="sysconfig.websiteAnnouncement" editor-id="websiteAnnouncement" no-mermaid no-katex
-                no-highlight
-              />
-            </ColorScheme>
+            <MdPreview
+              :model-value="sysconfig.websiteAnnouncement" editor-id="websiteAnnouncement" no-mermaid no-katex
+              no-highlight
+            />
           </div>
         </UCard>
         <XHotUser />

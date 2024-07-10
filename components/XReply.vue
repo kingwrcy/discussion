@@ -92,23 +92,21 @@ async function reply() {
   pending.value = false
 }
 const color = useColorMode()
-const theme = ref<'light' | 'dark'>(color.value === 'dark' ? 'dark' : 'light')
-themeChanged.on((val) => {
-  theme.value = val === 'dark' ? 'dark' : 'light'
-})
 </script>
 
 <template>
   <div v-if="token" class="flex flex-col  py-2 w-full ">
-    <MdEditor
-      ref="editorRef" v-model="state.content" :theme="theme" style="max-height:300px;" :preview="false"
-      :toolbars="toolbars" :editor-id="`post-${pid}`" @on-upload-img="onUploadImg"
-    >
-      <template #defToolbars>
-        <XEmoji />
-        <XYoutubeDialog />
-      </template>
-    </MdEditor>
+    <ClientOnly>
+      <MdEditor
+        ref="editorRef" v-model="state.content" :theme="color as any" style="max-height:300px;" :preview="false" :toolbars="toolbars"
+        :editor-id="`post-${pid}`" @on-upload-img="onUploadImg"
+      >
+        <template #defToolbars>
+          <XEmoji />
+          <XYoutubeDialog />
+        </template>
+      </MdEditor>
+    </ClientOnly>
     <div class="flex my-2">
       <UButton :disabled="pending" @click="reply">
         发表评论(Ctrl+Enter提交)

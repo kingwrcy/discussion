@@ -92,16 +92,21 @@ const postUrlFormatOptions = [{ value: 'UUID', label: 'UUID' }, { value: 'Number
 
       <div class="flex flex-row space-x-2">
         <UFormGroup label="站点公告" name="websiteAnnouncement">
-          <MdEditor
-            v-model="state.websiteAnnouncement" style="height:200px;" :theme="mode as any" :preview="false" :toolbars="toolbars"
-            editor-id="sysSettings" @on-upload-img="onUploadImg"
-          />
+          <ClientOnly>
+            <MdEditor
+              v-model="state.websiteAnnouncement" style="height:200px;" :theme="mode as any" :preview="false"
+              :toolbars="toolbars" editor-id="sysSettings" @on-upload-img="onUploadImg"
+            />
+          </ClientOnly>
         </UFormGroup>
       </div>
 
       <div class="flex flex-row space-x-2">
         <UFormGroup label="帖子链接定义" name="type">
-          <USelectMenu v-model="state.postUrlFormat.type" :options="postUrlFormatOptions" value-attribute="value" option-attribute="label" />
+          <USelectMenu
+            v-model="state.postUrlFormat.type" :options="postUrlFormatOptions" value-attribute="value"
+            option-attribute="label"
+          />
         </UFormGroup>
         <UFormGroup v-if="state.postUrlFormat.type === 'Number'" label="起始数字" name="minNumber">
           <UInput v-model="state.postUrlFormat.minNumber" />

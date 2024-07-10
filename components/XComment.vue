@@ -141,7 +141,7 @@ themeChanged.on((val) => {
         </div>
       </div>
       <div class="text-gray-600  text-sm  hover:text-primary/80">
-        <MdPreview :model-value="content" :editor-id="cid" no-mermaid no-katex :theme="theme" />
+        <MdPreview :model-value="content" :editor-id="cid" no-mermaid no-katex />
       </div>
     </div>
 

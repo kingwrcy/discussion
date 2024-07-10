@@ -136,9 +136,8 @@ useHead({
     </template>
     <div class="flex flex-col my-2 ">
       <UForm
-        ref="form"
-        :validate="validate" :schema="createPostSchema" :state="state" :validate-on="['submit']" class="space-y-4"
-        autocomplete="off" @submit="onSubmit"
+        ref="form" :validate="validate" :schema="createPostSchema" :state="state" :validate-on="['submit']"
+        class="space-y-4" autocomplete="off" @submit="onSubmit"
       >
         <UFormGroup label="标题" name="title" required>
           <UInput v-model="state.title" autocomplete="off" />
@@ -150,15 +149,17 @@ useHead({
           <USelectMenu v-model="state.readRole" value-attribute="id" option-attribute="desc" :options="readRoleList" />
         </UFormGroup>
         <UFormGroup label="正文" name="content" required>
-          <MdEditor
-            v-model="state.content" :theme="mode as any" style="max-height: 600px;" :preview="false"
-            :toolbars="toolbars" editor-id="newPost" @on-upload-img="onUploadImg"
-          >
-            <template #defToolbars>
-              <XEmoji />
-              <XYoutubeDialog />
-            </template>
-          </MdEditor>
+          <ClientOnly>
+            <MdEditor
+              v-model="state.content" style="max-height: 600px;" :preview="false" :theme="mode as any"
+              :toolbars="toolbars" editor-id="newPost" @on-upload-img="onUploadImg"
+            >
+              <template #defToolbars>
+                <XEmoji />
+                <XYoutubeDialog />
+              </template>
+            </MdEditor>
+          </ClientOnly>
         </UFormGroup>
         <div>
           <UButton type="submit" :loading="pending">

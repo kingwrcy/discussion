@@ -111,7 +111,7 @@ themeChanged.on((val) => {
       <XPost :show-avatar="true" v-bind="post" @support="doSupport" />
     </div>
     <div class="px-4 pt-2 leading-5 border-t space-y-2 dark:border-slate-700">
-      <MdPreview v-model="post.content" :editor-id="`pv-${post.pid}`" no-mermaid no-katex :theme="theme" />
+      <MdPreview v-model="post.content" :editor-id="`pv-${post.pid}`" no-mermaid no-katex />
     </div>
 
     <div class="px-4 flex justify-end pb-2  items-center space-x-2 my-2">
