@@ -1,11 +1,13 @@
 import { MessageType, PointReason, UserStatus } from '@prisma/client'
 import dayjs from 'dayjs'
+import { checkGoogleRecaptcha } from '~/server/utils'
 import type { SysConfigDTO } from '~/types'
 
 interface commentRequest {
   content: string
   pid: string
   cid: string
+  token?: string
 }
 
 function extractMentions(text: string) {
@@ -85,6 +87,17 @@ export default defineEventHandler(async (event) => {
 
   const sysConfig = await prisma.sysConfig.findFirst()
   const sysConfigDTO = sysConfig?.content as unknown as SysConfigDTO
+
+  if (sysConfigDTO.googleRecaptcha && sysConfigDTO.googleRecaptcha.enable) {
+    const { success, message } = await checkGoogleRecaptcha(sysConfigDTO.googleRecaptcha.secretKey, request.token)
+    if (!success) {
+      return {
+        success: false,
+        message,
+      }
+    }
+  }
+
   let {
     _sum: { point: totalToday },
   } = await prisma.pointHistory.aggregate({

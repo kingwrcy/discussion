@@ -4,9 +4,9 @@ import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient } from '@prisma/client'
 import nodemailer from 'nodemailer'
 
-import pg from 'pg'
 import { createCache, memoryStore } from 'cache-manager'
-import type { SysConfigDTO } from '~/types'
+import pg from 'pg'
+import type { SysConfigDTO, recaptchaResponse } from '~/types'
 
 const { Pool } = pg
 
@@ -85,4 +85,31 @@ export async function sendMailWithParams({ host, username, port, secure, passwor
     return `发送邮件失败${'message' in e ? e.message : ''}`
   }
   return ''
+}
+
+export async function checkGoogleRecaptcha(sk: string, token?: string) {
+  if (!token) {
+    return {
+      success: false,
+      message: '请先通过人机验证',
+    }
+  }
+  const url = `https://recaptcha.net/recaptcha/api/siteverify?secret=${sk}&response=${token}`
+  const response = (await $fetch(url)) as any as recaptchaResponse
+  if (response.success === false) {
+    return {
+      success: false,
+      message: '傻逼,还来??',
+    }
+  }
+  if (response.score <= 0.5) {
+    return {
+      success: false,
+      message: '二货,你是不是人机?',
+    }
+  }
+  return {
+    success: true,
+    message: '验证通过',
+  }
 }

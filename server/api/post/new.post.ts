@@ -1,6 +1,7 @@
 import { PointReason, UserStatus } from '@prisma/client'
 import dayjs from 'dayjs'
 import type { z } from 'zod'
+import { checkGoogleRecaptcha } from '~/server/utils'
 import type { SysConfigDTO } from '~/types'
 import { createPostSchema } from '~/types'
 
@@ -19,6 +20,7 @@ export default defineEventHandler(async (event) => {
       message: validateResult.error.issues.map(e => e.message).join(','),
     }
   }
+
   if (request.pid) {
     const post = await prisma.post.findUnique({
       where: { pid: request.pid },
@@ -43,6 +45,16 @@ export default defineEventHandler(async (event) => {
   let pid = `p${randomId()}`
   const sysConfig = await prisma.sysConfig.findFirst()
   const sysConfigDTO = sysConfig?.content as unknown as SysConfigDTO
+
+  if (sysConfigDTO.googleRecaptcha && sysConfigDTO.googleRecaptcha.enable) {
+    const { success, message } = await checkGoogleRecaptcha(sysConfigDTO.googleRecaptcha.secretKey, request.token)
+    if (!success) {
+      return {
+        success: false,
+        message,
+      }
+    }
+  }
 
   if (sysConfigDTO.postUrlFormat) {
     const { type, minNumber, dateFormat } = sysConfigDTO.postUrlFormat

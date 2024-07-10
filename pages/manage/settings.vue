@@ -67,6 +67,11 @@ const state = reactive({
     to: '',
     senderName: '',
   },
+  googleRecaptcha: {
+    siteKey: '',
+    secretKey: '',
+    enable: false,
+  },
 })
 
 Object.assign(state, configData.value?.config)
@@ -92,6 +97,11 @@ const items = [{
   icon: 'i-heroicons-information-circle',
   defaultOpen: false,
   slot: 'appearance-settings',
+}, {
+  label: 'Google Recaptcha',
+  icon: 'i-heroicons-information-circle',
+  defaultOpen: false,
+  slot: 'recaptcha-settings',
 }]
 
 const emailSending = ref(false)
@@ -260,6 +270,28 @@ async function testEmail() {
             <div class="flex flex-row space-x-2">
               <UFormGroup label="自定义JS" name="css" class="w-[500px]" hint="刷新页面生效">
                 <UTextarea v-model="state.js" :rows="10" />
+              </UFormGroup>
+            </div>
+          </div>
+        </template>
+
+        <template #recaptcha-settings>
+          <div class="flex flex-col space-y-2 ">
+            <div class="flex flex-row space-x-2">
+              <UFormGroup label="是否启用" name="googleRecaptchaEnabled" class="w-[500px]" hint="刷新页面生效">
+                <USelectMenu
+                  v-model="state.googleRecaptcha.enable" value-attribute="value" option-attribute="label"
+                  :options="[{ value: true, label: '是' }, { value: false, label: '否' }]"
+                />
+              </UFormGroup>
+            </div>
+
+            <div class="flex flex-row space-x-2">
+              <UFormGroup label="Site Key" name="css" class="w-[500px]">
+                <UInput v-model="state.googleRecaptcha.siteKey" autocomplete="off" />
+              </UFormGroup>
+              <UFormGroup label="Secret Key" name="css" class="w-[500px]">
+                <UInput v-model="state.googleRecaptcha.secretKey" autocomplete="off" />
               </UFormGroup>
             </div>
           </div>

@@ -5,6 +5,7 @@ import { sha256 } from 'js-sha256'
 import { UserRole } from '@prisma/client'
 import { regRequestSchema } from '~/types'
 import type { SysConfigDTO } from '~/types'
+import { checkGoogleRecaptcha } from '~/server/utils'
 
 type regRequest = z.infer<typeof regRequestSchema>
 
@@ -32,6 +33,16 @@ export default defineEventHandler(async (event) => {
   const invite = sysConfigDTO.invite
   const uid = `u${randomId()}`
   let inviteCodes: any = {}
+
+  if (sysConfigDTO.googleRecaptcha && sysConfigDTO.googleRecaptcha.enable) {
+    const { success, message } = await checkGoogleRecaptcha(sysConfigDTO.googleRecaptcha.secretKey, request.token)
+    if (!success) {
+      return {
+        success: false,
+        message,
+      }
+    }
+  }
 
   if (invite) {
     if (!request.inviteCode) {

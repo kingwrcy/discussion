@@ -94,6 +94,18 @@ if (userinfo.value.js) {
     ],
   })
 }
+
+if (sysconfig.googleRecaptcha && sysconfig.googleRecaptcha.enable) {
+  useHead({
+    script: [
+      {
+        type: 'text/javascript',
+        src: `https://recaptcha.net/recaptcha/api.js?render=${sysconfig.googleRecaptcha.siteKey}`,
+      },
+    ],
+  })
+}
+
 function search() {
   if (!keyWords.value)
     return

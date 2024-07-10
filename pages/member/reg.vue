@@ -3,6 +3,7 @@ import type { z } from 'zod'
 import { toast } from 'vue-sonner'
 import type { FormSubmitEvent } from '#ui/types'
 import { regRequestSchema } from '~/types'
+import type { SysConfigDTO } from '~/types'
 
 type Schema = z.output<typeof regRequestSchema>
 
@@ -21,12 +22,13 @@ const state = reactive<Schema>({
 })
 const pending = ref(false)
 const emailSending = ref(false)
+const global = useGlobalConfig()
+const sysconfig = global.value?.sysConfig as SysConfigDTO
 
-async function onSubmit(event: FormSubmitEvent<Schema>) {
-  pending.value = true
+async function doReg(data: Schema, token: string = '') {
   const result = await $fetch('/api/member/reg', {
     method: 'POST',
-    body: JSON.stringify(event.data),
+    body: JSON.stringify({ ...data, token }),
   })
   if (result.success) {
     toast.success('注册成功,去登录吧')
@@ -35,8 +37,23 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   else if ('message' in result) {
     toast.error(`注册失败,${result.message}`)
   }
+}
+
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  pending.value = true
+  if (sysconfig.googleRecaptcha && sysconfig.googleRecaptcha.enable) {
+    grecaptcha.ready(() => {
+      grecaptcha.execute(sysconfig.googleRecaptcha.siteKey, { action: 'reg' }).then(async (token) => {
+        await doReg(event.data, token)
+      })
+    })
+  }
+  else {
+    await doReg(event.data)
+  }
   pending.value = false
 }
+
 async function sendEmail() {
   emailSending.value = true
   const { success, emailCodeKey, message } = await $fetch('/api/member/sendEmail', {

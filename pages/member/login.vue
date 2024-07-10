@@ -2,7 +2,7 @@
 import { toast } from 'vue-sonner'
 import type { z } from 'zod'
 import type { FormSubmitEvent } from '#ui/types'
-import { loginRequestSchema } from '~/types'
+import { type SysConfigDTO, loginRequestSchema } from '~/types'
 
 useHead({
   title: `登录`,
@@ -15,22 +15,35 @@ const state = reactive<Schema>({
   username: '',
 })
 const pending = ref(false)
+const global = useGlobalConfig()
+const sysconfig = global.value?.sysConfig as SysConfigDTO
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   pending.value = true
+  if (sysconfig.googleRecaptcha && sysconfig.googleRecaptcha.enable) {
+    grecaptcha.ready(() => {
+      grecaptcha.execute(sysconfig.googleRecaptcha.siteKey, { action: 'login' }).then(async (token) => {
+        await login(event.data, token)
+      })
+    })
+  }
+  else {
+    await login(event.data)
+  }
+  pending.value = false
+}
+
+async function login(data: Schema, token: string = '') {
   const result = await $fetch('/api/member/login', {
     method: 'POST',
-    body: JSON.stringify(event.data),
+    body: JSON.stringify({ ...data, token }),
   })
   if (result.success && 'tokenKey' in result) {
     location.href = '/'
-    // refreshCookie(result.tokenKey)
-    // navigateTo('/', { replace: true })
   }
   else if ('message' in result) {
     toast.error(`登录失败,${result.message}`)
   }
-  pending.value = false
 }
 </script>
 

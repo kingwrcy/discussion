@@ -11,6 +11,7 @@ export const regRequestSchema = z
     inviteCode: z.string().optional(),
     emailCode: z.string().optional(),
     emailCodeKey: z.string().optional(),
+    token: z.string().optional(),
   })
   .refine(data => data.password === data.repeatPassword, {
     message: '两次密码不一致',
@@ -35,6 +36,7 @@ export const saveSettingsRequestSchema = z.object({
 export const loginRequestSchema = z.object({
   username: z.string(),
   password: z.string().min(6, '密码最少6个字符'),
+  token: z.string().optional(),
 }).refine(data => getLength(data.username) >= 4, {
   message: '用户名最少4个字符,中文一个算2个字符',
   path: ['username'],
@@ -49,6 +51,7 @@ export const createPostSchema = z.object({
   tagId: z.number({ message: '标签是必选的' }),
   pid: z.string().optional(),
   readRole: z.number({ message: '阅读范围是必选的' }),
+  token: z.string().optional(),
 }).refine(data => getLength(data.content) >= 6, {
   message: '内容最少6个字符,中文一个算2个字符',
   path: ['username'],
@@ -187,6 +190,11 @@ export interface SysConfigDTO {
     senderName: string
   }
   regWithEmailCodeVerify: boolean
+  googleRecaptcha: {
+    siteKey: string
+    secretKey: string
+    enable: boolean
+  }
 }
 
 export interface MessageDTO {
@@ -204,4 +212,12 @@ export interface inviteInfo {
   fromUid: string
   toUid: string
   content: string
+}
+
+export interface recaptchaResponse {
+  success: boolean
+  challenge_ts: string
+  hostname: string
+  score: number
+  action: string
 }

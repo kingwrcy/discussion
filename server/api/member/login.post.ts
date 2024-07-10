@@ -1,6 +1,8 @@
-import type { z } from 'zod'
-import jwt from 'jsonwebtoken'
 import { default as bcrypt } from 'bcryptjs'
+import jwt from 'jsonwebtoken'
+import type { z } from 'zod'
+import { checkGoogleRecaptcha } from '~/server/utils'
+import type { SysConfigDTO } from '~/types'
 import { loginRequestSchema } from '~/types'
 
 type regRequest = z.infer<typeof loginRequestSchema>
@@ -8,11 +10,24 @@ type regRequest = z.infer<typeof loginRequestSchema>
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
   const request = (await readBody(event)) as regRequest
+
   const validateResult = loginRequestSchema.safeParse(request)
   if (!validateResult.success) {
     return {
       success: false,
       message: validateResult.error.issues.map(e => e.message).join(','),
+    }
+  }
+
+  const sysConfig = await prisma.sysConfig.findFirst()
+  const sysConfigDTO = sysConfig?.content as unknown as SysConfigDTO
+  if (sysConfigDTO.googleRecaptcha && sysConfigDTO.googleRecaptcha.enable) {
+    const { success, message } = await checkGoogleRecaptcha(sysConfigDTO.googleRecaptcha.secretKey, request.token)
+    if (!success) {
+      return {
+        success: false,
+        message,
+      }
     }
   }
 

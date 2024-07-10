@@ -1,7 +1,8 @@
 <script lang="ts" setup>
+import { useColorMode } from '@vueuse/core'
 import type { ToolbarNames } from 'md-editor-v3'
 import { MdEditor } from 'md-editor-v3'
-import { useColorMode } from '@vueuse/core'
+import type { SysConfigDTO } from '~/types'
 import type { CommentQuotedPayload } from '~/utils/eventbus'
 
 const props = defineProps<{
@@ -17,6 +18,9 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyDown)
 })
+
+const global = useGlobalConfig()
+const sysconfig = global.value?.sysConfig as SysConfigDTO
 
 const editorRef = ref()
 const newCid = ref()
@@ -69,18 +73,14 @@ const toolbars: ToolbarNames[] = [
   'preview',
 ]
 
-async function reply() {
-  if (!state.content.trim())
-    return
-  if (pending.value)
-    return
-  pending.value = true
+async function doReply(token: string = '') {
   const res = await $fetch('/api/comment/new', {
     method: 'POST',
     body: JSON.stringify({
       content: state.content.trim(),
       pid: props.pid,
       cid: newCid.value,
+      token,
     }),
   })
   if (res.success) {
@@ -88,6 +88,24 @@ async function reply() {
     newCid.value = ''
     emits('commented')
     userCardChanged.emit()
+  }
+}
+
+async function reply() {
+  if (!state.content.trim())
+    return
+  if (pending.value)
+    return
+  pending.value = true
+  if (sysconfig.googleRecaptcha && sysconfig.googleRecaptcha.enable) {
+    grecaptcha.ready(() => {
+      grecaptcha.execute(sysconfig.googleRecaptcha.siteKey, { action: 'login' }).then(async (token) => {
+        await doReply(token)
+      })
+    })
+  }
+  else {
+    await doReply()
   }
   pending.value = false
 }
@@ -98,8 +116,8 @@ const color = useColorMode()
   <div v-if="token" class="flex flex-col  py-2 w-full ">
     <ClientOnly>
       <MdEditor
-        ref="editorRef" v-model="state.content" :theme="color as any" style="max-height:300px;" :preview="false" :toolbars="toolbars"
-        :editor-id="`post-${pid}`" @on-upload-img="onUploadImg"
+        ref="editorRef" v-model="state.content" :theme="color as any" style="max-height:300px;" :preview="false"
+        :toolbars="toolbars" :editor-id="`post-${pid}`" @on-upload-img="onUploadImg"
       >
         <template #defToolbars>
           <XEmoji />

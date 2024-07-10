@@ -5,14 +5,15 @@ import { toast } from 'vue-sonner'
 import type { z } from 'zod'
 import { useColorMode } from '@vueuse/core'
 import type { FormError, FormSubmitEvent } from '#ui/types'
-import type { PostDTO, UserDTO } from '~/types'
+import type { PostDTO, SysConfigDTO, UserDTO } from '~/types'
 import { createPostSchema } from '~/types'
 import { getLength } from '~/utils'
 
 type Schema = z.output<typeof createPostSchema>
 
 const userinfo = useState<UserDTO>('userinfo')
-
+const global = useGlobalConfig()
+const sysconfig = global.value?.sysConfig as SysConfigDTO
 onMounted(() => {
   window.addEventListener('keydown', handleKeyDown)
 })
@@ -87,11 +88,10 @@ watch(() => route.fullPath, loadPost)
 
 const pending = ref(false)
 
-async function onSubmit(event: FormSubmitEvent<Schema>) {
-  pending.value = true
+async function doPostNew(data: Schema, token: string = '') {
   const result = await $fetch('/api/post/new', {
     method: 'POST',
-    body: JSON.stringify(event.data),
+    body: JSON.stringify({ ...data, token }),
   })
   if (result.success && 'pid' in result) {
     userCardChanged.emit()
@@ -101,6 +101,20 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   }
   else if ('message' in result) {
     toast.error(`发表失败,${result.message}`)
+  }
+}
+
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  pending.value = true
+  if (sysconfig.googleRecaptcha && sysconfig.googleRecaptcha.enable) {
+    grecaptcha.ready(() => {
+      grecaptcha.execute(sysconfig.googleRecaptcha.siteKey, { action: 'newPost' }).then(async (token) => {
+        await doPostNew(event.data, token)
+      })
+    })
+  }
+  else {
+    await doPostNew(event.data)
   }
   pending.value = false
 }
