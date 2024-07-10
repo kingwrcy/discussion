@@ -129,6 +129,7 @@ export default defineEventHandler(async (event) => {
               headImg: true,
               role: true,
               signature: true,
+              titles: true,
             },
           },
           likes: {

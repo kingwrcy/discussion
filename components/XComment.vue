@@ -96,6 +96,9 @@ themeChanged.on((val) => {
           <NuxtLink :to="`/member/${author.username}`">
             {{ author.username }}
           </NuxtLink>
+          <UBadge v-for="(t, index) in author.titles" :key="index" size="xs" :color="t.style">
+            {{ t.title }}
+          </UBadge>
           <span
             v-if="author.uid === post!.uid"
             class="text-[11px] ml-1 bg-gray-500 text-white rounded px-1"

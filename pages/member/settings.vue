@@ -114,7 +114,7 @@ async function copyCode() {
         </template>
         <UTextarea
           v-model="state.signature" placeholder="[Moments](https://m.mblog.club)"
-          :disabled="userinfo.level < 2"
+          :disabled="userinfo.level < 2 && userinfo.role === 'USER'"
         />
       </UFormGroup>
       <UButton type="submit">

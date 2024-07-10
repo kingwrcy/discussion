@@ -20,6 +20,9 @@ const columns = [{
 }, {
   key: 'post.title',
   label: '帖子',
+}, {
+  key: 'remark',
+  label: '备注',
 }]
 
 function getReason(reason: PointReason) {
@@ -38,6 +41,8 @@ function getReason(reason: PointReason) {
       return '惩罚'
     case 'INVITE':
       return '生成邀请码'
+    case 'SEND':
+      return '管理员赠送'
     default:
       return reason
   }
@@ -80,6 +85,11 @@ watch(() => route.fullPath, reload)
           <NuxtLink class="text-blue-500 whitespace-pre-wrap" :to="`/post/${row.post.pid}`">
             {{ row.post.title }}
           </NuxtLink>
+        </div>
+      </template>
+      <template #point-data="{ row }">
+        <div :class="[row.point > 0 ? 'text-green-500' : 'text-red-500']">
+          {{ `${row.point > 0 ? '+' : ''}${row.point}` }}
         </div>
       </template>
       <template #reason-data="{ row }">

@@ -71,19 +71,19 @@ const columns = [{
   label: '加入时间',
 }, {
   key: 'lastLogin',
-  label: '最后登录时间',
+  label: '最后登录',
 }, {
   key: 'bannedEnd',
-  label: '禁言结束时间',
+  label: '禁言结束',
 }, {
   key: 'point',
   label: '积分',
 }, {
   key: '_count.posts',
-  label: '帖子数量',
+  label: '帖子',
 }, {
   key: '_count.comments',
-  label: '评论数量',
+  label: '评论',
 }, {
   key: 'actions',
 }]
@@ -162,9 +162,68 @@ async function removeTitle(userId: number, titleId: number) {
   }
   await reload()
 }
+
+const sendPointOpen = ref(false)
+const pointOptions = [{ key: 'PUNISH', label: '处罚' }, { key: 'SEND', label: '赠送' }]
+
+const pointActionState = reactive({
+  reason: 'SEND',
+  amount: '',
+  uid: '',
+  remark: '',
+})
+function openPointAction(uid: string) {
+  pointActionState.reason = 'SEND'
+  pointActionState.amount = ''
+  pointActionState.remark = ''
+  pointActionState.uid = uid
+  sendPointOpen.value = true
+}
+async function makePointAction() {
+  if (!pointActionState.amount) {
+    toast.error('请填写数量')
+    return
+  }
+  if (!pointActionState.reason) {
+    toast.error('请填写动作')
+    return
+  }
+  if (!pointActionState.remark) {
+    toast.error('请填写事由')
+    return
+  }
+  const { success } = await $fetch('/api/manage/member/point', {
+    method: 'POST',
+    body: JSON.stringify(pointActionState),
+  })
+  if (success) {
+    sendPointOpen.value = false
+    await reload()
+  }
+}
 </script>
 
 <template>
+  <UModal v-model="sendPointOpen">
+    <div class="p-4 space-y-4">
+      <UFormGroup label="动作" name="reason">
+        <USelectMenu
+          v-model="pointActionState.reason" value-attribute="key" option-attribute="label"
+          :options="pointOptions"
+        />
+      </UFormGroup>
+      <UFormGroup label="数量" name="status">
+        <UInput v-model="pointActionState.amount" />
+      </UFormGroup>
+      <UFormGroup label="事由" name="style">
+        <UInput v-model="pointActionState.remark" />
+      </UFormGroup>
+      <UButton @click="makePointAction">
+        提交
+      </UButton>
+    </div>
+  </UModal>
+
   <UCard class="flex-1 overflow-hidden">
     <template #header>
       <div class="max-w-[300px]">
@@ -231,6 +290,7 @@ async function removeTitle(userId: number, titleId: number) {
               @click="selectedUid = row.uid"
             />
           </UDropdown>
+          <UButton color="white" label="积分调整" @click="openPointAction(row.uid)" />
         </div>
       </template>
     </UTable>

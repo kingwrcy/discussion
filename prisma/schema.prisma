@@ -44,14 +44,13 @@ model User {
 }
 
 model Title {
-  id     Int         @id @default(autoincrement())
-  title  String      @unique
-  count  Int         @default(0)
+  id     Int     @id @default(autoincrement())
+  title  String  @unique
+  count  Int     @default(0)
   style  String
-  status Boolean     @default(true)
+  status Boolean @default(true)
   users  User[]
 }
-
 
 model Post {
   id              Int            @id @default(autoincrement())
@@ -177,6 +176,7 @@ model PointHistory {
   comment   Comment?    @relation(fields: [cid], references: [cid])
   post      Post?       @relation(fields: [pid], references: [pid])
   user      User        @relation(fields: [uid], references: [uid])
+  remark    String?
 }
 
 model Message {
@@ -220,6 +220,7 @@ enum PointReason {
   SIGNIN
   PUNISH
   INVITE
+  SEND
 }
 
 enum MessageType {
