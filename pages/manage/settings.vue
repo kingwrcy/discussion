@@ -89,17 +89,17 @@ const postUrlFormatOptions = [{ value: 'UUID', label: 'UUID' }, { value: 'Number
 
 const items = [{
   label: '邮件设置',
-  icon: 'i-heroicons-information-circle',
+  icon: 'i-carbon-email',
   defaultOpen: false,
   slot: 'email-settings',
 }, {
   label: '外观设置',
-  icon: 'i-heroicons-information-circle',
+  icon: 'i-carbon-machine-learning',
   defaultOpen: false,
   slot: 'appearance-settings',
 }, {
   label: 'Google Recaptcha',
-  icon: 'i-heroicons-information-circle',
+  icon: 'i-carbon-security',
   defaultOpen: false,
   slot: 'recaptcha-settings',
 }]
@@ -155,7 +155,7 @@ async function testEmail() {
       </div>
 
       <div class="flex flex-row space-x-2">
-        <UFormGroup label="帖子链接定义" name="type">
+        <UFormGroup label="帖子链接格式定义" name="type">
           <USelectMenu
             v-model="state.postUrlFormat.type" :options="postUrlFormatOptions" value-attribute="value"
             option-attribute="label"
@@ -252,7 +252,7 @@ async function testEmail() {
             <UInput v-model="state.email.senderName" autocomplete="off" />
           </UFormGroup>
           <UButtonGroup size="sm" orientation="horizontal" class="my-2">
-            <UInput v-model="state.email.to" disabled placeholder="测试邮件接收地址" />
+            <UInput v-model="state.email.to" placeholder="测试邮件接收地址" />
             <UButton class="w-fit " size="xs" :loading="emailSending" @click="testEmail">
               测试发送邮件
             </UButton>
@@ -262,13 +262,13 @@ async function testEmail() {
         <template #appearance-settings>
           <div class="flex flex-col space-y-2 ">
             <div class="flex flex-row space-x-2">
-              <UFormGroup label="自定义css" name="css" class="w-[500px]" hint="刷新页面生效">
+              <UFormGroup label="自定义css" name="css" class="w-[500px]">
                 <UTextarea v-model="state.css" :rows="10" />
               </UFormGroup>
             </div>
 
             <div class="flex flex-row space-x-2">
-              <UFormGroup label="自定义JS" name="css" class="w-[500px]" hint="刷新页面生效">
+              <UFormGroup label="自定义JS" name="css" class="w-[500px]">
                 <UTextarea v-model="state.js" :rows="10" />
               </UFormGroup>
             </div>
@@ -278,7 +278,7 @@ async function testEmail() {
         <template #recaptcha-settings>
           <div class="flex flex-col space-y-2 ">
             <div class="flex flex-row space-x-2">
-              <UFormGroup label="是否启用" name="googleRecaptchaEnabled" class="w-[500px]" hint="刷新页面生效">
+              <UFormGroup label="是否启用" name="googleRecaptchaEnabled" class="w-[500px]">
                 <USelectMenu
                   v-model="state.googleRecaptcha.enable" value-attribute="value" option-attribute="label"
                   :options="[{ value: true, label: '是' }, { value: false, label: '否' }]"

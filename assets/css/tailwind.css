@@ -7,6 +7,10 @@
     "Microsoft Yahei", sans-serif, "Apple Logo";
 }
 
+.grecaptcha-badge{
+  display: none !important;
+}
+
 .md-editor-preview-wrapper {
   padding: 0 !important;
 }

@@ -55,7 +55,7 @@ watch(() => route.path, () => {
         </NuxtLink>
 
         <NuxtLink to="/manage/title" :class="{ active: selectedMenu === 'title' }" class="flex items-center space-x-1 p-2 cursor-pointer hover:text-primary/80">
-          <UIcon name="i-carbon-book" class="text-primary/80" />
+          <UIcon name="i-carbon-carbon" class="text-primary/80" />
           <span class="hidden xl:block">头衔管理</span>
         </NuxtLink>
 

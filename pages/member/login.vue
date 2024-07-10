@@ -24,13 +24,14 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     grecaptcha.ready(() => {
       grecaptcha.execute(sysconfig.googleRecaptcha.siteKey, { action: 'login' }).then(async (token) => {
         await login(event.data, token)
+        pending.value = false
       })
     })
   }
   else {
     await login(event.data)
+    pending.value = false
   }
-  pending.value = false
 }
 
 async function login(data: Schema, token: string = '') {
@@ -39,6 +40,7 @@ async function login(data: Schema, token: string = '') {
     body: JSON.stringify({ ...data, token }),
   })
   if (result.success && 'tokenKey' in result) {
+    toast.success(`登录成功,自动跳转中...`)
     location.href = '/'
   }
   else if ('message' in result) {
@@ -66,7 +68,7 @@ async function login(data: Schema, token: string = '') {
           <UInput v-model="state.password" type="password" autocomplete="off" />
         </UFormGroup>
         <div class="flex gap-2 items-center">
-          <UButton type="submit" :loading="pending">
+          <UButton type="submit" :loading="pending" :disabled="pending">
             登录
           </UButton>
           <UButton color="gray" variant="solid" class="button" @click="navigateTo('/member/forgotPassword')">

@@ -2,6 +2,7 @@
 import { useColorMode } from '@vueuse/core'
 import type { ToolbarNames } from 'md-editor-v3'
 import { MdEditor } from 'md-editor-v3'
+import { toast } from 'vue-sonner'
 import type { SysConfigDTO } from '~/types'
 import type { CommentQuotedPayload } from '~/utils/eventbus'
 
@@ -88,6 +89,7 @@ async function doReply(token: string = '') {
     newCid.value = ''
     emits('commented')
     userCardChanged.emit()
+    toast.success('评论成功')
   }
 }
 
@@ -101,13 +103,14 @@ async function reply() {
     grecaptcha.ready(() => {
       grecaptcha.execute(sysconfig.googleRecaptcha.siteKey, { action: 'login' }).then(async (token) => {
         await doReply(token)
+        pending.value = false
       })
     })
   }
   else {
     await doReply()
+    pending.value = false
   }
-  pending.value = false
 }
 const color = useColorMode()
 </script>
@@ -126,7 +129,7 @@ const color = useColorMode()
       </MdEditor>
     </ClientOnly>
     <div class="flex my-2">
-      <UButton :disabled="pending" @click="reply">
+      <UButton :disabled="pending" :loading="pending" @click="reply">
         发表评论(Ctrl+Enter提交)
       </UButton>
     </div>

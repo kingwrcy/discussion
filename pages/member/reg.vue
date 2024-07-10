@@ -45,16 +45,21 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     grecaptcha.ready(() => {
       grecaptcha.execute(sysconfig.googleRecaptcha.siteKey, { action: 'reg' }).then(async (token) => {
         await doReg(event.data, token)
+        pending.value = false
       })
     })
   }
   else {
     await doReg(event.data)
+    pending.value = false
   }
-  pending.value = false
 }
 
 async function sendEmail() {
+  if (!state.email) {
+    toast.error('请填写邮箱')
+    return
+  }
   emailSending.value = true
   const { success, emailCodeKey, message } = await $fetch('/api/member/sendEmail', {
     method: 'POST',
@@ -89,7 +94,7 @@ async function sendEmail() {
         <UFormGroup label="邮箱" name="email" hint="请使用常用邮箱,会用来生成头像">
           <UButtonGroup v-if="config.sysConfig.regWithEmailCodeVerify">
             <UInput v-model="state.email" autocomplete="off" />
-            <UButton type="button" :loading="emailSending" @click="sendEmail">
+            <UButton type="button" :loading="emailSending" :disabled="!state.email" @click="sendEmail">
               发送邮件
             </UButton>
           </UButtonGroup>
@@ -108,7 +113,7 @@ async function sendEmail() {
           <UInput v-model="state.inviteCode" autocomplete="off" />
         </UFormGroup>
         <div>
-          <UButton type="submit" :loading="pending">
+          <UButton type="submit" :loading="pending" :disabled="pending">
             注册账户
           </UButton>
           <NuxtLink to="/member/login" class="text-primary text-sm ml-2 underline underline-offset-4">

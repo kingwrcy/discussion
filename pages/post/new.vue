@@ -95,6 +95,7 @@ async function doPostNew(data: Schema, token: string = '') {
   })
   if (result.success && 'pid' in result) {
     userCardChanged.emit()
+    toast.success(`帖子发表成功,自动跳转中...`)
     setTimeout(() => {
       navigateTo(`/post/${result.pid}`)
     }, 200)
@@ -110,13 +111,14 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     grecaptcha.ready(() => {
       grecaptcha.execute(sysconfig.googleRecaptcha.siteKey, { action: 'newPost' }).then(async (token) => {
         await doPostNew(event.data, token)
+        pending.value = false
       })
     })
   }
   else {
     await doPostNew(event.data)
+    pending.value = false
   }
-  pending.value = false
 }
 
 const form = ref<HTMLFormElement>()
@@ -176,7 +178,7 @@ useHead({
           </ClientOnly>
         </UFormGroup>
         <div>
-          <UButton type="submit" :loading="pending">
+          <UButton type="submit" :loading="pending" :disabled="pending">
             发表(Ctrl+Enter提交)
           </UButton>
         </div>
