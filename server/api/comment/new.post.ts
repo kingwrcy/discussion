@@ -1,6 +1,6 @@
 import { MessageType, PointReason, UserStatus } from '@prisma/client'
 import dayjs from 'dayjs'
-import { checkGoogleRecaptcha } from '~/server/utils'
+import { checkGoogleRecaptcha, sendTgMessage } from '~/server/utils'
 import type { SysConfigDTO } from '~/types'
 
 interface commentRequest {
@@ -44,6 +44,7 @@ export default defineEventHandler(async (event) => {
         select: {
           uid: true,
           username: true,
+          tgChatID: true,
         },
       },
     },
@@ -143,6 +144,7 @@ export default defineEventHandler(async (event) => {
           relationId: request.pid,
         },
       })
+      await sendTgMessage(sysConfigDTO, target.tgChatID, `你在帖子[${post.title}](${sysConfigDTO.websiteUrl}/post/${request.pid}#${cid})中被提到了`)
     }
   })
 
@@ -194,6 +196,7 @@ export default defineEventHandler(async (event) => {
         relationId: request.pid,
       },
     })
+    await sendTgMessage(sysConfigDTO, post.author.tgChatID, `你在帖子[${post.title}](${sysConfigDTO.websiteUrl}/post/${request.pid}#${cid})中被提到了`)
   }
   return { success: true }
 })

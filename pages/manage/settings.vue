@@ -72,11 +72,21 @@ const state = reactive({
     secretKey: '',
     enable: false,
   },
+  proxyUrl: '',
+  notify: {
+    tgBotEnabled: false,
+    tgBotToken: '',
+    tgBotName: '',
+  },
 })
 
 Object.assign(state, configData.value?.config)
 
 async function saveSettings() {
+  if (state.googleRecaptcha.enable && (!state.googleRecaptcha.siteKey || !state.googleRecaptcha.secretKey)) {
+    toast.error('启用了Google Recaptcha,请填写Site Key和Secret Key')
+    return
+  }
   await $fetch('/api/manage/config/save', {
     method: 'POST',
     body: JSON.stringify(state),
@@ -102,6 +112,11 @@ const items = [{
   icon: 'i-carbon-security',
   defaultOpen: false,
   slot: 'recaptcha-settings',
+}, {
+  label: '通知设置',
+  icon: 'i-carbon-security',
+  defaultOpen: false,
+  slot: 'notify-settings',
 }]
 
 const emailSending = ref(false)
@@ -292,6 +307,33 @@ async function testEmail() {
               </UFormGroup>
               <UFormGroup label="Secret Key" name="css" class="w-[500px]">
                 <UInput v-model="state.googleRecaptcha.secretKey" autocomplete="off" />
+              </UFormGroup>
+            </div>
+          </div>
+        </template>
+
+        <template #notify-settings>
+          <div class="flex flex-col space-y-2 ">
+            <div class="flex flex-row space-x-2">
+              <UFormGroup label="HTTP代理" name="proxyUrl" class="w-[500px]" hint="如果你的服务器在国内的话必填">
+                <UInput v-model="state.proxyUrl" autocomplete="off" />
+              </UFormGroup>
+            </div>
+            <div class="flex flex-row space-x-2">
+              <UFormGroup label="是否启用Telegram机器人" name="tgBotEnabled" class="w-[500px]">
+                <USelectMenu
+                  v-model="state.notify.tgBotEnabled" value-attribute="value" option-attribute="label"
+                  :options="[{ value: true, label: '是' }, { value: false, label: '否' }]"
+                />
+              </UFormGroup>
+            </div>
+
+            <div class="flex flex-row space-x-2">
+              <UFormGroup label="Bot Token" name="tgBotToken" class="w-[500px]">
+                <UInput v-model="state.notify.tgBotToken" autocomplete="off" />
+              </UFormGroup>
+              <UFormGroup label="Bot Name" name="tgBotName" class="w-[500px]" hint="显示在消息页面">
+                <UInput v-model="state.notify.tgBotName" autocomplete="off" />
               </UFormGroup>
             </div>
           </div>

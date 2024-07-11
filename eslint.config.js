@@ -1,8 +1,6 @@
 import antfu from '@antfu/eslint-config'
 
 export default antfu({
-  // Enable stylistic formatting rules
-  stylistic: true,
 
   // Or customize the stylistic rules
   stylistic: {

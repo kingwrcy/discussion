@@ -6,6 +6,7 @@ import nodemailer from 'nodemailer'
 
 import { createCache, memoryStore } from 'cache-manager'
 import pg from 'pg'
+import TelegramBot from 'node-telegram-bot-api'
 import type { SysConfigDTO, recaptchaResponse } from '~/types'
 
 const { Pool } = pg
@@ -111,5 +112,32 @@ export async function checkGoogleRecaptcha(sk: string, token?: string) {
   return {
     success: true,
     message: '验证通过',
+  }
+}
+
+export async function sendTgMessage(sysConfigDTO: SysConfigDTO, chatId: string | null, message: string) {
+  if (!chatId) {
+    return
+  }
+  if (sysConfigDTO.notify?.tgBotEnabled && sysConfigDTO.notify.tgBotToken) {
+    const request = {} as any
+    if (sysConfigDTO.proxyUrl) {
+      request.proxy = sysConfigDTO.proxyUrl
+    }
+
+    const bot = new TelegramBot(sysConfigDTO.notify.tgBotToken, {
+      polling: true,
+      request,
+    })
+    console.log('发送消息给', chatId, message)
+    try {
+      const res = await bot.sendMessage(chatId, message, {
+        parse_mode: 'MarkdownV2',
+      })
+      console.log('发送结果', res.message_id)
+    }
+    catch (e) {
+      console.log('发送失败', e)
+    }
   }
 }

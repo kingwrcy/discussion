@@ -46,6 +46,7 @@ model User {
   invitedUsers    User[]         @relation("UserInvitations")
   sentInvites     inviteCode[]   @relation("SentInvites")
   receivedInvites inviteCode[]   @relation("ReceivedInvites")
+  tgChatID        String?
 }
 
 model Title {

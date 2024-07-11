@@ -195,6 +195,12 @@ export interface SysConfigDTO {
     secretKey: string
     enable: boolean
   }
+  proxyUrl: ''
+  notify: {
+    tgBotEnabled: false
+    tgBotToken: ''
+    tgBotName: ''
+  }
 }
 
 export interface MessageDTO {
