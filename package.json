@@ -32,7 +32,7 @@
     "md-editor-v3": "^4.17.3",
     "node-telegram-bot-api": "^0.66.0",
     "nodemailer": "^6.9.14",
-    "nuxt": "^3.12.2",
+    "nuxt": "^3.12.3",
     "nuxt-scheduler": "^0.1.9",
     "pg": "^8.12.0",
     "short-uuid": "^5.2.0",
