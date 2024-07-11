@@ -56,7 +56,6 @@ async function start() {
 
     bot.onText(/\/bind (.+)/, async (msg, match) => {
       const chatId = msg.chat.id
-      console.log('match', match)
       if (!match || match?.length === 0) {
         bot.sendMessage(chatId, `格式错误，正确格式为 /bind 你的${websiteName}用户名#你的${websiteName}邮箱地址`)
         return
@@ -65,24 +64,11 @@ async function start() {
       updateUserTgChatID(prisma, params, chatId.toString(), bot, chatId.toString())
     })
 
-    bot.onText(/\/unbind (.+)/, async (msg, match) => {
-      const chatId = msg.chat.id
-      if (!match || match?.length === 0) {
-        bot.sendMessage(chatId, `格式错误，正确格式为 /unbind 你的${websiteName}用户名#你的${websiteName}邮箱地址`)
-        return
-      }
-      const params = match[1]
-      updateUserTgChatID(prisma, params, chatId.toString(), bot)
-    })
-
     bot.on('message', (msg) => {
       const chatId = msg.chat.id
 
       if (msg.text === '/bind') {
-        bot.sendMessage(chatId, `绑定时需要带上用户名和注册邮箱,中间使用#号分割，例如/bind 你的${websiteName}用户名#你的${websiteName}邮箱地址`)
-      }
-      else if (msg.text === '/unbind') {
-        bot.sendMessage(chatId, `解除绑定时需要带上用户名和注册邮箱,中间使用#号分割，例如/unbind 你的${websiteName}用户名#你的${websiteName}邮箱地址`)
+        bot.sendMessage(chatId, `绑定时需要的指令请去网站的消息中心右上角复制过来`)
       }
     })
 
@@ -97,16 +83,16 @@ async function updateUserTgChatID(prisma: PrismaClient, params: string, chatID: 
     bot.sendMessage(chatID, `格式不正确`)
     return
   }
-  const [username, email] = params.split('#')
+  const [username, hash] = params.split('#')
   const user = await prisma.user.findUnique({
-    where: { username, email },
+    where: { username, password: hash },
   })
   if (!user) {
-    bot.sendMessage(chatID, `不存在${username}#${email}这个用户`)
+    bot.sendMessage(chatID, `不存在${username}这个用户`)
     return
   }
   await prisma.user.update({
-    where: { username },
+    where: { username, password: hash },
     data: { tgChatID: value },
   })
   bot.sendMessage(chatID, '恭喜你，操作成功！')
