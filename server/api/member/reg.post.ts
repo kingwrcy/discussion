@@ -2,6 +2,7 @@ import type { z } from 'zod'
 
 import { default as bcrypt } from 'bcryptjs'
 import { sha256 } from 'js-sha256'
+import type { User } from '@prisma/client'
 import { UserRole } from '@prisma/client'
 import { regRequestSchema } from '~/types'
 import type { SysConfigDTO } from '~/types'
@@ -33,6 +34,7 @@ export default defineEventHandler(async (event) => {
   const invite = sysConfigDTO.invite
   const uid = `u${randomId()}`
   let inviteCodes: any = {}
+  let inviteUser: User | null = null
 
   if (sysConfigDTO.googleRecaptcha && sysConfigDTO.googleRecaptcha.enable) {
     const { success, message } = await checkGoogleRecaptcha(sysConfigDTO.googleRecaptcha.secretKey, request.token)
@@ -65,6 +67,17 @@ export default defineEventHandler(async (event) => {
       return {
         success: false,
         message: '邀请码已失效',
+      }
+    }
+    inviteUser = await prisma.user.findFirst({
+      where: {
+        uid: inviteCodes?.fromUid,
+      },
+    })
+    if (!inviteUser) {
+      return {
+        success: false,
+        message: '邀请人不存在',
       }
     }
   }
@@ -116,17 +129,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const exist = await prisma.user.count({})
-  const inviteUser = await prisma.user.findFirst({
-    where: {
-      uid: inviteCodes?.fromUid,
-    },
-  })
-  if (!inviteUser) {
-    return {
-      success: false,
-      message: '邀请人不存在',
-    }
-  }
+
   try {
     await prisma.user.create({
       data: {
@@ -137,7 +140,7 @@ export default defineEventHandler(async (event) => {
         avatarUrl: sha256(request.email.trim()),
         role: exist ? UserRole.USER : UserRole.ADMIN,
         point: 100,
-        invitedById: inviteUser.id,
+        invitedById: inviteUser ? inviteUser.id : null,
       },
     })
     if (invite && inviteCodes) {
