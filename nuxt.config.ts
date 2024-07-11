@@ -6,7 +6,9 @@ export default defineNuxtConfig({
   colorMode: {
     storageKey: 'vueuse-color-scheme',
   },
+
   modules: ['@nuxt/ui', '@vueuse/nuxt', 'nuxt-scheduler'],
+
   ui: {
     icons: ['carbon'],
   },
@@ -14,6 +16,7 @@ export default defineNuxtConfig({
   devtools: {
     enabled: false,
   },
+
   runtimeConfig: {
     public: {
       tokenKey: '',
@@ -22,6 +25,7 @@ export default defineNuxtConfig({
     },
     jwtSecretKey: '',
   },
+
   vite: {
     resolve: {
       alias: {
@@ -29,10 +33,12 @@ export default defineNuxtConfig({
       },
     },
   },
+
   hooks: {
     ready: async () => {
       await import('./server/tgBot')
     },
   },
 
+  compatibilityDate: '2024-07-11',
 })

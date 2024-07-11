@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { UserRole } from '@prisma/client'
-import type { UserDTO } from '~/types'
+import { toast } from 'vue-sonner'
+import type { SysConfigDTO, UserDTO } from '~/types'
 
 const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)
@@ -13,6 +14,9 @@ const currentUser = useState<UserDTO>('userinfo')
 useHead({
   title: `${username}的详情`,
 })
+
+const global = useGlobalConfig()
+const sysconfig = global.value?.sysConfig as SysConfigDTO
 
 watch(() => route.fullPath, () => {
   if (route.fullPath.startsWith(`/member/${username}/fav`)) {
@@ -31,6 +35,13 @@ watch(() => route.fullPath, () => {
     selectedTab.value = 'post'
   }
 }, { immediate: true })
+
+const { copy } = useClipboard({})
+
+function copyTgCommand() {
+  copy(`/bind ${userinfo.username}#${userinfo.email}`)
+  toast.success('复制成功,请发给机器人')
+}
 </script>
 
 <template>
@@ -58,6 +69,14 @@ watch(() => route.fullPath, () => {
             <div v-if="userinfo.lastActive" class="text-xs text-gray-400">
               最后活动时间:{{ dateFormat(userinfo.lastActive) }}
             </div>
+          </div>
+        </div>
+        <div v-if="userinfo && currentUser && currentUser.uid === userinfo.uid && sysconfig.notify && sysconfig.notify.tgBotName" class=" ml-auto flex flex-col gap-1">
+          <div class="text-sm">
+            关注<a class="text-green-500" :href="`https://t.me/${sysconfig.notify.tgBotName}`">TG机器人</a>可以实时收到消息
+          </div>
+          <div class="text-xs text-gray-400">
+            <span class="text-green-500 cursor-pointer" @click="copyTgCommand">点我复制</span>,然后发给上面的机器人即可绑定
           </div>
         </div>
       </div>

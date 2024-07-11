@@ -196,7 +196,7 @@ export default defineEventHandler(async (event) => {
         relationId: request.pid,
       },
     })
-    await sendTgMessage(sysConfigDTO, post.author.tgChatID, `你在帖子[${post.title}](${sysConfigDTO.websiteUrl}/post/${request.pid}#${cid})中被提到了`)
+    await sendTgMessage(sysConfigDTO, post.author.tgChatID, `你的帖子[${post.title}](${sysConfigDTO.websiteUrl}/post/${request.pid}#${cid})有了新回复`)
   }
   return { success: true }
 })

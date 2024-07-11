@@ -33,6 +33,13 @@ export default defineEventHandler(async (event) => {
       post: {
         select: {
           pid: true,
+          title: true,
+        },
+      },
+      author: {
+        select: {
+          tgChatID: true,
+          username: true,
         },
       },
     },
@@ -127,6 +134,7 @@ export default defineEventHandler(async (event) => {
       relationId: comment.post.pid,
     },
   })
+  await sendTgMessage(sysConfigDTO, comment.author.tgChatID, `你在帖子[${comment.post.title}](${sysConfigDTO.websiteUrl}/post/${comment.post.pid}#${cid})中的评论被点赞了`)
 
   return {
     success: true,

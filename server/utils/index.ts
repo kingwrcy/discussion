@@ -7,6 +7,7 @@ import nodemailer from 'nodemailer'
 import { createCache, memoryStore } from 'cache-manager'
 import pg from 'pg'
 import TelegramBot from 'node-telegram-bot-api'
+import TGBot from '../tgBot'
 import type { SysConfigDTO, recaptchaResponse } from '~/types'
 
 const { Pool } = pg
@@ -125,12 +126,9 @@ export async function sendTgMessage(sysConfigDTO: SysConfigDTO, chatId: string |
       request.proxy = sysConfigDTO.proxyUrl
     }
 
-    const bot = new TelegramBot(sysConfigDTO.notify.tgBotToken, {
-      polling: true,
-      request,
-    })
-    console.log('发送消息给', chatId, message)
     try {
+      const bot = TGBot.getInstance().getBot()!
+      console.log('发送消息给', chatId, message)
       const res = await bot.sendMessage(chatId, message, {
         parse_mode: 'MarkdownV2',
       })
