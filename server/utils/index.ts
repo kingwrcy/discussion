@@ -121,7 +121,11 @@ export async function sendTgMessage(sysConfigDTO: SysConfigDTO, chatId: string |
     return
   }
   if (sysConfigDTO.notify?.tgBotEnabled && sysConfigDTO.notify.tgBotToken) {
-    const target = `https://${sysConfigDTO.notify.tgProxyUrl ?? 'api.telegram.org'}/bot${sysConfigDTO.notify.tgBotToken}/sendMessage`
+    let url = sysConfigDTO.notify.tgProxyUrl ? sysConfigDTO.notify.tgProxyUrl : 'https://api.telegram.org'
+    if (url.endsWith('/')) {
+      url = url.substring(0, url.length - 1)
+    }
+    const target = `${url}/bot${sysConfigDTO.notify.tgBotToken}/sendMessage`
     console.log(new Date(), '开始发送tg消息通知，chatId:', chatId, 'message:', message, target)
     try {
       const res = await fetch(target, {
