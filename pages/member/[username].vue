@@ -39,7 +39,7 @@ watch(() => route.fullPath, () => {
 const { copy } = useClipboard({})
 
 function copyTgCommand() {
-  copy(`/bind ${userinfo.username}#${userinfo.secretKey}`)
+  copy(`${userinfo.username}#${userinfo.secretKey}`)
   toast.success('复制成功,请发给机器人')
 }
 </script>
