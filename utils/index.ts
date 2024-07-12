@@ -3,6 +3,7 @@ import relativeTime from 'dayjs/plugin/relativeTime.js'
 
 import zhCn from 'dayjs/locale/zh-cn.js'
 import { toast } from 'vue-sonner'
+import type { SysConfigDTO } from '~/types'
 
 dayjs.extend(relativeTime).locale(zhCn)
 
@@ -24,6 +25,9 @@ export function dateFormatAgo(date: Date | number | string) {
 const target = '/api/imgs/upload2wx'
 
 export async function onUploadImg(files: File[], callback: any) {
+  const global = useGlobalConfig()
+  const sysconfig = global.value?.sysConfig as SysConfigDTO
+
   let upload = async () => {
     const res = await Promise.all(
       files.map(async (f) => {
@@ -46,6 +50,28 @@ export async function onUploadImg(files: File[], callback: any) {
   if ('uploadImg' in window) {
     // @ts-expect-error 自定义上传图片函数
     upload = window.uploadImg
+  }
+
+  if (sysconfig.enableUploadLocalImage) {
+    upload = async () => {
+      const res = await Promise.all(
+        files.map(async (f) => {
+          const form = new FormData()
+          form.append('file', f)
+          return (await $fetch('/api/imgs/upload', {
+            method: 'POST',
+            body: form,
+          })) as any
+        }),
+      )
+      callback(
+        res.filter(r => r.success).map(r => ({
+          url: `${r.filename}`,
+          alt: 'alt',
+          title: 'title',
+        })),
+      )
+    }
   }
 
   toast.promise(upload, {
