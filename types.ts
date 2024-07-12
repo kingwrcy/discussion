@@ -198,6 +198,7 @@ export interface SysConfigDTO {
     enable: boolean
   }
   proxyUrl: ''
+  enableUploadLocalImage: boolean
   notify: {
     tgBotEnabled: false
     tgBotToken: ''

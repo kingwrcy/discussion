@@ -11,12 +11,10 @@ const route = useRoute()
 const columns = [{
   key: 'createdAt',
   label: '时间',
-},
-//  {
-//   key: 'from.username',
-//   label: '发件人'
-// },
-{
+}, {
+  key: 'from.username',
+  label: '来自',
+}, {
   key: 'content',
   label: '内容',
 }, {
@@ -67,7 +65,7 @@ watch(() => route.fullPath, reload)
         {{ dateFormat(row.createdAt) }}
       </template>
       <template #content-data="{ row }">
-        <div class="max-w-[300px] text-wrap line-clamp-3" v-html="row.content" />
+        <div class="text-wrap" v-html="row.content" />
       </template>
       <template #from.username-data="{ row }">
         <ULink v-if="row.from" class="text-blue-500" :to="`/member/${row.from.username}`">

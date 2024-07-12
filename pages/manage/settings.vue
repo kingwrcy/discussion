@@ -73,6 +73,7 @@ const state = reactive({
     enable: false,
   },
   proxyUrl: '',
+  enableUploadLocalImage: false,
   notify: {
     tgBotEnabled: false,
     tgBotToken: '',
@@ -251,13 +252,11 @@ async function copyWebhook() {
         <UFormGroup label="是否启用邀请注册" name="pointPerDaySignInMin">
           <UToggle v-model="state.invite" />
         </UFormGroup>
-      </div>
-
-      <div class="flex flex-row space-x-2">
-        <UFormGroup label="每次生成邀请码需要积分" name="createInviteCodePoint">
-          <UInput v-model.number="state.createInviteCodePoint" autocomplete="off" />
+        <UFormGroup label="是否允许上传本地图片" name="enableUploadLocalImage">
+          <UToggle v-model="state.enableUploadLocalImage" />
         </UFormGroup>
       </div>
+
       <div class="flex flex-row space-x-2">
         <UFormGroup label="每次生成邀请码需要积分" name="createInviteCodePoint">
           <UInput v-model.number="state.createInviteCodePoint" autocomplete="off" />

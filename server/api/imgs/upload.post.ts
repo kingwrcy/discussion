@@ -5,6 +5,9 @@ import short from 'short-uuid'
 interface FileInfo { name: string, filename: string, data: Buffer, type: string }
 
 export default defineEventHandler(async (event) => {
+  if (!event.context.uid) {
+    throw createError('请先去登录')
+  }
   const formData = await readMultipartFormData(event)
   if (!formData) {
     return {

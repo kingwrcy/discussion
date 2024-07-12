@@ -112,7 +112,7 @@ async function uploadAvatar(event: Event) {
       <UFormGroup label="头像">
         <UAvatar :src="avatarUrl" size="lg" alt="Avatar" />
       </UFormGroup>
-      <UFormGroup>
+      <UFormGroup v-if="sysConfig.enableUploadLocalImage">
         <UButtonGroup size="sm">
           <UButton icon="i-heroicons-camera" color="white" variant="solid">
             <label for="uploadAvatar">本地上传</label>

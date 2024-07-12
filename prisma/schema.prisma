@@ -238,6 +238,7 @@ enum MessageType {
   SIGNIN
   LIKE
   DISLIKE
+  PRIVATE_MSG
 }
 
 enum EmailReason {

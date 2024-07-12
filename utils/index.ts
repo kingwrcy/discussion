@@ -21,7 +21,7 @@ export function dateFormatAgo(date: Date | number | string) {
   return dayjs(date).fromNow()
 }
 
-const target = '/api/imgs/upload'
+const target = '/api/imgs/upload2wx'
 
 export async function onUploadImg(files: File[], callback: any) {
   let upload = async () => {

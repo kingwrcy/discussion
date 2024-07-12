@@ -31,6 +31,9 @@ watch(() => route.fullPath, () => {
   else if (route.fullPath.startsWith(`/member/${username}/message`)) {
     selectedTab.value = 'message'
   }
+  else if (route.fullPath.startsWith(`/member/${username}/sendMsg`)) {
+    selectedTab.value = ''
+  }
   else {
     selectedTab.value = 'post'
   }
@@ -50,14 +53,19 @@ function copyTgCommand() {
       <div class="flex flex-row gap-2 py-2">
         <UAvatar v-if="userinfo" :src="getAvatarUrl(userinfo.avatarUrl!, userinfo.headImg)" size="lg" alt="Avatar" />
         <div class="flex flex-col text-sm gap-1">
-          <div class="flex">
+          <div class="flex items-center">
             <NuxtLink :to="`/member/${userinfo.username}`">
               {{ userinfo.username }}
             </NuxtLink>
-            <UBadge class="ml-1" color="primary" variant="solid" size="xs">
-              {{ userinfo.role === UserRole.ADMIN ? '管理员' : '普通用户' }}
-              (lv{{ userinfo.level }})
-            </UBadge>
+            <UButtonGroup size="xs" class="select-none">
+              <UBadge class="ml-1" color="primary" variant="solid" size="xs">
+                {{ userinfo.role === UserRole.ADMIN ? '管理员' : '普通用户' }}
+                (lv{{ userinfo.level }})
+              </UBadge>
+              <UButton v-if="currentUser && currentUser.uid !== userinfo.uid" color="gray" variant="solid" :to="`/member/${userinfo.username}/sendMsg`">
+                私信
+              </UButton>
+            </UButtonGroup>
             <UBadge v-if="token && userinfo?.status === 'BANNED'">
               被禁言,到{{ dateFormat(userinfo?.bannedEnd) }}
             </UBadge>
