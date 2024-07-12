@@ -29,9 +29,15 @@ const config = useRuntimeConfig()
 const token = useCookie(config.public.tokenKey)
 const pending = ref(false)
 
+const key = `reply-${props.pid}`
+
 const state = reactive({
   content: '',
 })
+
+const { pause } = useIntervalFn(() => {
+  localStorage.setItem(key, state.content)
+}, 10000)
 
 async function handleKeyDown(event: KeyboardEvent) {
   if (event.ctrlKey && event.key === 'Enter') {
@@ -94,6 +100,7 @@ async function doReply(token: string = '') {
 }
 
 async function reply() {
+  localStorage.removeItem(key)
   if (!state.content.trim())
     return
   if (pending.value)
@@ -113,6 +120,17 @@ async function reply() {
   }
 }
 const color = useColorMode()
+
+onMounted(() => {
+  const reply = localStorage.getItem(key)
+  if (reply) {
+    state.content = reply
+  }
+})
+
+onUnmounted(() => {
+  pause()
+})
 </script>
 
 <template>

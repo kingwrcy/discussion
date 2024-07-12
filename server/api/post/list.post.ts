@@ -51,6 +51,7 @@ export default defineEventHandler(async (event) => {
     comments: false,
     fav: true,
     lastCommentUser: true,
+    content: false,
   }
 
   const pinnedPost = await prisma.post.findMany({

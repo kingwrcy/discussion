@@ -22,7 +22,7 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyDown)
 })
 const mode = useColorMode()
-
+const key = `new-post`
 const route = useRoute()
 
 const toolbars: ToolbarNames[] = [
@@ -71,6 +71,10 @@ const state = reactive<Schema>({
   readRole: 0,
 })
 
+const { pause } = useIntervalFn(() => {
+  localStorage.setItem(key, state.content)
+}, 10000)
+
 async function loadPost() {
   const query = route.query
   const pid = (query.pid) as string || ''
@@ -89,6 +93,7 @@ watch(() => route.fullPath, loadPost)
 const pending = ref(false)
 
 async function doPostNew(data: Schema, token: string = '') {
+  localStorage.removeItem(key)
   const result = await $fetch('/api/post/new', {
     method: 'POST',
     body: JSON.stringify({ ...data, token }),
@@ -140,6 +145,21 @@ function validate(state: any): FormError[] {
 }
 useHead({
   title: `发表帖子`,
+})
+
+onMounted(() => {
+  const query = route.query
+  const pid = (query.pid) as string || ''
+  if (!pid) {
+    const reply = localStorage.getItem(key)
+    if (reply) {
+      state.content = reply
+    }
+  }
+})
+
+onUnmounted(() => {
+  pause()
 })
 </script>
 

@@ -131,7 +131,7 @@ export interface PointHistoryDTO {
 
 export interface PostDTO {
   title: string
-  content: string
+  content?: string
   pid: string
   uid: string
   createdAt: string

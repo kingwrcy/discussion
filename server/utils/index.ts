@@ -122,16 +122,24 @@ export async function sendTgMessage(sysConfigDTO: SysConfigDTO, chatId: string |
   }
   if (sysConfigDTO.notify?.tgBotEnabled && sysConfigDTO.notify.tgBotToken) {
     const target = `https://${sysConfigDTO.notify.tgProxyUrl ?? 'api.telegram.org'}/bot${sysConfigDTO.notify.tgBotToken}/sendMessage`
-    await fetch(target, {
-      method: 'POST',
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: message,
-        parse_mode: 'MarkdownV2',
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    console.log(new Date(), '开始发送tg消息通知，chatId:', chatId, 'message:', message, target)
+    try {
+      const res = await fetch(target, {
+        method: 'POST',
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message,
+          parse_mode: 'MarkdownV2',
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      const resJson = await res.json()
+      console.log('tg消息发送结果:', resJson)
+    }
+    catch (e) {
+      console.log('tg消息发送失败:', e)
+    }
   }
 }
