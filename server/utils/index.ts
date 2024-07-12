@@ -121,7 +121,7 @@ export async function sendTgMessage(sysConfigDTO: SysConfigDTO, chatId: string |
     return
   }
   if (sysConfigDTO.notify?.tgBotEnabled && sysConfigDTO.notify.tgBotToken) {
-    const target = `https://tg.hotnews.pw/bot${sysConfigDTO.notify.tgBotToken}/sendMessage`
+    const target = `https://${sysConfigDTO.notify.tgProxyUrl ?? 'api.telegram.org'}/bot${sysConfigDTO.notify.tgBotToken}/sendMessage`
     await fetch(target, {
       method: 'POST',
       body: JSON.stringify({
