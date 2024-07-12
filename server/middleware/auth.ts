@@ -12,6 +12,10 @@ export default defineEventHandler(async (event) => {
     return
   }
 
+  if (url.pathname === '/api/tg') {
+    return
+  }
+
   if (token) {
     try {
       const result = jwt.verify(token, config.jwtSecretKey)

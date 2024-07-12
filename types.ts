@@ -37,8 +37,8 @@ export const loginRequestSchema = z.object({
   username: z.string(),
   password: z.string().min(6, '密码最少6个字符'),
   token: z.string().optional(),
-}).refine(data => getLength(data.username) >= 4, {
-  message: '用户名最少4个字符,中文一个算2个字符',
+}).refine(data => getLength(data.username) >= 3, {
+  message: '用户名最少3个字符,中文一个算2个字符',
   path: ['username'],
 })
 
@@ -82,6 +82,8 @@ export interface UserDTO {
   js?: string
   signature?: string
   lastActive?: string
+  secretKey?: string
+  tgChatID?: string
   _count: {
     fav: number
     comments: number
@@ -200,6 +202,8 @@ export interface SysConfigDTO {
     tgBotEnabled: false
     tgBotToken: ''
     tgBotName: ''
+    tgSecret: ''
+    tgProxyUrl: ''
   }
 }
 
@@ -226,4 +230,31 @@ export interface recaptchaResponse {
   hostname: string
   score: number
   action: string
+}
+
+export interface TGMessage {
+  update_id: number
+  message: {
+    message_id: number
+    from: {
+      id: number
+      is_bot: boolean
+      first_name: string
+      username: string
+      language_code: string
+    }
+    chat: {
+      id: number
+      first_name: string
+      username: string
+      type: string
+    }
+    date: number
+    text: string
+    entities: Array<{
+      offset: number
+      length: number
+      type: string
+    }>
+  }
 }

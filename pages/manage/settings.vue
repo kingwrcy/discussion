@@ -77,16 +77,32 @@ const state = reactive({
     tgBotEnabled: false,
     tgBotToken: '',
     tgBotName: '',
+    tgSecret: '',
+    tgProxyUrl: '',
   },
 })
 
 Object.assign(state, configData.value?.config)
+
+function randomString(e: number) {
+  e = e || 32
+  const t = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'
+  const a = t.length
+  let n = ''
+  for (let i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a))
+  return n
+}
 
 async function saveSettings() {
   if (state.googleRecaptcha.enable && (!state.googleRecaptcha.siteKey || !state.googleRecaptcha.secretKey)) {
     toast.error('启用了Google Recaptcha,请填写Site Key和Secret Key')
     return
   }
+
+  if (state.notify.tgBotEnabled && !state.notify.tgSecret) {
+    state.notify.tgSecret = randomString(32)
+  }
+
   await $fetch('/api/manage/config/save', {
     method: 'POST',
     body: JSON.stringify(state),
@@ -134,6 +150,17 @@ async function testEmail() {
     toast.error(message)
   }
   emailSending.value = false
+}
+
+const { copy } = useCopyToClipboard()
+
+async function copyWebhook() {
+  let target = state.notify.tgProxyUrl ?? 'https://api.telegram.org'
+  if (target.endsWith('/')) {
+    target = target.slice(0, -1)
+  }
+  copy(`${target}/bot${state.notify.tgBotToken}/setwebhook?secret_token=${state.notify.tgSecret}&url=${state.websiteUrl}/api/tg`)
+  toast.success('复制成功')
 }
 </script>
 
@@ -315,16 +342,22 @@ async function testEmail() {
         <template #notify-settings>
           <div class="flex flex-col space-y-2 ">
             <div class="flex flex-row space-x-2">
-              <UFormGroup label="HTTP代理" name="proxyUrl" class="w-[500px]" hint="如果你的服务器在国内的话必填">
-                <UInput v-model="state.proxyUrl" autocomplete="off" />
+              <UFormGroup label="TG API反代地址" name="proxyUrl" class="w-[500px]" hint="如果你的服务器在国内的话必填">
+                <UInput v-model="state.notify.tgProxyUrl" autocomplete="off" />
               </UFormGroup>
             </div>
             <div class="flex flex-row space-x-2">
               <UFormGroup label="是否启用Telegram机器人" name="tgBotEnabled" class="w-[500px]">
-                <USelectMenu
-                  v-model="state.notify.tgBotEnabled" value-attribute="value" option-attribute="label"
-                  :options="[{ value: true, label: '是' }, { value: false, label: '否' }]"
-                />
+                <UButtonGroup>
+                  <USelectMenu
+                    v-model="state.notify.tgBotEnabled"
+                    class="w-[400px]" value-attribute="value" option-attribute="label"
+                    :options="[{ value: true, label: '是' }, { value: false, label: '否' }]"
+                  />
+                  <UButton @click="copyWebhook">
+                    复制WebHook地址
+                  </UButton>
+                </UButtonGroup>
               </UFormGroup>
             </div>
 

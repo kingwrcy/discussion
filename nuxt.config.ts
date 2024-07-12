@@ -33,12 +33,5 @@ export default defineNuxtConfig({
       },
     },
   },
-
-  hooks: {
-    ready: async () => {
-      await import('./server/tgBot')
-    },
-  },
-
   compatibilityDate: '2024-07-11',
 })

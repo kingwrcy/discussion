@@ -39,7 +39,7 @@ watch(() => route.fullPath, () => {
 const { copy } = useClipboard({})
 
 function copyTgCommand() {
-  copy(`/bind ${userinfo.username}#${userinfo.email}`)
+  copy(`/bind ${userinfo.username}#${userinfo.secretKey}`)
   toast.success('复制成功,请发给机器人')
 }
 </script>
@@ -71,12 +71,12 @@ function copyTgCommand() {
             </div>
           </div>
         </div>
-        <div v-if="userinfo && currentUser && currentUser.uid === userinfo.uid && sysconfig.notify && sysconfig.notify.tgBotName" class=" ml-auto flex flex-col gap-1">
+        <div v-if="userinfo && currentUser && currentUser.uid === userinfo.uid && sysconfig.notify && sysconfig.notify.tgBotEnabled && !currentUser.tgChatID" class=" ml-auto flex flex-col gap-1">
           <div class="text-sm">
-            关注<a class="text-green-500" :href="`https://t.me/${sysconfig.notify.tgBotName}`">TG机器人</a>可以实时收到消息
+            关注<a target="_blank" class="text-green-500" :href="`https://t.me/${sysconfig.notify.tgBotName}`">TG机器人</a>可以实时收到消息通知
           </div>
           <div class="text-xs text-gray-400">
-            <span class="text-green-500 cursor-pointer" @click="copyTgCommand">点我复制</span>,然后发给上面的机器人即可绑定
+            <span class="text-green-500 cursor-pointer" @click="copyTgCommand">点我复制指令</span>,然后发给上面的机器人即可绑定
           </div>
         </div>
       </div>

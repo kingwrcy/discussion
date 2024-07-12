@@ -141,6 +141,7 @@ export default defineEventHandler(async (event) => {
         role: exist ? UserRole.USER : UserRole.ADMIN,
         point: 100,
         invitedById: inviteUser ? inviteUser.id : null,
+        secretKey: randomId(),
       },
     })
     if (invite && inviteCodes) {
