@@ -11,7 +11,7 @@ services:
     depends_on:
       - postgres
     environment:
-      DATABASE_URL: 'postgres://discussion-user:discussion-password@postgres/discussion'
+      DATABASE_URL: 'postgres://discussion-user:discussion-password@postgres/discussion'      
   postgres:
     container_name: postgres
     image: postgres:alpine

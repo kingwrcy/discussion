@@ -24,6 +24,7 @@ export default defineNuxtConfig({
       cookieSecure: false,
     },
     jwtSecretKey: '',
+    uploadDir: '/app/upload',
   },
 
   vite: {

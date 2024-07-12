@@ -44,6 +44,8 @@ NUXT_JWT_SECRET_KEY="67vdu9Bw951Kga4"
 NUXT_PUBLIC_TOKEN_KEY="S3pSQMBAgYWz"
 #由于使用了avatar头像服务,这里指定cdn地址,不懂的不要改.
 NUXT_PUBLIC_AVATAR_CDN=https://gravatar.cooluc.com/avatar/
+#上传图片的目录，如果需要上传本地图片，docker启动时需要映射出来，不然重启就会丢失
+NUXT_UPLOAD_DIR=/opt/discussion/upload
 ```
 
 执行`pnpm i`安装依赖包

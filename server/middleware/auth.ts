@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
     return
   }
 
-  if (url.pathname === '/api/tg') {
+  if (url.pathname === '/api/tg' || url.pathname.startsWith('/imgs')) {
     return
   }
 

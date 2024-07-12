@@ -16,6 +16,7 @@ const { sysConfig } = globalConfig.value
 useHead({
   title: `${userinfo.username}的个人设置`,
 })
+
 type Schema = z.output<typeof saveSettingsRequestSchema>
 
 const state = reactive({
@@ -27,6 +28,9 @@ const state = reactive({
   signature: userinfo.signature,
 })
 
+const avatarUrl = computed(() => {
+  return getAvatarUrl(userinfo.avatarUrl!, state.headImg)
+})
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   await $fetch('/api/member/saveSettings', {
     method: 'POST',
@@ -67,6 +71,26 @@ async function copyCode() {
   copy(inviteCode.value)
   toast.success('复制成功')
 }
+
+async function uploadAvatar(event: Event) {
+  const files = ((event.target as HTMLInputElement).files)
+  if (!files || files.length > 1) {
+    return
+  }
+  const formData = new FormData()
+  formData.append('file', files[0])
+  const { success, filename, message } = await $fetch('/api/imgs/upload', {
+    method: 'POST',
+    body: formData,
+  })
+  if (success) {
+    toast.success(message)
+    state.headImg = filename
+  }
+  else {
+    toast.error(message)
+  }
+}
 </script>
 
 <template>
@@ -86,12 +110,21 @@ async function copyCode() {
         </NuxtLink>)
       </UFormGroup>
       <UFormGroup label="头像">
-        <UAvatar :src="getAvatarUrl(userinfo.avatarUrl!, userinfo.headImg)" size="lg" alt="Avatar" />
+        <UAvatar :src="avatarUrl" size="lg" alt="Avatar" />
       </UFormGroup>
+      <UFormGroup>
+        <UButtonGroup size="sm">
+          <UButton icon="i-heroicons-camera" color="white" variant="solid">
+            <label for="uploadAvatar">本地上传</label>
+            <input id="uploadAvatar" name="uploadAvatar" type="file" accept="image/*" class="hidden" @change="uploadAvatar">
+          </UButton>
+        </UButtonGroup>
+      </UFormGroup>
+
       <UFormGroup label="密码" name="password" hint="留空则不修改密码">
         <UInput v-model="state.password" type="password" />
       </UFormGroup>
-      <UFormGroup label="自定义头像" name="headImg" hint="请填写头像地址，将会优先于gravatar显示">
+      <UFormGroup label="自定义头像" name="headImg" hint="请填写头像地址，将会优先于gravatar显示，清空则使用gravatar">
         <UInput v-model="state.headImg" type="text" />
       </UFormGroup>
       <UFormGroup label="邮箱" name="email" hint="请使用常用邮箱,会用来生成头像">
