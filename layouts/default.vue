@@ -202,7 +202,7 @@ themeChanged.on((val) => {
             :trailing="false" placeholder="Search..." @keydown.enter="search"
           />
         </UCard>
-        <XUserCard v-if="userinfo && userinfo.username && !route.fullPath.startsWith('/member')" />
+        <XUserCard v-if="userinfo && userinfo.username" />
         <UCard
           v-if="route.fullPath.startsWith('/go/') && tag" class="profile w-full mt-2"
           :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }"

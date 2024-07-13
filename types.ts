@@ -84,6 +84,7 @@ export interface UserDTO {
   lastActive?: string
   secretKey?: string
   tgChatID?: string
+  privateMsgCount?: number
   _count: {
     fav: number
     comments: number
@@ -91,6 +92,8 @@ export interface UserDTO {
     ReceiveMessage: number
   }
   titles: TitleDTO[]
+  unreadMessageCount: number
+  unreadPrivateMessageCount: number
 }
 export interface TagDTO {
   id: number

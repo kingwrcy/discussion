@@ -252,7 +252,7 @@ async function copyWebhook() {
         <UFormGroup label="是否启用邀请注册" name="pointPerDaySignInMin">
           <UToggle v-model="state.invite" />
         </UFormGroup>
-        <UFormGroup label="是否允许上传本地图片" name="enableUploadLocalImage">
+        <UFormGroup label="是否开启上传图片到服务器本地" name="enableUploadLocalImage">
           <UToggle v-model="state.enableUploadLocalImage" />
         </UFormGroup>
       </div>

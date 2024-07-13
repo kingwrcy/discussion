@@ -9,3 +9,4 @@ export interface CommentQuotedPayload {
 }
 export const commentQuoted = useEventBus<CommentQuotedPayload>('comment-quoted')
 export const themeChanged = useEventBus<string>('theme-changed')
+export const sendMsgSuccessed = useEventBus<string>('send-msg-successed')

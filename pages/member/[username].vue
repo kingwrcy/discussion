@@ -31,6 +31,9 @@ watch(() => route.fullPath, () => {
   else if (route.fullPath.startsWith(`/member/${username}/message`)) {
     selectedTab.value = 'message'
   }
+  else if (route.fullPath.startsWith(`/member/${username}/privateMsg`)) {
+    selectedTab.value = 'privateMsg'
+  }
   else if (route.fullPath.startsWith(`/member/${username}/sendMsg`)) {
     selectedTab.value = ''
   }
@@ -45,6 +48,14 @@ function copyTgCommand() {
   copy(`${userinfo.username}#${userinfo.secretKey}`)
   toast.success('复制成功,请发给机器人')
 }
+
+const sendMsgPage = ref(false)
+
+watch(() => route.fullPath, (fullPath: string) => {
+  sendMsgPage.value = fullPath.endsWith('/sendMsg')
+}, {
+  immediate: true,
+})
 </script>
 
 <template>
@@ -90,7 +101,7 @@ function copyTgCommand() {
       </div>
     </template>
 
-    <div class="flex gap-2 mb-4 flex-wrap">
+    <div v-if="!route.path.endsWith('/sendMsg')" class="flex gap-2 mb-4 flex-wrap">
       <NuxtLink class="flex flex-row gap-1 items-center" :to="`/member/${userinfo.username}`">
         <UBadge size="lg" :color="selectedTab === 'post' ? 'primary' : 'white'" variant="solid" class="space-x-1">
           <UIcon name="i-carbon-add-comment" />
@@ -122,7 +133,16 @@ function copyTgCommand() {
       <NuxtLink v-if="currentUser.username === userinfo.username && token" class="flex flex-row gap-1 items-center" :to="`/member/${userinfo.username}/message`">
         <UBadge size="lg" :color="selectedTab === 'message' ? 'primary' : 'white'" variant="solid" class="space-x-1">
           <UIcon name="i-carbon-notification" />
-          <span>消息({{ userinfo._count.ReceiveMessage }})</span>
+          <span :class="[userinfo.unreadMessageCount > 0 ? 'text-red-500' : '']">消息({{ userinfo._count.ReceiveMessage }})</span>
+        </UBadge>
+      </NuxtLink>
+      <NuxtLink
+        v-if="currentUser.username === userinfo.username && token" class="flex flex-row gap-1 items-center"
+        :to="`/member/${userinfo.username}/privateMsg`"
+      >
+        <UBadge size="lg" :color="selectedTab === 'privateMsg' ? 'primary' : 'white'" variant="solid" class="space-x-1">
+          <UIcon name="i-carbon-chat-bot" />
+          <span :class="[userinfo.unreadPrivateMessageCount > 0 && selectedTab !== 'privateMsg' ? 'text-red-500' : '']">私信({{ userinfo.privateMsgCount ?? 0 }})</span>
         </UBadge>
       </NuxtLink>
     </div>

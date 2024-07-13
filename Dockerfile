@@ -41,6 +41,7 @@ ENV NUXT_JWT_SECRET_KEY="uIWcy5NE9M2wmh9"
 ENV NUXT_PUBLIC_TOKEN_KEY="iPOJWvmRggSw9FU"
 ENV NUXT_PUBLIC_AVATAR_CDN="https://gravatar.cooluc.com/avatar/"
 ENV SIMPLE_DISCUSS_VERSION=$VERSION
+ENV NUXT_UPLOAD_DIR=/app/upload
 
 COPY --from=builder /app/.output /app/.output
 COPY --from=builder /app/prisma /app/prisma

@@ -81,8 +81,11 @@ watch(() => route.fullPath, reload)
         </div>
       </template>
       <template #actions-data="{ row }">
-        <UBadge v-if="!row.read" size="sm">
+        <UBadge v-if="row.type !== 'PRIVATE_MSG' && !row.read" size="sm">
           未读
+        </UBadge>
+        <UBadge v-if="row.type === 'PRIVATE_MSG'" size="sm">
+          回复
         </UBadge>
       </template>
     </UTable>

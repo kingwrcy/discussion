@@ -15,6 +15,9 @@ export default defineEventHandler(async (event) => {
       to: {
         username: request.username,
       },
+      type: {
+        not: 'PRIVATE_MSG',
+      },
     },
     include: {
       from: {
