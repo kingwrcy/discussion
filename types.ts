@@ -186,6 +186,7 @@ export interface SysConfigDTO {
   }
   invite: string
   createInviteCodePoint: number
+  ForwardUrl: string
   email: {
     host: string
     port: number

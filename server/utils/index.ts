@@ -40,7 +40,7 @@ export async function sendMail(to: string, subject: string, html: string) {
     return '请先配置邮箱'
   }
 
-  return sendMailWithParams({ ...sysConfigDTO.email, to, subject, html })
+  return sendMailWithParams({ ...sysConfigDTO.email, to, subject, html }, sysConfigDTO.ForwardUrl)
 }
 
 export interface sendMailParams {
@@ -55,9 +55,20 @@ export interface sendMailParams {
   senderName: string
 }
 
-export async function sendMailWithParams({ host, username, port, secure, password, to, subject, html, senderName }: sendMailParams) {
+export async function sendMailWithParams({ host, username, port, secure, password, to, subject, html, senderName }: sendMailParams, url: string) {
   if (host === '' || port === 0 || username === '' || password === '' || senderName === '') {
     return '请先配置邮箱'
+  }
+  if (url) {
+    const res: any = await fetch(url, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ host, username, port, secure, password, to, subject, html, senderName }),
+    })
+    const body = await res.json()
+    return body.message
   }
 
   try {
