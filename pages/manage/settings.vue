@@ -58,6 +58,7 @@ const state = reactive({
   invite: false,
   createInviteCodePoint: 100,
   regWithEmailCodeVerify: false,
+  ForwardUrl: '',
   email: {
     host: '',
     port: 465,
@@ -142,7 +143,7 @@ async function testEmail() {
   emailSending.value = true
   const { success, message } = await $fetch('/api/manage/testEmail', {
     method: 'POST',
-    body: JSON.stringify(state.email),
+    body: JSON.stringify({ email: state.email, url: state.ForwardUrl }),
   })
   if (success) {
     toast.success('发送成功')
@@ -273,6 +274,9 @@ async function copyWebhook() {
           </UFormGroup>
           <UFormGroup label="邮件服务器" name="host">
             <UInput v-model="state.email.host" autocomplete="off" />
+          </UFormGroup>
+          <UFormGroup label="转发邮件服务器" name="ForwardUrl" hint="如果你的服务器被阻断连接邮件端口">
+            <UInput v-model="state.ForwardUrl" autocomplete="off" />
           </UFormGroup>
           <UFormGroup label="端口" name="port">
             <UInput v-model.number="state.email.port" autocomplete="off" />

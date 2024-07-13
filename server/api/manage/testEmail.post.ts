@@ -1,18 +1,21 @@
 import { sendMailWithParams } from '~/server/utils'
 
 interface TestEmailRequest {
-  host: string
-  port: number
-  username: string
-  password: string
-  secure: boolean
-  to: string
-  senderName: string
+  email: {
+    host: string
+    port: number
+    username: string
+    password: string
+    secure: boolean
+    to: string
+    senderName: string
+  }
+  url: string
 }
 
 export default defineEventHandler(async (event) => {
   const request = (await readBody(event)) as TestEmailRequest
-  const message = await sendMailWithParams({ ...request, subject: 'Discussion 测试邮件 Test Email', html: '这是一封测试邮件 This is a test email' })
+  const message = await sendMailWithParams({ ...request.email, subject: 'Discussion 测试邮件 Test Email', html: '这是一封测试邮件 This is a test email' }, request.url)
   return {
     success: message === '',
     message,
