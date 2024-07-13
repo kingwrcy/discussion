@@ -132,7 +132,7 @@ const items = [{
   slot: 'recaptcha-settings',
 }, {
   label: '通知设置',
-  icon: 'i-carbon-security',
+  icon: 'i-carbon-chat',
   defaultOpen: false,
   slot: 'notify-settings',
 }]
@@ -266,42 +266,47 @@ async function copyWebhook() {
 
       <UAccordion :items="items" :ui="{ container: 'max-w-[500px]' }">
         <template #email-settings>
-          <UFormGroup label="开启邮件验证注册用户" name="regWithEmailCodeVerify">
-            <USelectMenu
-              v-model="state.regWithEmailCodeVerify" value-attribute="value" option-attribute="label"
-              :options="[{ value: true, label: '是' }, { value: false, label: '否' }]"
-            />
-          </UFormGroup>
-          <UFormGroup label="邮件服务器" name="host">
-            <UInput v-model="state.email.host" autocomplete="off" />
-          </UFormGroup>
-          <UFormGroup label="转发邮件服务器" name="ForwardUrl" hint="如果你的服务器被阻断连接邮件端口">
-            <UInput v-model="state.ForwardUrl" autocomplete="off" />
-          </UFormGroup>
-          <UFormGroup label="端口" name="port">
-            <UInput v-model.number="state.email.port" autocomplete="off" />
-          </UFormGroup>
-          <UFormGroup label="用户名" name="username">
-            <UInput v-model="state.email.username" autocomplete="off" />
-          </UFormGroup>
-          <UFormGroup label="密码" name="password">
-            <UInput v-model="state.email.password" autocomplete="off" />
-          </UFormGroup>
-          <UFormGroup label="是否安全连接" name="secure">
-            <USelectMenu
-              v-model="state.email.secure" value-attribute="value" option-attribute="label"
-              :options="[{ value: true, label: '是' }, { value: false, label: '否' }]"
-            />
-          </UFormGroup>
-          <UFormGroup label="发件人名称" name="senderName">
-            <UInput v-model="state.email.senderName" autocomplete="off" />
-          </UFormGroup>
-          <UButtonGroup size="sm" orientation="horizontal" class="my-2">
-            <UInput v-model="state.email.to" placeholder="测试邮件接收地址" />
-            <UButton class="w-fit " size="xs" :loading="emailSending" @click="testEmail">
-              测试发送邮件
-            </UButton>
-          </UButtonGroup>
+          <div class="flex flex-col space-y-2 ">
+            <UFormGroup label="开启邮件验证注册用户" name="regWithEmailCodeVerify">
+              <USelectMenu
+                v-model="state.regWithEmailCodeVerify" value-attribute="value" option-attribute="label"
+                :options="[{ value: true, label: '是' }, { value: false, label: '否' }]"
+              />
+            </UFormGroup>
+            <UFormGroup label="邮件服务器" name="host">
+              <UInput v-model="state.email.host" autocomplete="off" />
+            </UFormGroup>
+            <UFormGroup label="转发邮件服务器" name="ForwardUrl" hint="">
+              <template #hint>
+                如果你的服务器被阻断连接邮件端口,参考<a class="text-green-500" href="https://github.com/kingwrcy/discussion/pull/47">这里</a>
+              </template>
+              <UInput v-model="state.ForwardUrl" autocomplete="off" />
+            </UFormGroup>
+            <UFormGroup label="端口" name="port">
+              <UInput v-model.number="state.email.port" autocomplete="off" />
+            </UFormGroup>
+            <UFormGroup label="用户名" name="username">
+              <UInput v-model="state.email.username" autocomplete="off" />
+            </UFormGroup>
+            <UFormGroup label="密码" name="password">
+              <UInput v-model="state.email.password" autocomplete="off" />
+            </UFormGroup>
+            <UFormGroup label="是否安全连接" name="secure">
+              <USelectMenu
+                v-model="state.email.secure" value-attribute="value" option-attribute="label"
+                :options="[{ value: true, label: '是' }, { value: false, label: '否' }]"
+              />
+            </UFormGroup>
+            <UFormGroup label="发件人名称" name="senderName">
+              <UInput v-model="state.email.senderName" autocomplete="off" />
+            </UFormGroup>
+            <UButtonGroup size="sm" orientation="horizontal" class="my-2">
+              <UInput v-model="state.email.to" placeholder="测试邮件接收地址" />
+              <UButton class="w-fit " size="xs" :loading="emailSending" @click="testEmail">
+                测试发送邮件
+              </UButton>
+            </UButtonGroup>
+          </div>
         </template>
 
         <template #appearance-settings>
