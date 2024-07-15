@@ -69,6 +69,9 @@ const state = reactive<Schema>({
   content: '',
   tagId: 0,
   readRole: 0,
+  hide: false,
+  hideContent: '',
+  payPoint: 0,
 })
 
 const { pause } = useIntervalFn(() => {
@@ -197,6 +200,27 @@ onUnmounted(() => {
             </MdEditor>
           </ClientOnly>
         </UFormGroup>
+        <UFormGroup label="隐藏内容">
+          <UToggle v-model="state.hide" />
+        </UFormGroup>
+        <div v-if="state.hide">
+          <UFormGroup label="购买所需积分">
+            <UInput v-model="state.payPoint" type="number" />
+          </UFormGroup>
+          <UFormGroup label="隐藏内容">
+            <ClientOnly>
+              <MdEditor
+                v-model="state.hideContent" style="max-height: 600px;" :preview="false" :theme="mode as any"
+                :toolbars="toolbars" editor-id="newPost" @on-upload-img="onUploadImg"
+              >
+                <template #defToolbars>
+                  <XEmoji />
+                  <XYoutubeDialog />
+                </template>
+              </MdEditor>
+            </ClientOnly>
+          </UFormGroup>
+        </div>
         <div>
           <UButton type="submit" :loading="pending" :disabled="pending">
             发表(Ctrl+Enter提交)

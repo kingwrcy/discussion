@@ -81,6 +81,9 @@ export default defineEventHandler(async (event) => {
         content: request.content,
         tagId: request.tagId,
         readRole: request.readRole,
+        hide: request.hide,
+        hideContent: request.hideContent,
+        payPoint: request.payPoint,
       },
       create: {
         pid,
@@ -90,6 +93,9 @@ export default defineEventHandler(async (event) => {
         tagId: request.tagId,
         readRole: request.readRole,
         point: ((user.point * 2 - 1) / 600 ** 1.1) * 10000000,
+        hide: request.hide,
+        hideContent: request.hideContent,
+        payPoint: request.payPoint,
       },
     })
     if (!request.pid) {

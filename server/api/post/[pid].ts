@@ -83,8 +83,28 @@ export default defineEventHandler(async (event) => {
     where: {
       pid,
     },
-    include: {
-
+    select: {
+      id: true,
+      pid: true,
+      createdAt: true,
+      updatedAt: true,
+      title: true,
+      content: true,
+      uid: true,
+      viewCount: true,
+      replyCount: true,
+      likeCount: true,
+      disLikeCount: true,
+      minLevel: true,
+      tagId: true,
+      pinned: true,
+      point: true,
+      lastCommentTime: true,
+      lastCommentUid: true,
+      readRole: true,
+      hide: true,
+      payPoint: true,
+      hideContent: event.context.uid === postUid,
       lastCommentUser: {
         select: {
           uid: true,
@@ -170,6 +190,11 @@ export default defineEventHandler(async (event) => {
           PostSupport: true,
         },
       },
+      payUser: {
+        select: {
+          uid: true,
+        },
+      },
     },
   })
 
@@ -209,6 +234,7 @@ export default defineEventHandler(async (event) => {
     success: true,
     post: {
       ...post,
+      payUser: post?.payUser?.map(item => item.uid) || [],
       support: uid ? post!.PostSupport.length! > 0 : false,
       fav,
       comments: post?.comments.map(comment => ({

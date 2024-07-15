@@ -87,6 +87,10 @@ model Post {
   tag             Tag            @relation(fields: [tagId], references: [id])
   author          User           @relation(fields: [uid], references: [uid])
   PostSupport     PostSupport[]
+  hide            Boolean        @default(false)
+  hideContent     String?
+  payPoint        Int          @default(0) 
+  payUser         pay[]          
 }
 
 model PostSupport {
@@ -211,6 +215,15 @@ model inviteCode {
   toUser    User?    @relation("ReceivedInvites", fields: [toUid], references: [uid])
 }
 
+model pay {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  pid       String
+  uid       String
+  point     Int
+  post      Post     @relation(fields: [pid], references: [pid])
+}
+
 enum UserStatus {
   NORMAL
   BANNED
@@ -230,6 +243,7 @@ enum PointReason {
   PUNISH
   INVITE
   SEND
+  PUTIN
 }
 
 enum MessageType {
