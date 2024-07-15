@@ -105,7 +105,7 @@ watch(() => route.fullPath, (fullPath: string) => {
       <NuxtLink class="flex flex-row gap-1 items-center" :to="`/member/${userinfo.username}`">
         <UBadge size="lg" :color="selectedTab === 'post' ? 'primary' : 'white'" variant="solid" class="space-x-1">
           <UIcon name="i-carbon-add-comment" />
-          <span>帖子({{ userinfo._count.posts }})</span>
+          <span>帖子({{ userinfo._count ? userinfo._count.posts : 0 }})</span>
         </UBadge>
       </NuxtLink>
 
@@ -133,7 +133,7 @@ watch(() => route.fullPath, (fullPath: string) => {
       <NuxtLink v-if="currentUser.username === userinfo.username && token" class="flex flex-row gap-1 items-center" :to="`/member/${userinfo.username}/message`">
         <UBadge size="lg" :color="selectedTab === 'message' ? 'primary' : 'white'" variant="solid" class="space-x-1">
           <UIcon name="i-carbon-notification" />
-          <span :class="[userinfo.unreadMessageCount > 0 ? 'text-red-500' : '']">消息({{ userinfo._count.ReceiveMessage }})</span>
+          <span :class="[userinfo.unreadMessageCount > 0 && selectedTab !== 'message' ? 'text-red-500' : '']">消息({{ userinfo._count.ReceiveMessage }})</span>
         </UBadge>
       </NuxtLink>
       <NuxtLink

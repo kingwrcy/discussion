@@ -38,7 +38,7 @@ function doSupport() {
       >
         <div>
           <span class="mr-4">{{ title }}</span>
-          <span v-if="props.readRole > 0 && props.readRole <= 999" class="text-red-500 text-sm">
+          <span v-if="props.readRole && props.readRole > 0 && props.readRole <= 999" class="text-red-500 text-sm">
             <UIcon class="align-middle" name="i-carbon-locked" />
             <span class="align-middle">{{ props.readRole < 999 ? props.readRole : '私有' }}</span>
           </span>

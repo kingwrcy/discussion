@@ -137,13 +137,14 @@ export async function sendTgMessage(sysConfigDTO: SysConfigDTO, chatId: string |
       url = url.substring(0, url.length - 1)
     }
     const target = `${url}/bot${sysConfigDTO.notify.tgBotToken}/sendMessage`
-    console.log(new Date(), '开始发送tg消息通知，chatId:', chatId, 'message:', message, target)
+    const escapeMessage = message.replace(/[_*[\]()~`>#+=|{}.!-]/g, '\\$&')
+    console.log(new Date(), '开始发送tg消息通知，chatId:', chatId, 'message:', escapeMessage, target)
     try {
       const res = await fetch(target, {
         method: 'POST',
         body: JSON.stringify({
           chat_id: chatId,
-          text: message,
+          text: escapeMessage,
           parse_mode: 'MarkdownV2',
         }),
         headers: {

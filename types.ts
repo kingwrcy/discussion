@@ -165,6 +165,7 @@ export interface PostDTO {
 
 export interface SysConfigDTO {
   websiteName: string
+  favicon: string
   websiteUrl: string
   webBgimage: string
   websiteKeywords: string

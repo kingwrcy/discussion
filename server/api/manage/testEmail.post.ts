@@ -16,8 +16,16 @@ interface TestEmailRequest {
 export default defineEventHandler(async (event) => {
   const request = (await readBody(event)) as TestEmailRequest
   const message = await sendMailWithParams({ ...request.email, subject: 'Discussion 测试邮件 Test Email', html: '这是一封测试邮件 This is a test email' }, request.url)
-  return {
-    success: message === '',
-    message,
+  if (message) {
+    return {
+      success: false,
+      message,
+    }
+  }
+  else {
+    return {
+      success: true,
+      message: '发送成功',
+    }
   }
 })

@@ -74,6 +74,17 @@ if (sysconfig.js) {
   })
 }
 
+if (sysconfig.favicon) {
+  useHead({
+    link: [
+      {
+        rel: 'shortcut icon',
+        href: sysconfig.favicon,
+      },
+    ],
+  })
+}
+
 if (userinfo.value.css) {
   useHead({
     style: [

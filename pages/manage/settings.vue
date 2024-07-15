@@ -40,6 +40,7 @@ const state = reactive({
   webBgimage: '',
   websiteKeywords: '极简,论坛,极简论坛',
   websiteDescription: '极简论坛',
+  favicon: '',
   pointPerPost: 5,
   pointPerPostByDay: 20,
   pointPerComment: 1,
@@ -176,17 +177,23 @@ async function copyWebhook() {
         <UFormGroup label="论坛地址" name="websiteUrl">
           <UInput v-model="state.websiteUrl" autocomplete="off" />
         </UFormGroup>
+      </div>
+      <div class="flex flex-row space-x-2">
         <UFormGroup label="论坛背景图" name="webBgimage">
           <UInput v-model="state.webBgimage" autocomplete="off" />
         </UFormGroup>
         <UFormGroup label="论坛关键词" name="websiteKeywords">
           <UInput v-model="state.websiteKeywords" autocomplete="off" />
         </UFormGroup>
+      </div>
+      <div class="flex flex-row space-x-2">
         <UFormGroup label="论坛描述" name="websiteDescription">
           <UInput v-model="state.websiteDescription" autocomplete="off" />
         </UFormGroup>
+        <UFormGroup label="favicon" name="favicon">
+          <UInput v-model="state.favicon" autocomplete="off" />
+        </UFormGroup>
       </div>
-
       <div class="flex flex-row space-x-2">
         <UFormGroup label="站点公告" name="websiteAnnouncement">
           <ClientOnly>
@@ -199,7 +206,7 @@ async function copyWebhook() {
       </div>
 
       <div class="flex flex-row space-x-2">
-        <UFormGroup label="帖子链接格式定义" name="type">
+        <UFormGroup label="帖子链接格式定义" name="type" class="w-[225px]">
           <USelectMenu
             v-model="state.postUrlFormat.type" :options="postUrlFormatOptions" value-attribute="value"
             option-attribute="label"
