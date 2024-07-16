@@ -116,12 +116,13 @@ if (sysconfig.googleRecaptcha && sysconfig.googleRecaptcha.enable) {
     ],
   })
 }
-
+const open = ref(false)
 function search() {
   if (!keyWords.value)
     return
   router.push({ path: '/', query: { key: keyWords.value.trim() } })
   keyWords.value = ''
+  open.value = false
 }
 
 useHead({
@@ -149,6 +150,20 @@ const theme = ref<'light' | 'dark'>(color.value === 'dark' ? 'dark' : 'light')
 themeChanged.on((val) => {
   theme.value = val === 'dark' ? 'dark' : 'light'
 })
+
+function inputKey(value: any) {
+  if (value.target?.value.length > 1) {
+    open.value = true
+  }
+  else {
+    open.value = false
+  }
+}
+function GoogleSearch() {
+  const webUrl = sysconfig.websiteUrl || window.location.hostname
+  const url = `https://www.google.com/search?q=site:${webUrl}%20${encodeURIComponent(keyWords.value)}`
+  window.open(url, '_blank')
+}
 </script>
 
 <template>
@@ -207,11 +222,25 @@ themeChanged.on((val) => {
         <slot />
       </div>
       <div class="right-bar space-y-4 w-[300px] hidden md:block">
-        <UCard class="w-full mt-2" :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
+        <UCard class="w-full mt-2 card" :ui="{ header: { padding: 'px-0 py-0 sm:px-0' } }">
           <UInput
-            v-model="keyWords" icon="i-heroicons-magnifying-glass-20-solid" size="sm" color="white"
-            :trailing="false" placeholder="Search..." @keydown.enter="search"
+            v-model="keyWords" icon="i-heroicons-magnifying-glass-20-solid" size="sm" color="white" :trailing="false"
+            placeholder="Search..." @input="inputKey" @keydown.enter="search"
           />
+          <UPopover v-model:open="open" :popper="{ offsetDistance: -10 }">
+            <div />
+            <template #panel>
+              <div class="w-[250px] cursor-pointer">
+                <div class="px-4 py-2" @click="search">
+                  搜索帖子：{{ keyWords }}
+                </div>
+                <UDivider />
+                <div class="px-4 py-2" @click="GoogleSearch">
+                  谷歌搜索：{{ keyWords }}
+                </div>
+              </div>
+            </template>
+          </UPopover>
         </UCard>
         <XUserCard v-if="userinfo && userinfo.username" />
         <UCard
@@ -250,3 +279,9 @@ themeChanged.on((val) => {
   </div>
   <Toaster position="top-center" rich-colors :duration="1000" />
 </template>
+
+<style scoped>
+   .card div.relative:nth-of-type(2){
+    height: 0px;
+   }
+</style>
