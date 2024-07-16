@@ -8,7 +8,7 @@ export default defineEventHandler(async () => {
         gt: dayjs().subtract(3, 'day').toDate(),
       },
       reason: {
-        not: 'INVITE',
+        notIn: ['INVITE', 'PUTIN'],
       },
     },
     _sum: {

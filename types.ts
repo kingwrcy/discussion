@@ -52,6 +52,9 @@ export const createPostSchema = z.object({
   pid: z.string().optional(),
   readRole: z.number({ message: '阅读范围是必选的' }),
   token: z.string().optional(),
+  hide: z.boolean().optional(),
+  hideContent: z.string().optional(),
+  payPoint: z.number().optional(),
 }).refine(data => getLength(data.content) >= 6, {
   message: '内容最少6个字符,中文一个算2个字符',
   path: ['username'],
@@ -161,6 +164,9 @@ export interface PostDTO {
   lastCommentUid?: string
   lastCommentUser?: UserDTO
   point: number
+  hide: boolean
+  payPoint?: number
+  payUser?: Array<string>
 }
 
 export interface SysConfigDTO {

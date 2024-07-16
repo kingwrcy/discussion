@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { MdPreview } from 'md-editor-v3'
+import { toast } from 'vue-sonner'
 import type { PostDTO, UserDTO } from '~/types'
 
 const userinfo = useState<UserDTO>('userinfo')
@@ -95,6 +96,22 @@ const theme = ref<'light' | 'dark'>(color.value === 'dark' ? 'dark' : 'light')
 themeChanged.on((val) => {
   theme.value = val === 'dark' ? 'dark' : 'light'
 })
+
+const details = ref('')
+async function payHide() {
+  const res = await $fetch(`/api/post/pay`, {
+    method: 'POST',
+    body: JSON.stringify({
+      pid: route.params.pid,
+    }),
+  })
+  if (res.success) {
+    details.value = res.content
+  }
+  else {
+    toast.error(res.content)
+  }
+}
 </script>
 
 <template>
@@ -112,6 +129,13 @@ themeChanged.on((val) => {
     </div>
     <div class="px-4 pt-2 leading-5 border-t space-y-2 dark:border-slate-700">
       <MdPreview v-model="post.content" :editor-id="`pv-${post.pid}`" no-mermaid no-katex />
+    </div>
+    <div v-if="post.hide" class="px-4 pt-2 mt-2 leading-5 border-t space-y-2 dark:border-slate-700">
+      <MdPreview v-if="details" v-model="details" :editor-id="`pv-${post.pid}`" no-mermaid no-katex />
+      <div v-else>
+        <span class="text-xs">本贴包含隐藏内容，需要{{ post.payPoint }}分 </span>
+        <UButton :label="post.payUser?.includes(userinfo?.uid) || userinfo?.uid === post.uid ? '查看' : '购买'" @click="payHide" />
+      </div>
     </div>
 
     <div class="px-4 flex justify-end pb-2  items-center space-x-2 my-2">
