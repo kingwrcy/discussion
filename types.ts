@@ -208,14 +208,27 @@ export interface SysConfigDTO {
     secretKey: string
     enable: boolean
   }
-  proxyUrl: ''
+  proxyUrl: string
   enableUploadLocalImage: boolean
   notify: {
     tgBotEnabled: false
-    tgBotToken: ''
-    tgBotName: ''
-    tgSecret: ''
-    tgProxyUrl: ''
+    tgBotToken: string
+    tgBotName: string
+    tgSecret: string
+    tgProxyUrl: string
+  }
+  s3: {
+    endpoint: string
+    domain: string
+    ak: string
+    sk: string
+    bucket: string
+    region: string
+    suffix: string
+  }
+  upload: {
+    imgStrategy: 'tencent' | 'local' | 's3'
+    attachmentStrategy: 'none' | 'loall' | 's3'
   }
 }
 

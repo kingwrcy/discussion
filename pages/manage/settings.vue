@@ -83,6 +83,19 @@ const state = reactive({
     tgSecret: '',
     tgProxyUrl: '',
   },
+  s3: {
+    endpoint: '',
+    domain: '',
+    ak: '',
+    sk: '',
+    bucket: '',
+    region: '',
+    suffix: '',
+  },
+  upload: {
+    imgStrategy: 'tencent',
+    attachmentStrategy: 'none',
+  },
 })
 
 Object.assign(state, configData.value?.config)
@@ -136,6 +149,11 @@ const items = [{
   icon: 'i-carbon-chat',
   defaultOpen: false,
   slot: 'notify-settings',
+}, {
+  label: 'S3设置',
+  icon: 'i-carbon-cloud-upload',
+  defaultOpen: false,
+  slot: 's3-settings',
 }]
 
 const emailSending = ref(false)
@@ -270,6 +288,14 @@ async function copyWebhook() {
           <UInput v-model.number="state.createInviteCodePoint" autocomplete="off" />
         </UFormGroup>
       </div>
+      <div class="flex flex-row space-x-2 w-[500px]">
+        <UFormGroup label="图片上传策略" name="imgUploadStrategy" class="flex-1">
+          <USelectMenu v-model="state.upload.imgStrategy" :options="[{ label: '腾讯云(免费,不知何时不能使用)', value: 'tencent' }, { label: '本地存储', value: 'local' }, { label: 'S3', value: 's3' }]" />
+        </UFormGroup>
+        <UFormGroup label="附件上传策略" name="attachmentStrategy" class="flex-1">
+          <USelectMenu v-model="state.upload.attachmentStrategy" :options="[{ label: '禁用上传附件', value: 'none' }, { label: '本地存储', value: 'local' }, { label: 'S3', value: 's3' }]" />
+        </UFormGroup>
+      </div>
 
       <UAccordion :items="items" :ui="{ container: 'max-w-[500px]' }">
         <template #email-settings>
@@ -285,7 +311,10 @@ async function copyWebhook() {
             </UFormGroup>
             <UFormGroup label="转发邮件服务器" name="ForwardUrl" hint="">
               <template #hint>
-                如果你的服务器被阻断连接邮件端口,参考<a class="text-green-500" href="https://github.com/kingwrcy/discussion/pull/47">这里</a>
+                如果你的服务器被阻断连接邮件端口,参考<a
+                  class="text-green-500"
+                  href="https://github.com/kingwrcy/discussion/pull/47"
+                >这里</a>
               </template>
               <UInput v-model="state.ForwardUrl" autocomplete="off" />
             </UFormGroup>
@@ -365,9 +394,8 @@ async function copyWebhook() {
               <UFormGroup label="是否启用Telegram机器人" name="tgBotEnabled" class="w-[500px]">
                 <UButtonGroup>
                   <USelectMenu
-                    v-model="state.notify.tgBotEnabled"
-                    class="w-[400px]" value-attribute="value" option-attribute="label"
-                    :options="[{ value: true, label: '是' }, { value: false, label: '否' }]"
+                    v-model="state.notify.tgBotEnabled" class="w-[400px]" value-attribute="value"
+                    option-attribute="label" :options="[{ value: true, label: '是' }, { value: false, label: '否' }]"
                   />
                   <UButton @click="copyWebhook">
                     复制WebHook地址
@@ -382,6 +410,46 @@ async function copyWebhook() {
               </UFormGroup>
               <UFormGroup label="Bot Name" name="tgBotName" class="w-[500px]" hint="显示在消息页面">
                 <UInput v-model="state.notify.tgBotName" autocomplete="off" />
+              </UFormGroup>
+            </div>
+          </div>
+        </template>
+        <template #s3-settings>
+          <div class="flex flex-col space-y-2 ">
+            <div class="flex flex-row space-x-2">
+              <UFormGroup label="s3接口地址" name="endpoint" class="w-[500px]" hint="endpoint">
+                <UInput v-model="state.s3.endpoint" autocomplete="off" />
+              </UFormGroup>
+            </div>
+            <div class="flex flex-row space-x-2">
+              <UFormGroup label="域名" name="domain" class="w-[500px]" hint="自定义域名或s3提供的默认域名">
+                <UInput v-model="state.s3.domain" autocomplete="off" />
+              </UFormGroup>
+            </div>
+            <div class="flex flex-row space-x-2">
+              <UFormGroup label="桶名称" name="bucket" class="w-[500px]" hint="bucket">
+                <UInput v-model="state.s3.bucket" autocomplete="off" />
+              </UFormGroup>
+            </div>
+
+            <div class="flex flex-row space-x-2">
+              <UFormGroup label="地区" name="region" class="w-[500px]" hint="region">
+                <UInput v-model="state.s3.region" autocomplete="off" />
+              </UFormGroup>
+            </div>
+            <div class="flex flex-row space-x-2">
+              <UFormGroup label="AK" name="ak" class="w-[500px]" hint="Access Key">
+                <UInput v-model="state.s3.ak" autocomplete="off" />
+              </UFormGroup>
+            </div>
+            <div class="flex flex-row space-x-2">
+              <UFormGroup label="SK" name="sk" class="w-[500px]" hint="Secret Key">
+                <UInput v-model="state.s3.sk" autocomplete="off" />
+              </UFormGroup>
+            </div>
+            <div class="flex flex-row space-x-2">
+              <UFormGroup label="后缀" name="suffix" class="w-[500px]" hint="suffix后缀,不懂的不用填">
+                <UInput v-model="state.s3.suffix" autocomplete="off" />
               </UFormGroup>
             </div>
           </div>

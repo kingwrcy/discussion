@@ -16,6 +16,8 @@
     "lint-staged": "lint-staged"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.614.0",
+    "@aws-sdk/s3-request-presigner": "^3.614.0",
     "@iconify-json/carbon": "^1.1.36",
     "@nuxt/ui": "^2.17.0",
     "@prisma/adapter-pg": "^5.16.2",
