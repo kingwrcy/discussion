@@ -86,7 +86,7 @@ export default defineEventHandler(async (event) => {
       uid: post?.uid,
       point: post?.payPoint ?? 0,
       pid: request.pid,
-      reason: PointReason.SEND,
+      reason: PointReason.INCOME,
     },
   })
   await prisma.pay.create({

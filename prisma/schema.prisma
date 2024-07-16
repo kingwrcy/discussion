@@ -244,6 +244,7 @@ enum PointReason {
   INVITE
   SEND
   PUTIN
+  INCOME
 }
 
 enum MessageType {

@@ -43,6 +43,10 @@ function getReason(reason: PointReason) {
       return '生成邀请码'
     case 'SEND':
       return '管理员赠送'
+    case 'PUTIN':
+      return '购买'
+    case 'INCOME':
+      return '收入'
     default:
       return reason
   }
