@@ -191,7 +191,7 @@ onUnmounted(() => {
           <ClientOnly>
             <MdEditor
               v-model="state.content" style="max-height: 600px;" :preview="false" :theme="mode as any"
-              :toolbars="toolbars" editor-id="newPost" @on-upload-img="onUploadImg"
+              :toolbars="toolbars" editor-id="newPostContent" @on-upload-img="onUploadImg"
             >
               <template #defToolbars>
                 <XEmoji />
@@ -211,7 +211,7 @@ onUnmounted(() => {
             <ClientOnly>
               <MdEditor
                 v-model="state.hideContent" style="max-height: 600px;" :preview="false" :theme="mode as any"
-                :toolbars="toolbars" editor-id="newPost" @on-upload-img="onUploadImg"
+                :toolbars="toolbars" editor-id="newPostHideContent" @on-upload-img="onUploadImg"
               >
                 <template #defToolbars>
                   <XEmoji />
