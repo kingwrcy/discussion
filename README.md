@@ -23,6 +23,8 @@
 - 支持禁言用户.
 - 支持Docker Compose一键部署.
 
+**如果在后台开启了允许上传本地图片,还需要把`/app/upload`文件夹映射到宿主机上,不映射的话,docker重启之后上传到本地的图片就丢了.**
+
 ## docker compose 部署
 
 进入项目根目录,执行`docker-compose up -d`即可,无其他任何配置.
