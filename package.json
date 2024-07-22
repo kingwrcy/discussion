@@ -27,7 +27,7 @@
     "@vueuse/nuxt": "^10.11.0",
     "bcryptjs": "^2.4.3",
     "cache-manager": "^5.7.3",
-    "dayjs": "^1.11.11",
+    "dayjs": "^1.11.12",
     "js-sha256": "^0.11.0",
     "jsonwebtoken": "^9.0.2",
     "markdown-it-link-attributes": "^4.0.1",
