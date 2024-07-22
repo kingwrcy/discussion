@@ -54,8 +54,8 @@ importers:
         specifier: ^4.0.1
         version: 4.0.1
       md-editor-v3:
-        specifier: ^4.17.3
-        version: 4.17.3(@codemirror/view@6.28.4)(@lezer/common@1.2.1)(vue@3.4.31(typescript@5.5.3))
+        specifier: ^4.17.4
+        version: 4.17.4(@codemirror/view@6.28.4)(@lezer/common@1.2.1)(vue@3.4.31(typescript@5.5.3))
       nodemailer:
         specifier: ^6.9.14
         version: 6.9.14
@@ -3895,8 +3895,8 @@ packages:
     resolution: {integrity: sha512-a54IwgWPaeBCAAsv13YgmALOF1elABB08FxO9i+r4VFk5Vl4pKokRPeX8u5TCgSsPi6ec1otfLjdOpVcgbpshg==}
     hasBin: true
 
-  md-editor-v3@4.17.3:
-    resolution: {integrity: sha512-XepLAC46Ui6vlr9iW//ujNdzKF+/jyI6eLk9qmg3CDs89hpaXSylQdKy+wQoP+CgY5nxf82H50cYlqDl0a1pSA==}
+  md-editor-v3@4.17.4:
+    resolution: {integrity: sha512-g7fDBFNfahS0bNHbweVLepd1e8BnZtHNSobduSIa3nTEiGHCD0VzQtf+JyHsDYdGhDwZrBGReGpHxK+/9AZb/w==}
     peerDependencies:
       vue: ^3.2.47
 
@@ -10437,7 +10437,7 @@ snapshots:
       punycode.js: 2.3.1
       uc.micro: 2.1.0
 
-  md-editor-v3@4.17.3(@codemirror/view@6.28.4)(@lezer/common@1.2.1)(vue@3.4.31(typescript@5.5.3)):
+  md-editor-v3@4.17.4(@codemirror/view@6.28.4)(@lezer/common@1.2.1)(vue@3.4.31(typescript@5.5.3)):
     dependencies:
       '@codemirror/lang-markdown': 6.2.5
       '@codemirror/language-data': 6.5.1(@codemirror/view@6.28.4)

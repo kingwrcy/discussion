@@ -31,7 +31,7 @@
     "js-sha256": "^0.11.0",
     "jsonwebtoken": "^9.0.2",
     "markdown-it-link-attributes": "^4.0.1",
-    "md-editor-v3": "^4.17.3",
+    "md-editor-v3": "^4.17.4",
     "nodemailer": "^6.9.14",
     "nuxt": "^3.12.3",
     "nuxt-scheduler": "^0.1.9",
