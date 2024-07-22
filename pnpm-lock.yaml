@@ -24,8 +24,8 @@ importers:
         specifier: ^5.16.2
         version: 5.16.2(pg@8.12.0)
       '@prisma/client':
-        specifier: 5.16.1
-        version: 5.16.1(prisma@5.16.2)
+        specifier: 5.17.0
+        version: 5.17.0(prisma@5.16.2)
       '@vueuse/components':
         specifier: ^10.11.0
         version: 10.11.0(vue@3.4.31(typescript@5.5.3))
@@ -1425,8 +1425,8 @@ packages:
     peerDependencies:
       pg: ^8.11.3
 
-  '@prisma/client@5.16.1':
-    resolution: {integrity: sha512-wM9SKQjF0qLxdnOZIVAIMKiz6Hu7vDt4FFAih85K1dk/Rr2mdahy6d3QP41K62N9O0DJJA//gUDA3Mp49xsKIg==}
+  '@prisma/client@5.17.0':
+    resolution: {integrity: sha512-N2tnyKayT0Zf7mHjwEyE8iG7FwTmXDHFZ1GnNhQp0pJUObsuel4ZZ1XwfuAYkq5mRIiC/Kot0kt0tGCfLJ70Jw==}
     engines: {node: '>=16.13'}
     peerDependencies:
       prisma: '*'
@@ -7582,7 +7582,7 @@ snapshots:
       pg: 8.12.0
       postgres-array: 3.0.2
 
-  '@prisma/client@5.16.1(prisma@5.16.2)':
+  '@prisma/client@5.17.0(prisma@5.16.2)':
     optionalDependencies:
       prisma: 5.16.2
 
