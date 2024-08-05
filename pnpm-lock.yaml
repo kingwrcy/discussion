@@ -54,8 +54,8 @@ importers:
         specifier: ^4.0.1
         version: 4.0.1
       md-editor-v3:
-        specifier: ^4.17.3
-        version: 4.17.3(@codemirror/view@6.28.4)(@lezer/common@1.2.1)(vue@3.4.31(typescript@5.5.3))
+        specifier: ^4.18.0
+        version: 4.18.0(@codemirror/view@6.28.4)(@lezer/common@1.2.1)(vue@3.4.31(typescript@5.5.3))
       nodemailer:
         specifier: ^6.9.14
         version: 6.9.14
@@ -3888,15 +3888,12 @@ packages:
   markdown-it-link-attributes@4.0.1:
     resolution: {integrity: sha512-pg5OK0jPLg62H4k7M9mRJLT61gUp9nvG0XveKYHMOOluASo9OEF13WlXrpAp2aj35LbedAy3QOCgQCw0tkLKAQ==}
 
-  markdown-it-task-lists@2.1.1:
-    resolution: {integrity: sha512-TxFAc76Jnhb2OUu+n3yz9RMu4CwGfaT788br6HhEDlvWfdeJcLUsxk1Hgw2yJio0OXsxv7pyIPmvECY7bMbluA==}
-
   markdown-it@14.1.0:
     resolution: {integrity: sha512-a54IwgWPaeBCAAsv13YgmALOF1elABB08FxO9i+r4VFk5Vl4pKokRPeX8u5TCgSsPi6ec1otfLjdOpVcgbpshg==}
     hasBin: true
 
-  md-editor-v3@4.17.3:
-    resolution: {integrity: sha512-XepLAC46Ui6vlr9iW//ujNdzKF+/jyI6eLk9qmg3CDs89hpaXSylQdKy+wQoP+CgY5nxf82H50cYlqDl0a1pSA==}
+  md-editor-v3@4.18.0:
+    resolution: {integrity: sha512-lKGPTTqPM6BDuidcMXw9G/Lh9UXOAV7XRlUbOHnaiLVeJzwMhwXGqugtq3GgSJiNKvz9r1QpVgH6jYyT8zpPNQ==}
     peerDependencies:
       vue: ^3.2.47
 
@@ -10426,8 +10423,6 @@ snapshots:
 
   markdown-it-link-attributes@4.0.1: {}
 
-  markdown-it-task-lists@2.1.1: {}
-
   markdown-it@14.1.0:
     dependencies:
       argparse: 2.0.1
@@ -10437,7 +10432,7 @@ snapshots:
       punycode.js: 2.3.1
       uc.micro: 2.1.0
 
-  md-editor-v3@4.17.3(@codemirror/view@6.28.4)(@lezer/common@1.2.1)(vue@3.4.31(typescript@5.5.3)):
+  md-editor-v3@4.18.0(@codemirror/view@6.28.4)(@lezer/common@1.2.1)(vue@3.4.31(typescript@5.5.3)):
     dependencies:
       '@codemirror/lang-markdown': 6.2.5
       '@codemirror/language-data': 6.5.1(@codemirror/view@6.28.4)
@@ -10448,7 +10443,6 @@ snapshots:
       lru-cache: 10.4.3
       markdown-it: 14.1.0
       markdown-it-image-figures: 2.1.1(markdown-it@14.1.0)
-      markdown-it-task-lists: 2.1.1
       medium-zoom: 1.1.0
       punycode: 2.3.1
       vue: 3.4.31(typescript@5.5.3)
